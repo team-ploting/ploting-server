@@ -93,7 +93,7 @@ public class NaverOAuthService implements OAuthService {
                 .provider(ProviderType.NAVER)
                 .name(userinfo.getResponse().getName())
                 .profileImageUrl(userinfo.getResponse().getProfileImageUrl())
-                .roles(oAuthLoginRequest.getRoles())
+                .role(oAuthLoginRequest.getRole())
                 .build();
     }
 

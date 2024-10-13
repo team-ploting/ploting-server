@@ -15,11 +15,12 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true # console 창에 보여줄때 format 여부
+        show_sql: true  # sql query console 창에 표시 여부
 
   security:
     oauth2:

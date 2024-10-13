@@ -13,7 +13,7 @@ import ploting_server.ploting.member.entity.ProviderType;
 @RequiredArgsConstructor
 public class OAuthAuthorizationRequest {
 
-    @Schema(description = "OAuth 제공자 타입 (예: NAVER, KAKAO, APPLE)", example = "NAVER", required = true)
+    @Schema(description = "OAuth 제공자 타입 (예: NAVER, KAKAO, GOOGLE)", example = "NAVER", required = true)
     private final ProviderType provider;
 
     @Schema(description = "OAuth 제공자로부터 발급받은 인증 코드", example = "JjG...", required = true)

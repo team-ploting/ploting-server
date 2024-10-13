@@ -65,7 +65,7 @@ public class JwtService {
         String memberId = String.valueOf(memberJwtDto.getId());
         Date issuedAt = Date.from(Instant.now());
         Date expiration = Date.from(Instant.now().plusSeconds(expirationTime));
-        String roles = (memberJwtDto.getAuthorities() == null || memberJwtDto.getAuthorities().isEmpty()) ? "" :
+        String role = (memberJwtDto.getAuthorities() == null || memberJwtDto.getAuthorities().isEmpty()) ? "" :
                 memberJwtDto.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.joining(","));
@@ -75,7 +75,7 @@ public class JwtService {
                 .setSubject(memberId)
                 .setIssuedAt(issuedAt)
                 .setExpiration(expiration)
-                .claim("roles", roles)
+                .claim("role", role)
                 .signWith(extractSecretKey(), SignatureAlgorithm.HS512) // 서명에 사용할 비밀 키
                 .compact(); // JWT 문자열로 생성
     }
@@ -91,9 +91,9 @@ public class JwtService {
         Long memberId = Long.valueOf(claims.getSubject());
 
         // 권한 정보 추출
-        String roles = claims.get("roles", String.class);
-        List<GrantedAuthority> authorities = (roles != null && !roles.trim().isEmpty()) ?
-                List.of(new SimpleGrantedAuthority(roles)) : List.of();
+        String role = claims.get("role", String.class);
+        List<GrantedAuthority> authorities = (role != null && !role.trim().isEmpty()) ?
+                List.of(new SimpleGrantedAuthority(role)) : List.of();
 
         // 사용자 정보를 담은 UserDetails 객체 생성
         UserDetails userDetails = new PrincipalDetails(memberId, authorities);

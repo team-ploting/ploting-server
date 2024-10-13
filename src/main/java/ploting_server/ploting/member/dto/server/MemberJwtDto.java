@@ -19,7 +19,7 @@ public class MemberJwtDto {
 
     public MemberJwtDto(Member member) {
         this.id = member.getId();
-        this.authorities = Optional.ofNullable(member.getRoles())
+        this.authorities = Optional.ofNullable(member.getRole())
                 .map(role -> List.<GrantedAuthority>of(new SimpleGrantedAuthority(role.name())))
                 .orElse(List.of());
     }

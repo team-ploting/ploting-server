@@ -1,38 +1,57 @@
 package ploting_server.ploting.member.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
- * 회원 정보를 관리하는 엔티티 클래스입니다.
+ * 회원을 관리하는 엔티티 클래스입니다.
  */
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "oauth_id")
-    private String oauthId; // 소셜 회원 고유 ID
+    private String oauthId;
 
     @Column(name = "provider")
     @Enumerated(EnumType.STRING)
-    private ProviderType provider; // OAuth 제공자 정보
+    private ProviderType provider;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
     @Column(name = "name")
-    private String name; // 사용자 이름
+    private String name;
+
+    @Column(name = "nickname")
+    private String nickname;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
+    private GenderType gender;
+
+    @Column(name = "birth")
+    private LocalDate birth;
 
     @Column(name = "profile_image_url")
-    private String profileImageUrl; // 프로필 이미지 URL
+    private String profileImageUrl;
 
-    @Column(name = "roles")
-    @Enumerated(EnumType.STRING)
-    private RolesType roles; // 권한
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }

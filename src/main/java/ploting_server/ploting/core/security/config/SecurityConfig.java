@@ -20,7 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ploting_server.ploting.core.security.filter.JwtFilter;
 import ploting_server.ploting.core.security.service.jwt.JwtService;
-import ploting_server.ploting.member.entity.RolesType;
+import ploting_server.ploting.member.entity.RoleType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -76,7 +76,7 @@ public class SecurityConfig {
                         .requestMatchers(authenticatedRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(authenticatedRequestMatchers())
-                        .hasAnyAuthority(RolesType.ROLE_USER.name(), RolesType.ROLE_ADMIN.name())
+                        .hasAnyAuthority(RoleType.ROLE_USER.name(), RoleType.ROLE_ADMIN.name())
                         .anyRequest().authenticated())
 //                  TODO: 예외 처리
 //                .exceptionHandling(exception -> exception
