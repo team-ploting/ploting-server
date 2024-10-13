@@ -60,7 +60,7 @@ public class AuthService {
         MemberLoginDto memberLoginDto = oAuthService.getUserInfo(oAuthLoginRequest);
 
         // DB 회원 정보 조회
-        Member member = memberRepository.findByOauthIdAndRoles(memberLoginDto.getOauthId(), memberLoginDto.getRoles())
+        Member member = memberRepository.findByOauthIdAndRole(memberLoginDto.getOauthId(), memberLoginDto.getRole())
                 .orElseGet(() -> registerMember(memberLoginDto)); // 회원 정보가 없을 경우 회원가입
 
         MemberJwtDto memberJwtDto = new MemberJwtDto(member);
@@ -104,7 +104,7 @@ public class AuthService {
                 .provider(memberLoginDto.getProvider())
                 .name(memberLoginDto.getName())
                 .profileImageUrl(memberLoginDto.getProfileImageUrl())
-                .roles(memberLoginDto.getRoles())
+                .role(memberLoginDto.getRole())
                 .build();
 
         return memberRepository.save(newMember);
