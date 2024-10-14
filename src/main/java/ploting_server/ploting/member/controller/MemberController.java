@@ -12,6 +12,7 @@ import ploting_server.ploting.core.code.success.GlobalSuccessCode;
 import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
+import ploting_server.ploting.member.dto.response.MemberInfoResponse;
 import ploting_server.ploting.member.service.MemberService;
 
 @RestController
@@ -35,5 +36,19 @@ public class MemberController {
             @RequestBody MemberRegisterRequest memberRegisterRequest) {
         memberService.registerMember(Long.parseLong(principalDetails.getUsername()), memberRegisterRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
+
+    @Operation(
+            summary = "회원 정보 조회",
+            description = "회원의 정보를 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 정보 조회 성공", useReturnTypeSchema = true),
+    })
+    @GetMapping("")
+    public ResponseEntity<BfResponse<MemberInfoResponse>> getMember(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        MemberInfoResponse memberInfoResponse = memberService.getMember(Long.parseLong(principalDetails.getUsername()));
+        return ResponseEntity.ok(new BfResponse<>(memberInfoResponse));
     }
 }

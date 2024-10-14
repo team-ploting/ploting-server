@@ -33,6 +33,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     @Column(name = "name")
     private String name;
 
@@ -49,15 +52,12 @@ public class Member {
     @Column(name = "birth")
     private LocalDate birth;
 
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
-
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "is_active")
-    private boolean isActive; // soft delete 용도
+    @Column(name = "active_status")
+    private boolean activeStatus; // soft delete 용도
 
     // 회원 가입 시 정보를 업데이트하는 메서드
     public void registerMember(MemberRegisterRequest memberRegisterRequest) {
@@ -66,5 +66,7 @@ public class Member {
         this.location = memberRegisterRequest.getLocation();
         this.gender = memberRegisterRequest.getGender();
         this.birth = memberRegisterRequest.getBirth();
+        this.createdAt = LocalDateTime.now();
+        this.activeStatus = true;
     }
 }
