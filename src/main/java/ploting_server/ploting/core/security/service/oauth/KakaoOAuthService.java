@@ -15,7 +15,7 @@ import ploting_server.ploting.core.security.dto.oauth.KakaoResponseDto;
 import ploting_server.ploting.core.security.dto.oauth.KakaoUserInfoDto;
 import ploting_server.ploting.member.dto.request.OAuthAuthorizationRequest;
 import ploting_server.ploting.member.dto.request.OAuthLoginRequest;
-import ploting_server.ploting.member.dto.server.MemberLoginDto;
+import ploting_server.ploting.member.dto.server.MemberOAuthLoginDto;
 import ploting_server.ploting.member.entity.ProviderType;
 import reactor.core.publisher.Mono;
 
@@ -70,7 +70,7 @@ public class KakaoOAuthService implements OAuthService {
     /**
      * OAuth 제공자에서 사용자 정보를 가져와 MemberLoginDto로 변환
      */
-    public MemberLoginDto getUserInfo(OAuthLoginRequest oAuthLoginRequest) {
+    public MemberOAuthLoginDto getUserInfo(OAuthLoginRequest oAuthLoginRequest) {
 
         WebClient webClient = WebClient.builder()
                 .baseUrl(baseUri)
@@ -86,7 +86,7 @@ public class KakaoOAuthService implements OAuthService {
                 .bodyToMono(KakaoUserInfoDto.class)
                 .block();
 
-        return MemberLoginDto.builder()
+        return MemberOAuthLoginDto.builder()
                 .oauthId(String.valueOf(userinfo.getOauthId()))
                 .provider(ProviderType.KAKAO)
                 .name(userinfo.getKakaoAccount().getProfile().getName())

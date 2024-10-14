@@ -10,7 +10,7 @@ import ploting_server.ploting.member.entity.RoleType;
  */
 @Getter
 @Builder
-public class MemberLoginDto {
+public class MemberOAuthLoginDto {
 
     private final String oauthId;
     private final ProviderType provider;

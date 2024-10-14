@@ -15,7 +15,7 @@ import ploting_server.ploting.core.security.dto.oauth.NaverResponseDto;
 import ploting_server.ploting.core.security.dto.oauth.NaverUserInfoDto;
 import ploting_server.ploting.member.dto.request.OAuthAuthorizationRequest;
 import ploting_server.ploting.member.dto.request.OAuthLoginRequest;
-import ploting_server.ploting.member.dto.server.MemberLoginDto;
+import ploting_server.ploting.member.dto.server.MemberOAuthLoginDto;
 import ploting_server.ploting.member.entity.ProviderType;
 import reactor.core.publisher.Mono;
 
@@ -72,7 +72,7 @@ public class NaverOAuthService implements OAuthService {
      * OAuth 제공자에서 사용자 정보를 가져와 MemberLoginDto로 변환
      */
     @Override
-    public MemberLoginDto getUserInfo(OAuthLoginRequest oAuthLoginRequest) {
+    public MemberOAuthLoginDto getUserInfo(OAuthLoginRequest oAuthLoginRequest) {
 
         WebClient webClient = WebClient.builder()
                 .baseUrl(baseUri)
@@ -88,7 +88,7 @@ public class NaverOAuthService implements OAuthService {
                 .bodyToMono(NaverUserInfoDto.class)
                 .block();
 
-        return MemberLoginDto.builder()
+        return MemberOAuthLoginDto.builder()
                 .oauthId(userinfo.getResponse().getOauthId())
                 .provider(ProviderType.NAVER)
                 .name(userinfo.getResponse().getName())
