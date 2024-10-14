@@ -1,8 +1,11 @@
 package ploting_server.ploting.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +33,8 @@ public class MemberController {
             description = "소셜 로그인 후 회원의 추가 정보를 등록합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원 추가 정보 등록 성공", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "200", description = "회원 추가 정보 등록 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
     })
     @PatchMapping("/registration")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerMember(
@@ -44,13 +48,14 @@ public class MemberController {
             summary = "회원 정보 조회",
             description = "회원의 정보를 조회합니다."
     )
+    @SecurityRequirements(value = {})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원 정보 조회 성공", useReturnTypeSchema = true),
     })
-    @GetMapping("")
+    @GetMapping("/{memberId}")
     public ResponseEntity<BfResponse<MemberInfoResponse>> getMember(
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        MemberInfoResponse memberInfoResponse = memberService.getMember(Long.parseLong(principalDetails.getUsername()));
+            @PathVariable Long memberId) {
+        MemberInfoResponse memberInfoResponse = memberService.getMember(memberId);
         return ResponseEntity.ok(new BfResponse<>(memberInfoResponse));
     }
 
@@ -58,6 +63,7 @@ public class MemberController {
             summary = "회원 닉네임 중복 확인",
             description = "회원의 닉네임 중복 여부를 확인합니다."
     )
+    @SecurityRequirements(value = {})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원 닉네임 중복 여부 조회 성공 (중복이면 true)", useReturnTypeSchema = true),
     })
@@ -73,7 +79,8 @@ public class MemberController {
             description = "회원의 정보를 수정합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원 정보 수정 성공", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "200", description = "회원 정보 수정 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
     })
     @PatchMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> updateMember(
@@ -88,7 +95,8 @@ public class MemberController {
             description = "회원을 탈퇴 처리합니다. (soft delete)"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원 탈퇴 처리 성공", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "200", description = "회원 탈퇴 처리 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
     })
     @DeleteMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteMember(

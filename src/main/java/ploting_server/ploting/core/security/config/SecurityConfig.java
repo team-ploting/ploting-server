@@ -25,6 +25,7 @@ import ploting_server.ploting.member.entity.RoleType;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 /**
@@ -55,10 +56,8 @@ public class SecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(publicRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
-                                .requestMatchers(publicRequestMatchers()).permitAll()
-//                        TODO: endpoint 추가 후 주석 풀기
-//                        .anyRequest().authenticated()
-                                .anyRequest().permitAll()
+                        .requestMatchers(publicRequestMatchers()).permitAll()
+                        .anyRequest().authenticated()
                 );
 
         return http.build();
@@ -91,8 +90,12 @@ public class SecurityConfig {
      */
     private RequestMatcher[] publicRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-//                TODO: endpoint 추가
-                antMatcher("/**")
+                antMatcher(GET, "/swagger-ui/**"), // Swagger UI 웹 인터페이스를 제공하는 경로
+                antMatcher(GET, "/v3/api-docs/**"), // Swagger의 API 문서 데이터를 JSON 형식으로 제공하는 경로
+                antMatcher(POST, "/auth/request"),
+                antMatcher(POST, "/auth/login"),
+                antMatcher(GET, "/member"),
+                antMatcher(GET, "/member/check-nickname")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -103,8 +106,10 @@ public class SecurityConfig {
      */
     private RequestMatcher[] authenticatedRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-//                TODO: endpoint 추가
-                antMatcher("/**")
+                antMatcher(POST, "/auth/refresh"),
+                antMatcher(PATCH, "/member"),
+                antMatcher(PATCH, "/member/registration"),
+                antMatcher(DELETE, "/member")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
