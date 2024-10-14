@@ -11,4 +11,6 @@ import java.util.Optional;
  */
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByOauthIdAndRole(String oauthId, RoleType role);
+
+    Boolean existsByNickname(String nickname);
 }

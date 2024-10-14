@@ -49,4 +49,15 @@ public class MemberService {
                 .activeStatus(findMember.isActiveStatus())
                 .build();
     }
+
+    /**
+     * 회원 닉네임 중복 여부를 확인합니다.
+     */
+    public MemberNicknameDuplicationResponse checkNicknameDuplicate(String nickname) {
+        Boolean existsByNickname = memberRepository.existsByNickname(nickname);
+
+        return MemberNicknameDuplicationResponse.builder()
+                .isMemberNicknameDuplicated(existsByNickname)
+                .build();
+    }
 }
