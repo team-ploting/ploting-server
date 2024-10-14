@@ -3,6 +3,8 @@ package ploting_server.ploting.member.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ploting_server.ploting.comment.entity.Comment;
+import ploting_server.ploting.comment.repository.CommentRepository;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
@@ -10,6 +12,10 @@ import ploting_server.ploting.member.dto.response.MemberInfoResponse;
 import ploting_server.ploting.member.dto.response.MemberNicknameDuplicationResponse;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
+import ploting_server.ploting.post.entity.Post;
+import ploting_server.ploting.post.repository.PostRepository;
+
+import java.util.List;
 
 /**
  * 회원을 관리하는 서비스 클래스입니다.
@@ -19,6 +25,8 @@ import ploting_server.ploting.member.repository.MemberRepository;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     /**
      * 회원 가입 시 회원 정보를 추가적으로 등록합니다.
@@ -59,5 +67,33 @@ public class MemberService {
         return MemberNicknameDuplicationResponse.builder()
                 .isMemberNicknameDuplicated(existsByNickname)
                 .build();
+    }
+
+    /**
+     * 회원을 삭제합니다. (soft delete)
+     */
+    @Transactional
+    public void deleteMember(Long memberId) {
+        Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        // 회원 soft delete
+        findMember.softDeleteMember(false);
+
+        // 회원의 게시글 soft delete
+        List<Post> postsByFindMember = postRepository.findByMemberId(memberId);
+        for (Post post : postsByFindMember) {
+            post.softDeletePost();
+        }
+
+        // 대댓글 없는 경우 댓글 삭제, 대댓글 있는 경우 soft delete
+        List<Comment> commentsByFindMember = commentRepository.findByMemberId(memberId);
+        for (Comment comment : commentsByFindMember) {
+            if (comment.getParentComment() == null) {
+                commentRepository.delete(comment);
+                continue;
+            }
+            comment.softDeleteComment();
+        }
     }
 }

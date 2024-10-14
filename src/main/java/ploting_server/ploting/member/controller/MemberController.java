@@ -66,4 +66,18 @@ public class MemberController {
         MemberNicknameDuplicationResponse memberNicknameDuplicationResponse = memberService.checkNicknameDuplicate(nickname);
         return ResponseEntity.ok(new BfResponse<>(memberNicknameDuplicationResponse));
     }
+
+    @Operation(
+            summary = "회원 탈퇴 (soft delete)",
+            description = "회원을 탈퇴 처리합니다. (soft delete)"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 탈퇴 처리 성공", useReturnTypeSchema = true),
+    })
+    @DeleteMapping("")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteMember(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        memberService.deleteMember(Long.parseLong(principalDetails.getUsername()));
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
 }
