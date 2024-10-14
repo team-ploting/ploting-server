@@ -13,6 +13,7 @@ import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
 import ploting_server.ploting.member.dto.response.MemberInfoResponse;
+import ploting_server.ploting.member.dto.response.MemberNicknameDuplicationResponse;
 import ploting_server.ploting.member.service.MemberService;
 
 @RestController
@@ -50,5 +51,19 @@ public class MemberController {
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         MemberInfoResponse memberInfoResponse = memberService.getMember(Long.parseLong(principalDetails.getUsername()));
         return ResponseEntity.ok(new BfResponse<>(memberInfoResponse));
+    }
+
+    @Operation(
+            summary = "회원 닉네임 중복 확인",
+            description = "회원의 닉네임 중복 여부를 확인합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 닉네임 중복 여부 조회 성공 (중복이면 true)", useReturnTypeSchema = true),
+    })
+    @GetMapping("/check-nickname")
+    public ResponseEntity<BfResponse<MemberNicknameDuplicationResponse>> getMember(
+            @RequestParam String nickname) {
+        MemberNicknameDuplicationResponse memberNicknameDuplicationResponse = memberService.checkNicknameDuplicate(nickname);
+        return ResponseEntity.ok(new BfResponse<>(memberNicknameDuplicationResponse));
     }
 }
