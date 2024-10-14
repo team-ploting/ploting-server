@@ -8,6 +8,7 @@ import ploting_server.ploting.comment.repository.CommentRepository;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
+import ploting_server.ploting.member.dto.request.MemberUpdateRequest;
 import ploting_server.ploting.member.dto.response.MemberInfoResponse;
 import ploting_server.ploting.member.dto.response.MemberNicknameDuplicationResponse;
 import ploting_server.ploting.member.entity.Member;
@@ -70,6 +71,17 @@ public class MemberService {
     }
 
     /**
+     * 회원 정보를 수정합니다.
+     */
+    @Transactional
+    public void updateMember(Long memberId, MemberUpdateRequest memberUpdateRequest) {
+        Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        findMember.updateMember(memberUpdateRequest);
+    }
+
+    /**
      * 회원을 삭제합니다. (soft delete)
      */
     @Transactional
@@ -78,7 +90,7 @@ public class MemberService {
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
         // 회원 soft delete
-        findMember.softDeleteMember(false);
+        findMember.softDeleteMember();
 
         // 회원의 게시글 soft delete
         List<Post> postsByFindMember = postRepository.findByMemberId(memberId);
