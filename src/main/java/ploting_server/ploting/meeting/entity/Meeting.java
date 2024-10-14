@@ -56,6 +56,6 @@ public class Meeting {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "is_active")
-    private boolean isActive;
+    @Column(name = "active_status")
+    private boolean activeStatus;
 }
