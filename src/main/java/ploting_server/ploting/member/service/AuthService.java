@@ -20,7 +20,7 @@ import ploting_server.ploting.core.security.service.oauth.OAuthService;
 import ploting_server.ploting.member.dto.request.OAuthAuthorizationRequest;
 import ploting_server.ploting.member.dto.request.OAuthLoginRequest;
 import ploting_server.ploting.member.dto.server.MemberJwtDto;
-import ploting_server.ploting.member.dto.server.MemberLoginDto;
+import ploting_server.ploting.member.dto.server.MemberOAuthLoginDto;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.entity.ProviderType;
 import ploting_server.ploting.member.repository.MemberRepository;
@@ -57,11 +57,11 @@ public class AuthService {
         OAuthService oAuthService = getOAuthService(oAuthLoginRequest.getProvider());
 
         // OAuth 제공자로부터 회원 정보 조회
-        MemberLoginDto memberLoginDto = oAuthService.getUserInfo(oAuthLoginRequest);
+        MemberOAuthLoginDto memberOAuthLoginDto = oAuthService.getUserInfo(oAuthLoginRequest);
 
         // DB 회원 정보 조회
-        Member member = memberRepository.findByOauthIdAndRole(memberLoginDto.getOauthId(), memberLoginDto.getRole())
-                .orElseGet(() -> registerMember(memberLoginDto)); // 회원 정보가 없을 경우 회원가입
+        Member member = memberRepository.findByOauthIdAndRole(memberOAuthLoginDto.getOauthId(), memberOAuthLoginDto.getRole())
+                .orElseGet(() -> registerOAuthMember(memberOAuthLoginDto)); // 회원 정보가 없을 경우 회원가입
 
         MemberJwtDto memberJwtDto = new MemberJwtDto(member);
 
@@ -98,13 +98,13 @@ public class AuthService {
     /**
      * OAuth 신규 회원 저장
      */
-    private Member registerMember(MemberLoginDto memberLoginDto) {
+    private Member registerOAuthMember(MemberOAuthLoginDto memberOAuthLoginDto) {
         Member newMember = Member.builder()
-                .oauthId(memberLoginDto.getOauthId())
-                .provider(memberLoginDto.getProvider())
-                .name(memberLoginDto.getName())
-                .profileImageUrl(memberLoginDto.getProfileImageUrl())
-                .role(memberLoginDto.getRole())
+                .oauthId(memberOAuthLoginDto.getOauthId())
+                .provider(memberOAuthLoginDto.getProvider())
+                .name(memberOAuthLoginDto.getName())
+                .profileImageUrl(memberOAuthLoginDto.getProfileImageUrl())
+                .role(memberOAuthLoginDto.getRole())
                 .build();
 
         return memberRepository.save(newMember);

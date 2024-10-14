@@ -3,6 +3,7 @@ package ploting_server.ploting.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -57,4 +58,13 @@ public class Member {
 
     @Column(name = "is_active")
     private boolean isActive; // soft delete 용도
+
+    // 회원 가입 시 정보를 업데이트하는 메서드
+    public void registerMember(MemberRegisterRequest memberRegisterRequest) {
+        this.name = memberRegisterRequest.getName();
+        this.nickname = memberRegisterRequest.getNickname();
+        this.location = memberRegisterRequest.getLocation();
+        this.gender = memberRegisterRequest.getGender();
+        this.birth = memberRegisterRequest.getBirth();
+    }
 }
