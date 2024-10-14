@@ -54,4 +54,7 @@ public class Member {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "is_active")
+    private boolean isActive; // soft delete 용도
 }
