@@ -41,4 +41,10 @@ public class Post {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    // 게시글 삭제 (soft delete)
+    public void softDeletePost() {
+        this.content = "삭제된 글입니다.";
+        this.title = "삭제된 글입니다.";
+    }
 }

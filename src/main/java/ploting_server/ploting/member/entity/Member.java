@@ -69,4 +69,9 @@ public class Member {
         this.createdAt = LocalDateTime.now();
         this.activeStatus = true;
     }
+
+    // 회원 탈퇴 (soft delete)
+    public void softDeleteMember(boolean activeStatus) {
+        this.activeStatus = activeStatus;
+    }
 }

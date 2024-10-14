@@ -43,4 +43,9 @@ public class Comment {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    // 댓글 삭제 (soft delete)
+    public void softDeleteComment() {
+        this.content = "삭제된 댓글입니다.";
+    }
 }
