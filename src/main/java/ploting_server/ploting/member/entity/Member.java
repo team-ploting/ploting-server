@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
+import ploting_server.ploting.member.dto.request.MemberUpdateRequest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -59,7 +60,7 @@ public class Member {
     @Column(name = "active_status")
     private boolean activeStatus; // soft delete 용도
 
-    // 회원 가입 시 정보를 업데이트하는 메서드
+    // 회원 가입 시 정보 업데이트
     public void registerMember(MemberRegisterRequest memberRegisterRequest) {
         this.name = memberRegisterRequest.getName();
         this.nickname = memberRegisterRequest.getNickname();
@@ -71,7 +72,14 @@ public class Member {
     }
 
     // 회원 탈퇴 (soft delete)
-    public void softDeleteMember(boolean activeStatus) {
-        this.activeStatus = activeStatus;
+    public void softDeleteMember() {
+        this.activeStatus = false;
+    }
+
+    // 회원 정보 수정
+    public void updateMember(MemberUpdateRequest memberUpdateRequest) {
+        this.name = memberUpdateRequest.getName();
+        this.nickname = memberUpdateRequest.getNickname();
+        this.location = memberUpdateRequest.getLocation();
     }
 }
