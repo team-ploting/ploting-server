@@ -54,6 +54,7 @@ public class MemberService {
                 .location(findMember.getLocation())
                 .gender(findMember.getGender())
                 .birth(findMember.getBirth())
+                .level(findMember.getLevel())
                 .createdAt(findMember.getCreatedAt())
                 .activeStatus(findMember.isActiveStatus())
                 .build();
@@ -107,5 +108,7 @@ public class MemberService {
             }
             comment.softDeleteComment();
         }
+
+        // TODO: 회원이 속한 단체와 모임 row 삭제, 단체와 모임 리더라면 reject
     }
 }

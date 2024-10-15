@@ -32,8 +32,8 @@ public class OrganizationMember {
     @JoinColumn(name = "introduction", columnDefinition = "TEXT")
     private String introduction;
 
-    @Column(name = "is_leader")
-    private boolean isLeader;
+    @Column(name = "leader_status")
+    private boolean leaderStatus;
 
     @CreationTimestamp
     @Column(name = "created_at")
