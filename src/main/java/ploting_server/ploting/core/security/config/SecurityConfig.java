@@ -95,7 +95,8 @@ public class SecurityConfig {
                 antMatcher(POST, "/auth/request"),
                 antMatcher(POST, "/auth/login"),
                 antMatcher(GET, "/member"),
-                antMatcher(GET, "/member/check-nickname")
+                antMatcher(GET, "/member/check-nickname"),
+                antMatcher(GET, "/organization/{organizationId}")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
