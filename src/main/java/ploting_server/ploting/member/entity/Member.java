@@ -53,6 +53,9 @@ public class Member {
     @Column(name = "birth")
     private LocalDate birth;
 
+    @Column(name = "level")
+    private int level;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

@@ -95,7 +95,8 @@ public class SecurityConfig {
                 antMatcher(POST, "/auth/request"),
                 antMatcher(POST, "/auth/login"),
                 antMatcher(GET, "/member"),
-                antMatcher(GET, "/member/check-nickname")
+                antMatcher(GET, "/member/check-nickname"),
+                antMatcher(GET, "/organization/{organizationId}")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -109,7 +110,8 @@ public class SecurityConfig {
                 antMatcher(POST, "/auth/refresh"),
                 antMatcher(PATCH, "/member"),
                 antMatcher(PATCH, "/member/registration"),
-                antMatcher(DELETE, "/member")
+                antMatcher(DELETE, "/member"),
+                antMatcher(POST, "/organization")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);

@@ -56,4 +56,13 @@ public class GlobalExceptionHandler {
         BaseErrorCode errorCode = exception.getErrorCode();
         return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
     }
+
+    /**
+     * Organization 관련 예외 Handler
+     */
+    @ExceptionHandler(OrganizationException.class)
+    protected ResponseEntity<ErrorResponse> handleOrganizationException(OrganizationException exception) {
+        BaseErrorCode errorCode = exception.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
+    }
 }

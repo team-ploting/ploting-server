@@ -29,8 +29,11 @@ public class OrganizationMember {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "is_leader")
-    private boolean isLeader;
+    @JoinColumn(name = "introduction", columnDefinition = "TEXT")
+    private String introduction;
+
+    @Column(name = "leader_status")
+    private boolean leaderStatus;
 
     @CreationTimestamp
     @Column(name = "created_at")

@@ -52,6 +52,15 @@ public class Meeting {
     @Column(name = "like_count")
     private int likeCount;
 
+    @Column(name = "member_count")
+    private int memberCount;
+
+    @Column(name = "male_count")
+    private int maleCount;
+
+    @Column(name = "female_count")
+    private int femaleCount;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
