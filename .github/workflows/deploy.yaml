@@ -58,7 +58,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Before build, inject .env file
-        run: echo "${{ secret.PROD_ENV }}" > ./src/main/resources/.env
+        run: echo "${{ secrets.PROD_ENV }}" > ./src/main/resources/.env
             
       - name: Build with Gradle
         run: ./gradlew clean build --refresh-dependencies -x test
