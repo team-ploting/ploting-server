@@ -68,6 +68,9 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys:
             ${{ runner.os }}-gradle-
+
+      - name: Before build, inject .env file
+        run: echo "${{ secret.PROD_ENV }}" > ./src/main/resources/.env
             
       - name: Build with Gradle
         run: ./gradlew clean build --refresh-dependencies -x test
