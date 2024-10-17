@@ -78,7 +78,7 @@ jobs:
           aws ecs describe-task-definition \
             --task-definition ${{ env.ECS_TASK_DEFINITION }} \
             --query taskDefinition \
-            > task-definition.json
+            > ploting-task-definition.json
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
