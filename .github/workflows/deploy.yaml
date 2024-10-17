@@ -13,7 +13,7 @@ env:
   ECR_REPOSITORY: ploting-ecr
   ECS_SERVICE: ploting-service
   ECS_CLUSTER: ploting-cluster
-  ECS_TASK_DEFINITION: ploting-task-definition
+  ECS_TASK_DEFINITION: .aws/task-definition.json # this env means directory
   CONTAINER_NAME: ploting-server
 
 
@@ -72,6 +72,11 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Create task definition JSON file from secret
+        run: | 
+          mkdir -p .aws
+          echo "${{ secrets.TASK_DEFINITION }}" > .aws/task-definition.json
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
