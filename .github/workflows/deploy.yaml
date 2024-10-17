@@ -10,7 +10,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
-  ECR_REPOSITORY: ploting-ecr
+  ECR_REPOSITORY: ploting-repository
   ECS_SERVICE: ploting-service
   ECS_CLUSTER: ploting-cluster
   ECS_TASK_DEFINITION: ploting-task-definition
