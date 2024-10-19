@@ -59,7 +59,7 @@ public class OrganizationController {
     }
 
     @Operation(
-            summary = "단체 정보 수정",
+            summary = "단체 정보 수정 (단체장만 가능)",
             description = "단체의 정보를 수정합니다."
     )
     @ApiResponses(value = {
@@ -72,6 +72,22 @@ public class OrganizationController {
             @PathVariable Long organizationId,
             @RequestBody OrganizationUpdateRequest organizationUpdateRequest) {
         organizationService.updateOrganization(Long.parseLong(principalDetails.getUsername()), organizationId, organizationUpdateRequest);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
+
+    @Operation(
+            summary = "단체 삭제 (단체장만 가능)",
+            description = "단체를 삭제합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "단체 정보 수정 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @DeleteMapping("/{organizationId}")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteOrganization(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long organizationId) {
+        organizationService.deleteOrganization(Long.parseLong(principalDetails.getUsername()), organizationId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 }

@@ -143,6 +143,45 @@ public class OrganizationService {
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
+        // 단체의 단체장인지 확인
+        checkOrganizationLeader(memberId, organizationId);
+
+        // 최대 멤버 제한이 현재 멤버 수보다 작을 수 없음
+        if (organization.getMemberCount() > organizationUpdateRequest.getMaxMember()) {
+            throw new OrganizationException(OrganizationErrorCode.INVALID_MEMBER_LIMIT);
+        }
+
+        // 단체 수정
+        organization.updateOrganization(organizationUpdateRequest);
+    }
+
+    /**
+     * 단체를 삭제합니다. (단체장만 가능)
+     */
+    @Transactional
+    public void deleteOrganization(Long memberId, Long organizationId) {
+        Organization organization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        OrganizationMember organizationMember = organizationMemberRepository.findById(organizationId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        // 단체의 단체장인지 확인
+        checkOrganizationLeader(memberId, organizationId);
+
+        // 멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없음
+        if (organization.getMemberCount() != 1) {
+            throw new OrganizationException(OrganizationErrorCode.CANNOT_DELETE_ORGANIZATION);
+        }
+
+        // 단체 삭제
+        organizationRepository.delete(organization);
+    }
+
+    /**
+     * 단체의 단체장인지 확인합니다.
+     */
+    private void checkOrganizationLeader(Long memberId, Long organizationId) {
         OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
@@ -150,8 +189,5 @@ public class OrganizationService {
         if (!organizationMember.getMember().getId().equals(memberId)) {
             throw new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_LEADER);
         }
-
-        // 단체 수정
-        organization.updateOrganization(organizationUpdateRequest);
     }
 }
