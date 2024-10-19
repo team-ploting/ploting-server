@@ -9,6 +9,10 @@ import ploting_server.ploting.core.response.ErrorResponse;
  */
 @Getter
 public enum OrganizationErrorCode implements BaseErrorCode {
+    // 400 BAD_REQUEST
+    INVALID_MEMBER_LIMIT(400, "최대 멤버 제한이 현재 멤버 수보다 작을 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_DELETE_ORGANIZATION(400, "멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
+
     // 403 FORBIDDEN
     NOT_ORGANIZATION_LEADER(403, "단체의 단체장이 아닙니다.", HttpStatus.FORBIDDEN),
 
