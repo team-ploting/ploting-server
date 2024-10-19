@@ -53,6 +53,7 @@ public class AuthService {
     /**
      * OAuth 로그인
      */
+    @Transactional
     public JwtTokenResponse login(OAuthLoginRequest oAuthLoginRequest) {
         OAuthService oAuthService = getOAuthService(oAuthLoginRequest.getProvider());
 
@@ -130,7 +131,7 @@ public class AuthService {
         return switch (provider) {
             case NAVER -> naverOAuthService;
             case KAKAO -> kakaoOAuthService;
-//            case APPLE -> appleOAuthService;
+//            case GOOGLE -> googleOAuthService;
             default -> throw new OAuthException(OAuthErrorCode.UNSUPPORTED_OAUTH_PROVIDER);
         };
     }
