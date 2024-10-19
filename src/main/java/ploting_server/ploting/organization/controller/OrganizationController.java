@@ -17,7 +17,10 @@ import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.organization.dto.request.OrganizationCreateRequest;
 import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
+import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
 import ploting_server.ploting.organization.service.OrganizationService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("organization")
@@ -89,5 +92,20 @@ public class OrganizationController {
             @PathVariable Long organizationId) {
         organizationService.deleteOrganization(Long.parseLong(principalDetails.getUsername()), organizationId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
+
+    @Operation(
+            summary = "단체 멤버 리스트 조회",
+            description = "단체의 멤버 리스트를 조회합니다."
+    )
+    @SecurityRequirements(value = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "단체 멤버 리스트 조회 성공", useReturnTypeSchema = true),
+    })
+    @GetMapping("/{organizationId}/members")
+    public ResponseEntity<BfResponse<List<OrganizationMemberListResponse>>> getOrganizationMemberList(
+            @PathVariable Long organizationId) {
+        List<OrganizationMemberListResponse> organizationMemberList = organizationService.getOrganizationMemberList(organizationId);
+        return ResponseEntity.ok(new BfResponse<>(organizationMemberList));
     }
 }
