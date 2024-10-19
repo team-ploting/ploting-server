@@ -36,7 +36,4 @@ public class OrganizationCreateRequest {
 
     @Schema(description = "단체의 이미지", example = "https://...", required = true)
     private final String organizationImageUrl;
-
-    @Schema(description = "단체 생성시 한 줄 소개", example = "한 줄 소개", required = true)
-    private final String introduction;
 }
