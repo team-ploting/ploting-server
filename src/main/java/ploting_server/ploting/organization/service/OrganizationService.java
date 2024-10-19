@@ -16,6 +16,7 @@ import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.dto.request.OrganizationCreateRequest;
 import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
+import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
 import ploting_server.ploting.organization.entity.Organization;
 import ploting_server.ploting.organization.entity.OrganizationMember;
 import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
@@ -176,6 +177,26 @@ public class OrganizationService {
 
         // 단체 삭제
         organizationRepository.delete(organization);
+    }
+
+    /**
+     * 단체의 멤버를 조회합니다.
+     */
+    @Transactional(readOnly = true)
+    public List<OrganizationMemberListResponse> getOrganizationMemberList(Long organizationId) {
+        // 단체의 멤버 리스트 조회
+        List<OrganizationMember> organizationMemberList = organizationMemberRepository.findAllByOrganizationId(organizationId);
+
+        // 모임_멤버 리스트를 OrganizationMemberInfoResponse 리스트로 변환
+        return organizationMemberList.stream()
+                .map(organizationMember -> OrganizationMemberListResponse.builder()
+                        .nickname(organizationMember.getMember().getNickname())
+                        .level(organizationMember.getMember().getLevel())
+                        .profileImageUrl(organizationMember.getMember().getProfileImageUrl())
+                        .introduction(organizationMember.getIntroduction())
+                        .leaderStatus(organizationMember.isLeaderStatus())
+                        .build())
+                .toList();
     }
 
     /**
