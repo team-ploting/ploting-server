@@ -43,6 +43,7 @@ public class MemberService {
     /**
      * 회원의 정보를 반환합니다.
      */
+    @Transactional(readOnly = true)
     public MemberInfoResponse getMember(Long memberId) {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
@@ -63,6 +64,7 @@ public class MemberService {
     /**
      * 회원 닉네임 중복 여부를 확인합니다.
      */
+    @Transactional(readOnly = true)
     public MemberNicknameDuplicationResponse checkNicknameDuplicate(String nickname) {
         Boolean existsByNickname = memberRepository.existsByNickname(nickname);
 
