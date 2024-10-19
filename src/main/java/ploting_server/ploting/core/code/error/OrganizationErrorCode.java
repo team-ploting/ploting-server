@@ -9,6 +9,9 @@ import ploting_server.ploting.core.response.ErrorResponse;
  */
 @Getter
 public enum OrganizationErrorCode implements BaseErrorCode {
+    // 403 FORBIDDEN
+    NOT_ORGANIZATION_LEADER(403, "단체의 단체장이 아닙니다.", HttpStatus.FORBIDDEN),
+
     // 404 NOT_FOUND
     NOT_FOUND_ORGANIZATION_ID(404, "존재하지 않는 단체입니다.", HttpStatus.NOT_FOUND);
 

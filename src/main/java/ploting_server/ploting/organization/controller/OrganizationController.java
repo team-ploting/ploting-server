@@ -15,6 +15,7 @@ import ploting_server.ploting.core.code.success.GlobalSuccessCode;
 import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.organization.dto.request.OrganizationCreateRequest;
+import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
 import ploting_server.ploting.organization.service.OrganizationService;
 
@@ -55,5 +56,22 @@ public class OrganizationController {
             @PathVariable Long organizationId) {
         OrganizationInfoResponse organizationInfoResponse = organizationService.getOrganizationInfo(organizationId);
         return ResponseEntity.ok(new BfResponse<>(organizationInfoResponse));
+    }
+
+    @Operation(
+            summary = "단체 정보 수정",
+            description = "단체의 정보를 수정합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "단체 정보 수정 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @PatchMapping("/{organizationId}")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> updateOrganization(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long organizationId,
+            @RequestBody OrganizationUpdateRequest organizationUpdateRequest) {
+        organizationService.updateOrganization(Long.parseLong(principalDetails.getUsername()), organizationId, organizationUpdateRequest);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 }

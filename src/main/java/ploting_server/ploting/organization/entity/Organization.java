@@ -3,6 +3,7 @@ package ploting_server.ploting.organization.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 
 import java.time.LocalDateTime;
 
@@ -59,4 +60,60 @@ public class Organization {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    /**
+     * 단체 수정
+     */
+    public void updateOrganization(OrganizationUpdateRequest organizationUpdateRequest) {
+        this.name = organizationUpdateRequest.getName();
+        this.description = organizationUpdateRequest.getDescription();
+        this.location = organizationUpdateRequest.getLocation();
+        this.maxMember = organizationUpdateRequest.getMaxMember();
+        this.minAge = organizationUpdateRequest.getMinAge();
+        this.maxAge = organizationUpdateRequest.getMaxAge();
+        this.minLevel = organizationUpdateRequest.getMinLevel();
+        this.organizationImageUrl = organizationUpdateRequest.getOrganizationImageUrl();
+    }
+
+    /**
+     * 멤버 수 증가
+     */
+    public void incrementMemberCount() {
+        this.memberCount++;
+    }
+
+    /**
+     * 멤버 수 감소
+     */
+    public void decrementMemberCount() {
+        this.memberCount--;
+    }
+
+    /**
+     * 여자 수 증가
+     */
+    public void incrementFemaleCount() {
+        this.femaleCount++;
+    }
+
+    /**
+     * 여자 수 감소
+     */
+    public void decrementFemaleCount() {
+        this.femaleCount--;
+    }
+
+    /**
+     * 남자 수 증가
+     */
+    public void incrementMaleCount() {
+        this.maleCount++;
+    }
+
+    /**
+     * 남자 수 감소
+     */
+    public void decrementMaleCount() {
+        this.maleCount--;
+    }
 }

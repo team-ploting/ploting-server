@@ -112,7 +112,8 @@ public class SecurityConfig {
                 antMatcher(PATCH, "/member"),
                 antMatcher(PATCH, "/member/registration"),
                 antMatcher(DELETE, "/member"),
-                antMatcher(POST, "/organization")
+                antMatcher(POST, "/organization"),
+                antMatcher(PATCH, "/organization/{organizationId}")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -138,7 +139,6 @@ public class SecurityConfig {
                 );
     }
 
-    // TODO: RN 이면 삭제
     /**
      * CORS 설정
      */
@@ -151,8 +151,11 @@ public class SecurityConfig {
                 Arrays.asList(
                         "http://localhost:8080",
                         "http://127.0.0.1:8080",
-                        "http://localhost:8080/swagger-ui.html",
-                        "http://127.0.0.1:8080/swagger-ui.html"
+                        "http://localhost:5173",
+                        "http://127.0.0.1:5173",
+                        "http://localhost:8080/swagger-ui/index.html",
+                        "http://127.0.0.1:8080/swagger-ui/index.html",
+                        "https://api.ploting.kr"
                 )
         );
 
