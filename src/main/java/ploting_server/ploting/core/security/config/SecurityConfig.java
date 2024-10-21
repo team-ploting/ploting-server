@@ -117,7 +117,8 @@ public class SecurityConfig {
                 antMatcher(DELETE, "/organizations/{organizationId}"),
                 antMatcher(GET, "/organizations/mine"),
                 antMatcher(PATCH, "/organizations/{organizationId}"),
-                antMatcher(POST, "/organizations")
+                antMatcher(POST, "/organizations"),
+                antMatcher(PATCH, "organizations/{organizationId}/leader")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);

@@ -142,4 +142,21 @@ public class OrganizationController {
         List<OrganizationMemberListResponse> organizationMemberList = organizationService.getOrganizationMemberList(organizationId);
         return ResponseEntity.ok(new BfResponse<>(organizationMemberList));
     }
+
+    @Operation(
+            summary = "단체장 권한 위임",
+            description = "단체장 권한을 다른 회원에게 위임합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "단체장 권한 위임 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @PatchMapping("/{organizationId}/leader")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> delegateLeader(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long organizationId,
+            @RequestParam Long newLeaderId) {
+        organizationService.delegateLeader(Long.parseLong(principalDetails.getUsername()), organizationId, newLeaderId);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
 }
