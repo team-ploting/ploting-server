@@ -92,6 +92,7 @@ public class SecurityConfig {
         List<RequestMatcher> requestMatchers = List.of(
                 antMatcher(GET, "/swagger-ui/**"), // Swagger UI 웹 인터페이스를 제공하는 경로
                 antMatcher(GET, "/v3/api-docs/**"), // Swagger의 API 문서 데이터를 JSON 형식으로 제공하는 경로
+                antMatcher(GET, "utils/health"),
                 antMatcher(POST, "/auth/request"),
                 antMatcher(POST, "/auth/login"),
                 antMatcher(GET, "/members"),
