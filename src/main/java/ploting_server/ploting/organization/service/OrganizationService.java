@@ -249,9 +249,28 @@ public class OrganizationService {
     }
 
     /**
+     * 단체장 권한을 다른 회원에게 위임합니다.
+     */
+    @Transactional
+    public void delegateLeader(Long memberId, Long organizationId, Long newLeaderId) {
+        // 현재 단체장
+        OrganizationMember currentLeader = checkOrganizationLeader(memberId, organizationId);
+
+        // 새로운 단체장
+        OrganizationMember newLeader = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, newLeaderId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
+
+        // 기존 단체장의 권한을 해제
+        currentLeader.revokeLeader();
+
+        // 새로운 단체장에게 권한을 부여
+        newLeader.assignLeader();
+    }
+
+    /**
      * 단체의 단체장인지 확인합니다.
      */
-    private void checkOrganizationLeader(Long memberId, Long organizationId) {
+    private OrganizationMember checkOrganizationLeader(Long memberId, Long organizationId) {
         OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
@@ -259,5 +278,7 @@ public class OrganizationService {
         if (!organizationMember.getMember().getId().equals(memberId)) {
             throw new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_LEADER);
         }
+
+        return organizationMember;
     }
 }
