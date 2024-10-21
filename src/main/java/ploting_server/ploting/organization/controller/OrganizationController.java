@@ -71,7 +71,7 @@ public class OrganizationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "나의 단체 목록 조회 성공", useReturnTypeSchema = true),
     })
-    @GetMapping("/my")
+    @GetMapping("/self")
     public ResponseEntity<BfResponse<Page<OrganizationListResponse>>> getMyOrganizationList(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestParam int page,
@@ -168,12 +168,29 @@ public class OrganizationController {
             @ApiResponse(responseCode = "200", description = "멤버 강퇴 성공",
                     content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
     })
-    @DeleteMapping("{organizationId}/members/{kickMemberId}")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> kickMember(
+    @DeleteMapping("{organizationId}/banishment")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> banishMember(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long organizationId,
-            @PathVariable Long kickMemberId) {
-        organizationService.kickMember(Long.parseLong(principalDetails.getUsername()), organizationId, kickMemberId);
+            @RequestParam Long kickMemberId) {
+        organizationService.banishMember(Long.parseLong(principalDetails.getUsername()), organizationId, kickMemberId);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
+
+    @Operation(
+            summary = "단체 가입",
+            description = "단체를 가입합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "단체 가입 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @PostMapping("{organizationId}")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> registerOrganization(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long organizationId,
+            @RequestParam String introduction) {
+        organizationService.registerOrganization(Long.parseLong(principalDetails.getUsername()), organizationId, introduction);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 }

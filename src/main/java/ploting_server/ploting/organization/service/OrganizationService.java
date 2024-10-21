@@ -98,6 +98,7 @@ public class OrganizationService {
     /**
      * 모든 단체 목록을 조회합니다. (페이징 처리)
      */
+    @Transactional(readOnly = true)
     public Page<OrganizationListResponse> getAllOrganizationList(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -120,6 +121,7 @@ public class OrganizationService {
     /**
      * 나의 단체 목록을 조회합니다. (페이징 처리)
      */
+    @Transactional(readOnly = true)
     public Page<OrganizationListResponse> getMyOrganizationList(Long memberId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -271,7 +273,7 @@ public class OrganizationService {
      * 단체의 멤버를 강퇴합니다.
      */
     @Transactional
-    public void kickMember(Long memberId, Long organizationId, Long kickMemberId) {
+    public void banishMember(Long memberId, Long organizationId, Long kickMemberId) {
         // 단체장 권한 확인
         checkOrganizationLeader(memberId, organizationId);
 
@@ -280,6 +282,28 @@ public class OrganizationService {
 
         // 멤버 강퇴
         organizationMemberRepository.delete(organizationMember);
+    }
+
+    /**
+     * 단체를 가입합니다.
+     */
+    @Transactional
+    public void registerOrganization(Long memberId, Long organizationId, String introduction) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        Organization organization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        OrganizationMember organizationMember = OrganizationMember.builder()
+                .organization(organization)
+                .member(member)
+                .introduction(introduction)
+                .leaderStatus(false)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        organizationMemberRepository.save(organizationMember);
     }
 
     /**
