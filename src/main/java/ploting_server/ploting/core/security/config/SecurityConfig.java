@@ -115,11 +115,13 @@ public class SecurityConfig {
                 antMatcher(PATCH, "/members/registration"),
                 antMatcher(DELETE, "/members"),
                 antMatcher(DELETE, "/organizations/{organizationId}"),
-                antMatcher(GET, "/organizations/mine"),
+                antMatcher(DELETE, "organizations/{organizationId}/departure"),
+                antMatcher(DELETE, "organizations/{organizationId}/banishment"),
+                antMatcher(GET, "/organizations/self"),
                 antMatcher(PATCH, "/organizations/{organizationId}"),
-                antMatcher(POST, "/organizations"),
                 antMatcher(PATCH, "organizations/{organizationId}/leader"),
-                antMatcher(DELETE, "organizations/{organizationId}/members/{kickMemberId}")
+                antMatcher(POST, "/organizations"),
+                antMatcher(POST, "/organizations/{organizationId}")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
