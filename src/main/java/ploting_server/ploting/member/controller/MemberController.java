@@ -21,7 +21,7 @@ import ploting_server.ploting.member.dto.response.MemberNicknameDuplicationRespo
 import ploting_server.ploting.member.service.MemberService;
 
 @RestController
-@RequestMapping("member")
+@RequestMapping("members")
 @RequiredArgsConstructor
 @Tag(name = "회원", description = "회원 관련 API")
 public class MemberController {

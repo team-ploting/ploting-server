@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 단체를 관리하는 엔티티 클래스입니다.
@@ -60,6 +61,20 @@ public class Organization {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    // 양방향 연관관계
+    @OneToMany(mappedBy = "organization")
+    private List<OrganizationMember> organizationMembers;
+
+    // 연관관계 편의 메서드 - 추가
+    public void addOrganizationMember(OrganizationMember organizationMember) {
+        this.organizationMembers.add(organizationMember);
+    }
+
+    // 연관관계 편의 메서드 - 삭제
+    public void removeOrganizationMember(OrganizationMember organizationMember) {
+        this.organizationMembers.remove(organizationMember);
+    }
 
     /**
      * 단체 수정
