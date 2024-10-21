@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,14 @@ import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.organization.dto.request.OrganizationCreateRequest;
 import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
+import ploting_server.ploting.organization.dto.response.OrganizationListResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
 import ploting_server.ploting.organization.service.OrganizationService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("organization")
+@RequestMapping("organizations")
 @RequiredArgsConstructor
 @Tag(name = "단체", description = "단체 관련 API")
 public class OrganizationController {
@@ -44,6 +46,38 @@ public class OrganizationController {
             @RequestBody OrganizationCreateRequest organizationCreateRequest) {
         organizationService.createOrganization(Long.parseLong(principalDetails.getUsername()), organizationCreateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
+
+    @Operation(
+            summary = "모든 단체 목록 조회 (페이징 처리)",
+            description = "페이징 처리된 모든 단체 목록을 조회합니다."
+    )
+    @SecurityRequirements(value = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모든 단체 목록 조회 성공", useReturnTypeSchema = true),
+    })
+    @GetMapping("")
+    public ResponseEntity<BfResponse<Page<OrganizationListResponse>>> getAllOrganizationList(
+            @RequestParam int page,
+            @RequestParam int size) {
+        Page<OrganizationListResponse> allOrganizationList = organizationService.getAllOrganizationList(page, size);
+        return ResponseEntity.ok(new BfResponse<>(allOrganizationList));
+    }
+
+    @Operation(
+            summary = "나의 단체 목록 조회 (페이징 처리)",
+            description = "페이징 처리된 나의 단체 목록을 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "나의 단체 목록 조회 성공", useReturnTypeSchema = true),
+    })
+    @GetMapping("/mine")
+    public ResponseEntity<BfResponse<Page<OrganizationListResponse>>> getMyOrganizationList(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestParam int page,
+            @RequestParam int size) {
+        Page<OrganizationListResponse> myOrganizationList = organizationService.getMyOrganizationList(Long.parseLong(principalDetails.getUsername()), page, size);
+        return ResponseEntity.ok(new BfResponse<>(myOrganizationList));
     }
 
     @Operation(

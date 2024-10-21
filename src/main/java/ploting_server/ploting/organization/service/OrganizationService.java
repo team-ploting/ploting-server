@@ -1,6 +1,10 @@
 package ploting_server.ploting.organization.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
@@ -16,6 +20,7 @@ import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.dto.request.OrganizationCreateRequest;
 import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
+import ploting_server.ploting.organization.dto.response.OrganizationListResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
 import ploting_server.ploting.organization.entity.Organization;
 import ploting_server.ploting.organization.entity.OrganizationMember;
@@ -84,7 +89,54 @@ public class OrganizationService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
+        // 양방향 연관관계 설정
+        organization.addOrganizationMember(organizationMember);
+
         organizationMemberRepository.save(organizationMember);
+    }
+
+    /**
+     * 모든 단체 목록을 조회합니다. (페이징 처리)
+     */
+    public Page<OrganizationListResponse> getAllOrganizationList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<Organization> organizationPage = organizationRepository.findAll(pageable);
+
+        return organizationPage.map(organization -> OrganizationListResponse.builder()
+                .id(organization.getId())
+                .name(organization.getName())
+                .description(organization.getDescription())
+                .location(organization.getLocation())
+                .minAge(organization.getMinAge())
+                .maxAge(organization.getMaxAge())
+                .minLevel(organization.getMinLevel())
+                .memberCount(organization.getMemberCount())
+                .maleCount(organization.getMaleCount())
+                .femaleCount(organization.getFemaleCount())
+                .build());
+    }
+
+    /**
+     * 나의 단체 목록을 조회합니다. (페이징 처리)
+     */
+    public Page<OrganizationListResponse> getMyOrganizationList(Long memberId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<Organization> organizationPage = organizationRepository.findAllByMemberId(memberId, pageable);
+
+        return organizationPage.map(organization -> OrganizationListResponse.builder()
+                .id(organization.getId())
+                .name(organization.getName())
+                .description(organization.getDescription())
+                .location(organization.getLocation())
+                .minAge(organization.getMinAge())
+                .maxAge(organization.getMaxAge())
+                .minLevel(organization.getMinLevel())
+                .memberCount(organization.getMemberCount())
+                .maleCount(organization.getMaleCount())
+                .femaleCount(organization.getFemaleCount())
+                .build());
     }
 
     /**
@@ -162,9 +214,6 @@ public class OrganizationService {
     @Transactional
     public void deleteOrganization(Long memberId, Long organizationId) {
         Organization organization = organizationRepository.findById(organizationId)
-                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
-
-        OrganizationMember organizationMember = organizationMemberRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
         // 단체의 단체장인지 확인

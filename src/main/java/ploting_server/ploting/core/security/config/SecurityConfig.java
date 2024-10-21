@@ -94,10 +94,11 @@ public class SecurityConfig {
                 antMatcher(GET, "/v3/api-docs/**"), // Swagger의 API 문서 데이터를 JSON 형식으로 제공하는 경로
                 antMatcher(POST, "/auth/request"),
                 antMatcher(POST, "/auth/login"),
-                antMatcher(GET, "/member"),
-                antMatcher(GET, "/member/check-nickname"),
-                antMatcher(GET, "/organization/{organizationId}"),
-                antMatcher(GET, "/organization/{organizationId}/members")
+                antMatcher(GET, "/members"),
+                antMatcher(GET, "/members/check-nickname"),
+                antMatcher(GET, "/organizations"),
+                antMatcher(GET, "/organizations/{organizationId}"),
+                antMatcher(GET, "/organizations/{organizationId}/members")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -109,12 +110,13 @@ public class SecurityConfig {
     private RequestMatcher[] authenticatedRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
                 antMatcher(POST, "/auth/refresh"),
-                antMatcher(PATCH, "/member"),
-                antMatcher(PATCH, "/member/registration"),
-                antMatcher(DELETE, "/member"),
-                antMatcher(DELETE, "/organization/{organizationId}"),
-                antMatcher(PATCH, "/organization/{organizationId}"),
-                antMatcher(POST, "/organization")
+                antMatcher(PATCH, "/members"),
+                antMatcher(PATCH, "/members/registration"),
+                antMatcher(DELETE, "/members"),
+                antMatcher(DELETE, "/organizations/{organizationId}"),
+                antMatcher(GET, "/organizations/mine"),
+                antMatcher(PATCH, "/organizations/{organizationId}"),
+                antMatcher(POST, "/organizations")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
