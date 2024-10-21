@@ -249,7 +249,7 @@ public class OrganizationService {
     }
 
     /**
-     * 단체장 권한을 다른 회원에게 위임합니다.
+     * 단체장 권한을 다른 회원에게 위임합니다. (단체장만 가능)
      */
     @Transactional
     public void delegateLeader(Long memberId, Long organizationId, Long newLeaderId) {
@@ -265,6 +265,21 @@ public class OrganizationService {
 
         // 새로운 단체장에게 권한을 부여
         newLeader.assignLeader();
+    }
+
+    /**
+     * 단체의 멤버를 강퇴합니다.
+     */
+    @Transactional
+    public void kickMember(Long memberId, Long organizationId, Long kickMemberId) {
+        // 단체장 권한 확인
+        checkOrganizationLeader(memberId, organizationId);
+
+        OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, kickMemberId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
+
+        // 멤버 강퇴
+        organizationMemberRepository.delete(organizationMember);
     }
 
     /**
