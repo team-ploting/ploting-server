@@ -193,4 +193,20 @@ public class OrganizationController {
         organizationService.registerOrganization(Long.parseLong(principalDetails.getUsername()), organizationId, introduction);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
+
+    @Operation(
+            summary = "단체 탈퇴",
+            description = "단체를 탈퇴합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "단체 탈퇴 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @DeleteMapping("{organizationId}/departure")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> departOrganization(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long organizationId) {
+        organizationService.departOrganization(Long.parseLong(principalDetails.getUsername()), organizationId);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
 }

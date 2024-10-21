@@ -307,6 +307,17 @@ public class OrganizationService {
     }
 
     /**
+     * 단체를 탈퇴합니다.
+     */
+    @Transactional
+    public void departOrganization(Long memberId, Long organizationId) {
+        OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, memberId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
+
+        organizationMemberRepository.delete(organizationMember);
+    }
+
+    /**
      * 단체의 단체장인지 확인합니다.
      */
     private OrganizationMember checkOrganizationLeader(Long memberId, Long organizationId) {
