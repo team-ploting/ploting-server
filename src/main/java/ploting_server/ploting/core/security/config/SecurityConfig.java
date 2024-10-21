@@ -161,7 +161,8 @@ public class SecurityConfig {
                         "http://127.0.0.1:5173",
                         "http://localhost:8080/swagger-ui/index.html",
                         "http://127.0.0.1:8080/swagger-ui/index.html",
-                        "https://api.ploting.kr"
+                        "https://ploting.kr",
+                        "https://api.ploting.kr/swagger-ui/index.html"
                 )
         );
 
