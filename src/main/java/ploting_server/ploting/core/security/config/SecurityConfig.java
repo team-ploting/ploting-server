@@ -158,11 +158,11 @@ public class SecurityConfig {
                         "http://localhost:8080",
                         "http://127.0.0.1:8080",
                         "http://localhost:5173",
+                        "https://localhost:5173",
                         "http://127.0.0.1:5173",
-                        "http://localhost:8080/swagger-ui/index.html",
-                        "http://127.0.0.1:8080/swagger-ui/index.html",
+                        "https://127.0.0.1:5173",
                         "https://ploting.kr",
-                        "https://api.ploting.kr/swagger-ui/index.html"
+                        "https://api.ploting.kr"
                 )
         );
 
@@ -181,8 +181,8 @@ public class SecurityConfig {
         configuration.setAllowedHeaders(
                 Arrays.asList(
                         "Authorization",
-                        "Cache-Control",
                         "Content-Type",
+                        "Cache-Control",
                         "X-Requested-With"
                 )
         );
