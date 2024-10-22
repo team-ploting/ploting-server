@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,8 +64,9 @@ public class Organization {
     private LocalDateTime createdAt;
 
     // 양방향 연관관계
-    @OneToMany(mappedBy = "organization")
-    private List<OrganizationMember> organizationMembers;
+    @Builder.Default
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<OrganizationMember> organizationMembers = new ArrayList<>();
 
     // 연관관계 편의 메서드 - 추가
     public void addOrganizationMember(OrganizationMember organizationMember) {
