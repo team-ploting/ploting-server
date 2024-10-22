@@ -12,6 +12,9 @@ public enum OrganizationErrorCode implements BaseErrorCode {
     // 400 BAD_REQUEST
     INVALID_MEMBER_LIMIT(400, "최대 멤버 제한이 현재 멤버 수보다 작을 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_DELETE_ORGANIZATION(400, "멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_LEAVE_ORGANIZATION_AS_LEADER(400, "단체장은 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_KICK_SELF_LEADER(400, "단체장은 스스로 강퇴될 수 없습니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_REGISTERED_MEMBER(400, "해당 단체에 이미 가입된 회원입니다.", HttpStatus.BAD_REQUEST),
 
     // 403 FORBIDDEN
     NOT_ORGANIZATION_MEMBER(403, "단체에 가입된 멤버가 아닙니다.", HttpStatus.FORBIDDEN),

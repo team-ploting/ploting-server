@@ -89,10 +89,10 @@ public class OrganizationService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
+        organizationMemberRepository.save(organizationMember);
+
         // 양방향 연관관계 설정
         organization.addOrganizationMember(organizationMember);
-
-        organizationMemberRepository.save(organizationMember);
     }
 
     /**
@@ -182,7 +182,7 @@ public class OrganizationService {
                 .organizationImageUrl(organization.getOrganizationImageUrl())
                 .likeCount(organization.getLikeCount())
                 .memberCount(organization.getMemberCount())
-                .leaderName(organizationMember.getMember().getName())
+                .leaderName(organizationMember.getMember().getNickname())
                 .leaderLevel(organizationMember.getMember().getLevel())
                 .maleCount(organization.getMaleCount())
                 .femaleCount(organization.getFemaleCount())
@@ -280,6 +280,11 @@ public class OrganizationService {
         OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, kickMemberId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
 
+        // 단체장 스스로를 강퇴할 수 없음
+        if (organizationMember.isLeaderStatus()) {
+            throw new OrganizationException(OrganizationErrorCode.CANNOT_KICK_SELF_LEADER);
+        }
+
         // 멤버 강퇴
         organizationMemberRepository.delete(organizationMember);
     }
@@ -294,6 +299,12 @@ public class OrganizationService {
 
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        // 이미 가입된 회원인지 확인
+        boolean isMemberExists = organizationMemberRepository.existsByOrganizationIdAndMemberId(organizationId, memberId);
+        if (isMemberExists) {
+            throw new OrganizationException(OrganizationErrorCode.ALREADY_REGISTERED_MEMBER);
+        }
 
         OrganizationMember organizationMember = OrganizationMember.builder()
                 .organization(organization)
@@ -313,6 +324,17 @@ public class OrganizationService {
     public void departOrganization(Long memberId, Long organizationId) {
         OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, memberId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
+
+        // 단체장은 탈퇴할 수 없음
+        if (organizationMember.isLeaderStatus()) {
+            throw new OrganizationException(OrganizationErrorCode.CANNOT_LEAVE_ORGANIZATION_AS_LEADER);
+        }
+
+        Organization organization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        // 양방향 연관관계 해제
+        organization.removeOrganizationMember(organizationMember);
 
         organizationMemberRepository.delete(organizationMember);
     }
