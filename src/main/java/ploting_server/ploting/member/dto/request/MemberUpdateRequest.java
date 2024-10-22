@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 /**
  * 회원 정보를 업데이트하기 위한 정보를 담는 DTO 클래스입니다.
  */
@@ -19,4 +21,7 @@ public class MemberUpdateRequest {
 
     @Schema(description = "회원의 지역", example = "동대문구", required = true)
     private final String location;
+
+    @Schema(description = "회원의 생년월일", example = "2003-02-12", required = true)
+    private LocalDate birth;
 }
