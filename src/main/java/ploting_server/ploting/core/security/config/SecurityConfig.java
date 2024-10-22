@@ -157,37 +157,52 @@ public class SecurityConfig {
         // 허용할 Origin(출처)
         configuration.setAllowedOrigins(
                 Arrays.asList(
-                        "http://localhost:8080",
-                        "http://127.0.0.1:8080",
-                        "http://localhost:5173",
-                        "https://localhost:5173",
-                        "http://127.0.0.1:5173",
-                        "https://127.0.0.1:5173",
-                        "https://ploting.kr",
-                        "https://api.ploting.kr"
+                        "*"
                 )
         );
+//        configuration.setAllowedOrigins(
+//                Arrays.asList(
+//                        "http://localhost:8080",
+//                        "http://127.0.0.1:8080",
+//                        "http://localhost:5173",
+//                        "https://localhost:5173",
+//                        "http://127.0.0.1:5173",
+//                        "https://127.0.0.1:5173",
+//                        "https://ploting.kr",
+//                        "https://api.ploting.kr"
+//                )
+//        );
 
         // 허용할 HTTP 메서드
         configuration.setAllowedMethods(
                 Arrays.asList(
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "PATCH",
-                        "DELETE"
+                        "*"
                 )
         );
+//        configuration.setAllowedMethods(
+//                Arrays.asList(
+//                        "GET",
+//                        "POST",
+//                        "PUT",
+//                        "PATCH",
+//                        "DELETE"
+//                )
+//        );
 
         // 허용할 헤더
         configuration.setAllowedHeaders(
                 Arrays.asList(
-                        "Authorization",
-                        "Content-Type",
-                        "Cache-Control",
-                        "X-Requested-With"
+                        "*"
                 )
         );
+//        configuration.setAllowedHeaders(
+//                Arrays.asList(
+//                        "Authorization",
+//                        "Content-Type",
+//                        "Cache-Control",
+//                        "X-Requested-With"
+//                )
+//        );
 
         // 인증 정보(쿠키, Authorization 헤더 등)를 포함한 요청 허용
         configuration.setAllowCredentials(true);
