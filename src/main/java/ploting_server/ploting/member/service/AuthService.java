@@ -106,6 +106,7 @@ public class AuthService {
                 .name(memberOAuthLoginDto.getName())
                 .profileImageUrl(memberOAuthLoginDto.getProfileImageUrl())
                 .role(memberOAuthLoginDto.getRole())
+                .level(1)
                 .build();
 
         return memberRepository.save(newMember);
