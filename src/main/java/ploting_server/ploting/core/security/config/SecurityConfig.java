@@ -157,37 +157,28 @@ public class SecurityConfig {
         // 허용할 Origin(출처)
         configuration.setAllowedOrigins(
                 Arrays.asList(
-                        "*"
+                        "http://localhost:8080",
+                        "http://127.0.0.1:8080",
+                        "http://localhost:5173",
+                        "https://localhost:5173",
+                        "http://127.0.0.1:5173",
+                        "https://127.0.0.1:5173",
+                        "https://ploting.kr",
+                        "https://api.ploting.kr"
                 )
         );
-//        configuration.setAllowedOrigins(
-//                Arrays.asList(
-//                        "http://localhost:8080",
-//                        "http://127.0.0.1:8080",
-//                        "http://localhost:5173",
-//                        "https://localhost:5173",
-//                        "http://127.0.0.1:5173",
-//                        "https://127.0.0.1:5173",
-//                        "https://ploting.kr",
-//                        "https://api.ploting.kr"
-//                )
-//        );
 
         // 허용할 HTTP 메서드
         configuration.setAllowedMethods(
                 Arrays.asList(
-                        "*"
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
+                        "OPTIONS"
                 )
         );
-//        configuration.setAllowedMethods(
-//                Arrays.asList(
-//                        "GET",
-//                        "POST",
-//                        "PUT",
-//                        "PATCH",
-//                        "DELETE"
-//                )
-//        );
 
         // 허용할 헤더
         configuration.setAllowedHeaders(
