@@ -20,6 +20,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ploting_server.ploting.core.security.filter.JwtFilter;
 import ploting_server.ploting.core.security.service.jwt.JwtService;
+import ploting_server.ploting.core.security.service.oauth.CustomOAuth2FailureHandler;
+import ploting_server.ploting.core.security.service.oauth.CustomOAuth2SuccessHandler;
+import ploting_server.ploting.core.security.service.oauth.CustomOAuth2UserService;
 import ploting_server.ploting.member.entity.RoleType;
 
 import java.util.Arrays;
@@ -36,6 +39,10 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
+    private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
 
     /**
      * 로그인 인증 작업 처리
@@ -90,6 +97,8 @@ public class SecurityConfig {
      */
     private RequestMatcher[] publicRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
+                antMatcher(GET, "/oauth2/**"), // OAuth 인증 요청 경로
+                antMatcher(GET, "/login/oauth2/**"), // OAuth 리다이렉트 경로
                 antMatcher(GET, "/swagger-ui/**"), // Swagger UI 웹 인터페이스를 제공하는 경로
                 antMatcher(GET, "/v3/api-docs/**"), // Swagger의 API 문서 데이터를 JSON 형식으로 제공하는 경로
                 antMatcher(GET, "/utils/health"),
@@ -144,7 +153,13 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 생성하지 않음
                 .headers(headers -> headers.frameOptions(
                         HeadersConfigurer.FrameOptionsConfig::disable) // X-Frame-Options 헤더 비활성화, 클릭재킹 공격 방지
-                );
+                )
+                .oauth2Login(oauth -> oauth
+                        .successHandler(customOAuth2SuccessHandler)
+                        .failureHandler(customOAuth2FailureHandler)
+                        .userInfoEndpoint(userinfo -> userinfo
+                                .userService(customOAuth2UserService))
+                ); // OAuth2 로그인 설정
     }
 
     /**
