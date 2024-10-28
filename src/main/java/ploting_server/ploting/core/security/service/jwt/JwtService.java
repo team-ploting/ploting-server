@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import ploting_server.ploting.core.security.constant.JwtConstants;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.core.security.principal.PrincipalDetailsService;
 import ploting_server.ploting.member.dto.server.MemberJwtDto;
@@ -78,6 +80,20 @@ public class JwtService {
                 .claim("role", role)
                 .signWith(extractSecretKey(), SignatureAlgorithm.HS512) // 서명에 사용할 비밀 키
                 .compact(); // JWT 문자열로 생성
+    }
+
+    /**
+     * Access 토큰 Header 설정
+     */
+    public void setAccessTokenToHeader(HttpServletResponse response, String accessToken) {
+        response.setHeader(JwtConstants.ACCESS_TOKEN_HEADER, JwtConstants.TOKEN_PREFIX + accessToken);
+    }
+
+    /**
+     * Refresh 토큰 Header 설정
+     */
+    public void setRefreshTokenToHeader(HttpServletResponse response, String refreshToken) {
+        response.setHeader(JwtConstants.REFRESH_TOKEN_HEADER, JwtConstants.TOKEN_PREFIX + refreshToken);
     }
 
     /**
