@@ -33,7 +33,7 @@ public class MemberService {
      * 회원 가입 시 회원 정보를 추가적으로 등록합니다.
      */
     @Transactional
-    public void registerMember(Long memberId, MemberRegisterRequest memberRegisterRequest) {
+    public void registerMemberInfo(Long memberId, MemberRegisterRequest memberRegisterRequest) {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
@@ -85,7 +85,7 @@ public class MemberService {
     }
 
     /**
-     * 회원을 삭제합니다. (soft delete)
+     * 회원 탈퇴합니다. (soft delete)
      */
     @Transactional
     public void deleteMember(Long memberId) {

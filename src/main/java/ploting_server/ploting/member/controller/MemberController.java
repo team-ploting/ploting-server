@@ -40,7 +40,7 @@ public class MemberController {
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerMember(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestBody MemberRegisterRequest memberRegisterRequest) {
-        memberService.registerMember(Long.parseLong(principalDetails.getUsername()), memberRegisterRequest);
+        memberService.registerMemberInfo(Long.parseLong(principalDetails.getUsername()), memberRegisterRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 
