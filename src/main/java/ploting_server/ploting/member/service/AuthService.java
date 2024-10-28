@@ -6,23 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ploting_server.ploting.core.code.error.JwtErrorCode;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
-import ploting_server.ploting.core.code.error.OAuthErrorCode;
 import ploting_server.ploting.core.exception.JwtException;
 import ploting_server.ploting.core.exception.MemberException;
-import ploting_server.ploting.core.exception.OAuthException;
-import ploting_server.ploting.core.security.dto.jwt.request.RefreshTokenRequest;
-import ploting_server.ploting.core.security.dto.jwt.response.AccessTokenResponse;
-import ploting_server.ploting.core.security.dto.jwt.response.JwtTokenResponse;
+import ploting_server.ploting.core.security.dto.jwt.server.JwtTokenDto;
 import ploting_server.ploting.core.security.service.jwt.JwtService;
-import ploting_server.ploting.core.security.service.oauth.KakaoOAuthService;
-import ploting_server.ploting.core.security.service.oauth.NaverOAuthService;
-import ploting_server.ploting.core.security.service.oauth.OAuthService;
-import ploting_server.ploting.member.dto.request.OAuthAuthorizationRequest;
-import ploting_server.ploting.member.dto.request.OAuthLoginRequest;
 import ploting_server.ploting.member.dto.server.MemberJwtDto;
-import ploting_server.ploting.member.dto.server.MemberOAuthLoginDto;
+import ploting_server.ploting.member.dto.server.MemberLoginDto;
 import ploting_server.ploting.member.entity.Member;
-import ploting_server.ploting.member.entity.ProviderType;
 import ploting_server.ploting.member.repository.MemberRepository;
 
 /**
@@ -34,35 +24,15 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final JwtService jwtService;
-    private final KakaoOAuthService kakaoOAuthService;
-    private final NaverOAuthService naverOAuthService;
-
-    /**
-     * Provider 서버에서 AccessToken 발급
-     * (백엔드 테스트 용도)
-     */
-    public AccessTokenResponse getAccessToken(OAuthAuthorizationRequest oAuthAuthorizationRequest) {
-        OAuthService oAuthService = getOAuthService(oAuthAuthorizationRequest.getProvider());
-        String accessToken = oAuthService.getAccessToken(oAuthAuthorizationRequest);
-
-        return AccessTokenResponse.builder()
-                .accessToken(accessToken)
-                .build();
-    }
 
     /**
      * OAuth 로그인
      */
     @Transactional
-    public JwtTokenResponse login(OAuthLoginRequest oAuthLoginRequest) {
-        OAuthService oAuthService = getOAuthService(oAuthLoginRequest.getProvider());
-
-        // OAuth 제공자로부터 회원 정보 조회
-        MemberOAuthLoginDto memberOAuthLoginDto = oAuthService.getUserInfo(oAuthLoginRequest);
-
+    public JwtTokenDto login(MemberLoginDto memberLoginDto) {
         // DB 회원 정보 조회
-        Member member = memberRepository.findByOauthIdAndRole(memberOAuthLoginDto.getOauthId(), memberOAuthLoginDto.getRole())
-                .orElseGet(() -> registerOAuthMember(memberOAuthLoginDto)); // 회원 정보가 없을 경우 회원가입
+        Member member = memberRepository.findByOauthIdAndRole(memberLoginDto.getOauthId(), memberLoginDto.getRole())
+                .orElseGet(() -> registerOAuthMember(memberLoginDto)); // 회원 정보가 없을 경우 회원가입
 
         MemberJwtDto memberJwtDto = new MemberJwtDto(member);
 
@@ -74,16 +44,16 @@ public class AuthService {
      * 기존 Refresh token 으로 신규 Access token 및 Refresh token 발급
      */
     @Transactional
-    public JwtTokenResponse refreshTokens(RefreshTokenRequest refreshTokenRequest) {
+    public JwtTokenDto refreshTokens(String refreshToken) {
         // 유효성 검증
         try {
-            jwtService.validateToken(refreshTokenRequest.getRefreshToken());
+            jwtService.validateToken(refreshToken);
         } catch (Exception e) {
             throw new JwtException(JwtErrorCode.INVALID_TOKEN);
         }
 
         // ID로 회원 조회
-        Claims claims = jwtService.getClaims(refreshTokenRequest.getRefreshToken());
+        Claims claims = jwtService.getClaims(refreshToken);
         Long memberId = Long.valueOf(claims.getSubject());
 
         // DB 조회
@@ -99,13 +69,13 @@ public class AuthService {
     /**
      * OAuth 신규 회원 저장
      */
-    private Member registerOAuthMember(MemberOAuthLoginDto memberOAuthLoginDto) {
+    private Member registerOAuthMember(MemberLoginDto memberLoginDto) {
         Member newMember = Member.builder()
-                .oauthId(memberOAuthLoginDto.getOauthId())
-                .provider(memberOAuthLoginDto.getProvider())
-                .name(memberOAuthLoginDto.getName())
-                .profileImageUrl(memberOAuthLoginDto.getProfileImageUrl())
-                .role(memberOAuthLoginDto.getRole())
+                .oauthId(memberLoginDto.getOauthId())
+                .provider(memberLoginDto.getProvider())
+                .name(memberLoginDto.getName())
+                .profileImageUrl(memberLoginDto.getProfileImageUrl())
+                .role(memberLoginDto.getRole())
                 .level(1)
                 .build();
 
@@ -115,25 +85,13 @@ public class AuthService {
     /**
      * Access Token 및 Refresh Token 발급
      */
-    private JwtTokenResponse createAccessTokenAndRefreshToken(MemberJwtDto memberJwtDto) {
+    private JwtTokenDto createAccessTokenAndRefreshToken(MemberJwtDto memberJwtDto) {
         String accessToken = jwtService.createAccessToken(memberJwtDto);
         String refreshToken = jwtService.createRefreshToken(memberJwtDto);
 
-        return JwtTokenResponse.builder()
+        return JwtTokenDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-    }
-
-    /**
-     * OAuth 제공자 서비스 반환
-     */
-    private OAuthService getOAuthService(ProviderType provider) {
-        return switch (provider) {
-            case NAVER -> naverOAuthService;
-            case KAKAO -> kakaoOAuthService;
-//            case GOOGLE -> googleOAuthService;
-            default -> throw new OAuthException(OAuthErrorCode.UNSUPPORTED_OAUTH_PROVIDER);
-        };
     }
 }
