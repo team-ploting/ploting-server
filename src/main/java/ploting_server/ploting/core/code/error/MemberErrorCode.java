@@ -1,8 +1,8 @@
 package ploting_server.ploting.core.code.error;
 
-import ploting_server.ploting.core.response.ErrorResponse;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+import ploting_server.ploting.core.response.ErrorResponse;
 
 /**
  * 회원 관련 에러 코드를 관리하는 enum 클래스입니다.
@@ -10,7 +10,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum MemberErrorCode implements BaseErrorCode {
     // 404 NOT_FOUND
-    NOT_FOUND_MEMBER_ID(404, "존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND);
+    NOT_FOUND_MEMBER_ID(404, "존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND),
+    NOT_FOUND_MEMBER_ROLES(404, "회원의 권한이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
     private final int errorCode;
     private final String errorMessage;
