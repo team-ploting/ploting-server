@@ -6,6 +6,6 @@ WORKDIR /apps
 
 COPY $JAR_FILE_PATH app.jar
 
-EXPOSE 8082
+EXPOSE 8080
 
 CMD ["java", "--enable-preview", "-jar", "app.jar"]
