@@ -17,6 +17,7 @@ import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ploting_server.ploting.core.security.filter.JwtFilter;
 import ploting_server.ploting.core.security.service.jwt.JwtService;
@@ -63,6 +64,7 @@ public class SecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(publicRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(publicRequestMatchers()).permitAll()
                         .anyRequest().authenticated()
                 );
@@ -81,6 +83,7 @@ public class SecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(authenticatedRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(authenticatedRequestMatchers())
                         .hasAnyAuthority(RoleType.ROLE_USER.name(), RoleType.ROLE_ADMIN.name())
                         .anyRequest().authenticated())
