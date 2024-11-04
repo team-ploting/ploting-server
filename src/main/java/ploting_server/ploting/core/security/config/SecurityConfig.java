@@ -64,7 +64,6 @@ public class SecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(publicRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(publicRequestMatchers()).permitAll()
                         .anyRequest().authenticated()
                 );
@@ -83,7 +82,6 @@ public class SecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(authenticatedRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(authenticatedRequestMatchers())
                         .hasAnyAuthority(RoleType.ROLE_USER.name(), RoleType.ROLE_ADMIN.name())
                         .anyRequest().authenticated())
@@ -147,6 +145,8 @@ public class SecurityConfig {
                 // JWT, OAuth 기반
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 보호 비활성화
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll())
                 .formLogin(AbstractHttpConfigurer::disable) // Form 기반 로그인 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable) // HTTP Basic 인증 비활성화
                 .rememberMe(AbstractHttpConfigurer::disable) // 세션 기반의 인증 비활성화
@@ -209,9 +209,14 @@ public class SecurityConfig {
 //                        "Authorization",
 //                        "Content-Type",
 //                        "Cache-Control",
-//                        "X-Requested-With"
+//                        "X-Requested-With",
+//                        "Origin",
+//                        "Accept",
+//                        "Key"
 //                )
 //        );
+
+        configuration.setMaxAge(3600L);
 
         // 인증 정보(쿠키, Authorization 헤더 등)를 포함한 요청 허용
         configuration.setAllowCredentials(true);
