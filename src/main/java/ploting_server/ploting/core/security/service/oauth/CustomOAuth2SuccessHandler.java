@@ -60,6 +60,6 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         jwtService.setRefreshTokenToHeader(response, jwtTokens.getRefreshToken());
 
         // 성공 후 리다이렉트
-//        response.sendRedirect("/success");
+        response.sendRedirect("https://ploting.kr");
     }
 }
