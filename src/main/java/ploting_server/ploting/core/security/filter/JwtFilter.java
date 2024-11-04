@@ -30,12 +30,17 @@ import static org.springframework.util.StringUtils.hasText;
  */
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
-
     private static final String AUTHENTICATION_HEADER = "Authorization";
-    private static final String AUTHENTICATION_SCHEME = "Bearer ";
 
+    private static final String AUTHENTICATION_SCHEME = "Bearer ";
     private final JwtService jwtService;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return "OPTIONS".equalsIgnoreCase(request.getMethod());
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
