@@ -3,6 +3,7 @@ package ploting_server.ploting.organization.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import ploting_server.ploting.member.entity.GenderType;
 import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 
 import java.time.LocalDateTime;
@@ -93,44 +94,46 @@ public class Organization {
     }
 
     /**
-     * 멤버 수 증가
+     * 멤버 수, 성별 수 증가
      */
-    public void incrementMemberCount() {
+    public void incrementMemberAndGenderCount(GenderType genderType) {
+        if (genderType.equals(GenderType.MALE)) {
+            this.maleCount++;
+        }
+
+        if (genderType.equals(GenderType.FEMALE)) {
+            this.femaleCount++;
+        }
+
         this.memberCount++;
     }
 
     /**
-     * 멤버 수 감소
+     * 멤버 수, 성별 수 감소
      */
-    public void decrementMemberCount() {
+    public void decrementMemberAndGenderCount(GenderType genderType) {
+        if (genderType.equals(GenderType.MALE)) {
+            this.maleCount--;
+        }
+
+        if (genderType.equals(GenderType.FEMALE)) {
+            this.femaleCount--;
+        }
+
         this.memberCount--;
     }
 
     /**
-     * 여자 수 증가
+     * 좋아요 수 증가
      */
-    public void incrementFemaleCount() {
-        this.femaleCount++;
+    public void incrementLikeCount() {
+        this.likeCount++;
     }
 
     /**
-     * 여자 수 감소
+     * 좋아요 수 감소
      */
-    public void decrementFemaleCount() {
-        this.femaleCount--;
-    }
-
-    /**
-     * 남자 수 증가
-     */
-    public void incrementMaleCount() {
-        this.maleCount++;
-    }
-
-    /**
-     * 남자 수 감소
-     */
-    public void decrementMaleCount() {
-        this.maleCount--;
+    public void decrementLikeCount() {
+        this.likeCount--;
     }
 }

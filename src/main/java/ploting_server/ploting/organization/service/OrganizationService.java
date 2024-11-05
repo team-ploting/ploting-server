@@ -14,7 +14,6 @@ import ploting_server.ploting.core.exception.OrganizationException;
 import ploting_server.ploting.meeting.dto.response.MeetingListResponse;
 import ploting_server.ploting.meeting.entity.Meeting;
 import ploting_server.ploting.meeting.repository.MeetingRepository;
-import ploting_server.ploting.member.entity.GenderType;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.dto.request.OrganizationCreateRequest;
@@ -24,10 +23,10 @@ import ploting_server.ploting.organization.dto.response.OrganizationListResponse
 import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
 import ploting_server.ploting.organization.entity.Organization;
 import ploting_server.ploting.organization.entity.OrganizationMember;
+import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
 import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
 import ploting_server.ploting.organization.repository.OrganizationRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -39,6 +38,7 @@ public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
     private final OrganizationMemberRepository organizationMemberRepository;
+    private final OrganizationLikeRepository organizationLikeRepository;
     private final MemberRepository memberRepository;
     private final MeetingRepository meetingRepository;
 
@@ -64,29 +64,18 @@ public class OrganizationService {
                 .memberCount(0)
                 .maleCount(0)
                 .femaleCount(0)
-                .createdAt(LocalDateTime.now())
                 .build();
 
         organizationRepository.save(organization);
 
-        // 성별 수 증가
-        if (member.getGender().equals(GenderType.MALE)) {
-            organization.incrementMaleCount();
-        }
-
-        if (member.getGender().equals(GenderType.FEMALE)) {
-            organization.incrementFemaleCount();
-        }
-
-        // 멤버 수 증가
-        organization.incrementMemberCount();
+        // 멤버 수, 성별 수 증가
+        organization.incrementMemberAndGenderCount(member.getGender());
 
         // 리더로서 OrganizationMember 생성
         OrganizationMember organizationMember = OrganizationMember.builder()
                 .organization(organization)
                 .member(member)
                 .leaderStatus(true)
-                .createdAt(LocalDateTime.now())
                 .build();
 
         organizationMemberRepository.save(organizationMember);
@@ -145,12 +134,14 @@ public class OrganizationService {
      * 단체 세부 정보를 조회합니다.
      */
     @Transactional(readOnly = true)
-    public OrganizationInfoResponse getOrganizationInfo(Long organizationId) {
+    public OrganizationInfoResponse getOrganizationInfo(Long memberId, Long organizationId) {
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
         OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        boolean hasLiked = organizationLikeRepository.existsByMemberIdAndOrganizationId(memberId, organizationId);
 
         // 단체의 모임 리스트 조회
         List<Meeting> meetingList = meetingRepository.findAllByOrganizationId(organizationId);
@@ -181,6 +172,7 @@ public class OrganizationService {
                 .minLevel(organization.getMinLevel())
                 .organizationImageUrl(organization.getOrganizationImageUrl())
                 .likeCount(organization.getLikeCount())
+                .hasLiked(hasLiked)
                 .memberCount(organization.getMemberCount())
                 .leaderName(organizationMember.getMember().getNickname())
                 .leaderLevel(organizationMember.getMember().getLevel())
@@ -311,7 +303,6 @@ public class OrganizationService {
                 .member(member)
                 .introduction(introduction)
                 .leaderStatus(false)
-                .createdAt(LocalDateTime.now())
                 .build();
 
         organizationMemberRepository.save(organizationMember);
@@ -322,6 +313,9 @@ public class OrganizationService {
      */
     @Transactional
     public void departOrganization(Long memberId, Long organizationId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
         OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, memberId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
 
@@ -335,6 +329,9 @@ public class OrganizationService {
 
         // 양방향 연관관계 해제
         organization.removeOrganizationMember(organizationMember);
+
+        // 멤버 수, 성별 수 감소
+        organization.decrementMemberAndGenderCount(member.getGender());
 
         organizationMemberRepository.delete(organizationMember);
     }
