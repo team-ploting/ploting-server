@@ -14,6 +14,7 @@ public enum OrganizationErrorCode implements BaseErrorCode {
     CANNOT_DELETE_ORGANIZATION(400, "멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_LEAVE_ORGANIZATION_AS_LEADER(400, "단체장은 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_KICK_SELF_LEADER(400, "단체장은 스스로 강퇴될 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_WITHDRAW_AS_ORGANIZATION_LEADER(400, "회원이 단체장인 단체가 있어 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
     ALREADY_REGISTERED_MEMBER(400, "해당 단체에 이미 가입된 회원입니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_ORGANIZATION_LIKE(400, "좋아요를 누르지 않은 상태입니다.", HttpStatus.BAD_REQUEST),
 

@@ -57,9 +57,6 @@ public class Member {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "active_status")
-    private boolean activeStatus; // soft delete 용도
-
     // 회원 가입 시 정보 업데이트
     public void registerMember(MemberRegisterRequest memberRegisterRequest) {
         this.name = memberRegisterRequest.getName();
@@ -68,12 +65,6 @@ public class Member {
         this.gender = memberRegisterRequest.getGender();
         this.birth = memberRegisterRequest.getBirth();
         this.createdAt = LocalDateTime.now();
-        this.activeStatus = true;
-    }
-
-    // 회원 탈퇴 (soft delete)
-    public void softDeleteMember() {
-        this.activeStatus = false;
     }
 
     // 회원 정보 수정
