@@ -3,18 +3,20 @@ package ploting_server.ploting.member.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ploting_server.ploting.comment.entity.Comment;
-import ploting_server.ploting.comment.repository.CommentRepository;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
+import ploting_server.ploting.core.code.error.OrganizationErrorCode;
 import ploting_server.ploting.core.exception.MemberException;
+import ploting_server.ploting.core.exception.OrganizationException;
 import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
 import ploting_server.ploting.member.dto.request.MemberUpdateRequest;
 import ploting_server.ploting.member.dto.response.MemberInfoResponse;
 import ploting_server.ploting.member.dto.response.MemberNicknameDuplicationResponse;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
-import ploting_server.ploting.post.entity.Post;
-import ploting_server.ploting.post.repository.PostRepository;
+import ploting_server.ploting.organization.entity.OrganizationLike;
+import ploting_server.ploting.organization.entity.OrganizationMember;
+import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
+import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
 
 import java.util.List;
 
@@ -26,8 +28,8 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
+    private final OrganizationMemberRepository organizationMemberRepository;
+    private final OrganizationLikeRepository organizationLikeRepository;
 
     /**
      * 회원 가입 시 회원 정보를 추가적으로 등록합니다.
@@ -56,7 +58,6 @@ public class MemberService {
                 .birth(findMember.getBirth())
                 .level(findMember.getLevel())
                 .createdAt(findMember.getCreatedAt())
-                .activeStatus(findMember.isActiveStatus())
                 .build();
     }
 
@@ -84,32 +85,34 @@ public class MemberService {
     }
 
     /**
-     * 회원 탈퇴합니다. (soft delete)
+     * 회원 탈퇴합니다.
      */
     @Transactional
     public void deleteMember(Long memberId) {
-        Member findMember = memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
-        // 회원 soft delete
-        findMember.softDeleteMember();
-
-        // 회원의 게시글 soft delete
-        List<Post> postsByFindMember = postRepository.findByMemberId(memberId);
-        for (Post post : postsByFindMember) {
-            post.softDeletePost();
-        }
-
-        // 대댓글 없는 경우 댓글 삭제, 대댓글 있는 경우 soft delete
-        List<Comment> commentsByFindMember = commentRepository.findByMemberId(memberId);
-        for (Comment comment : commentsByFindMember) {
-            if (comment.getParentComment() == null) {
-                commentRepository.delete(comment);
-                continue;
+        // 단체 삭제, 단체장인 단체가 있으면 탈퇴할 수 없음
+        List<OrganizationMember> organizationMembers = organizationMemberRepository.findAllByMemberId(memberId);
+        for (OrganizationMember organizationMember : organizationMembers) {
+            if (organizationMember.isLeaderStatus()) {
+                throw new OrganizationException(OrganizationErrorCode.CANNOT_WITHDRAW_AS_ORGANIZATION_LEADER);
             }
-            comment.softDeleteComment();
+            organizationMemberRepository.delete(organizationMember);
         }
 
-        // TODO: 회원이 속한 단체와 모임 row 삭제, 단체와 모임 리더라면 reject
+        // 단체 좋아요 삭제
+        List<OrganizationLike> organizationLikes = organizationLikeRepository.findAllByMemberId(memberId);
+        organizationLikeRepository.deleteAll(organizationLikes);
+
+        // TODO: 모임 삭제
+
+        // TODO: 모임 좋아요 삭제
+
+        // TODO: 게시글, 댓글 삭제
+
+        // TODO: 게시글, 댓글 좋아요 삭제
+
+        memberRepository.delete(member);
     }
 }
