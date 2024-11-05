@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import ploting_server.ploting.core.code.success.GlobalSuccessCode;
 import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
-import ploting_server.ploting.organization.dto.request.OrganizationCreateRequest;
-import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationListResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
@@ -31,22 +29,6 @@ import java.util.List;
 public class OrganizationController {
 
     private final OrganizationService organizationService;
-
-    @Operation(
-            summary = "단체 생성",
-            description = "리더로서 단체를 생성합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 생성 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @PostMapping("")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> registerMember(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @RequestBody OrganizationCreateRequest organizationCreateRequest) {
-        organizationService.createOrganization(Long.parseLong(principalDetails.getUsername()), organizationCreateRequest);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
-    }
 
     @Operation(
             summary = "모든 단체 목록 조회 (페이징 처리)",
@@ -97,39 +79,6 @@ public class OrganizationController {
     }
 
     @Operation(
-            summary = "단체 정보 수정 (단체장만 가능)",
-            description = "단체의 정보를 수정합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 정보 수정 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @PatchMapping("/{organizationId}")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> updateOrganization(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId,
-            @RequestBody OrganizationUpdateRequest organizationUpdateRequest) {
-        organizationService.updateOrganization(Long.parseLong(principalDetails.getUsername()), organizationId, organizationUpdateRequest);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
-    }
-
-    @Operation(
-            summary = "단체 삭제 (단체장만 가능)",
-            description = "단체를 삭제합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 정보 수정 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @DeleteMapping("/{organizationId}")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteOrganization(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId) {
-        organizationService.deleteOrganization(Long.parseLong(principalDetails.getUsername()), organizationId);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
-    }
-
-    @Operation(
             summary = "단체 멤버 리스트 조회",
             description = "단체의 멤버 리스트를 조회합니다."
     )
@@ -142,40 +91,6 @@ public class OrganizationController {
             @PathVariable Long organizationId) {
         List<OrganizationMemberListResponse> organizationMemberList = organizationService.getOrganizationMemberList(organizationId);
         return ResponseEntity.ok(new BfResponse<>(organizationMemberList));
-    }
-
-    @Operation(
-            summary = "단체장 권한 위임 (단체장만 가능)",
-            description = "단체장 권한을 다른 회원에게 위임합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체장 권한 위임 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @PatchMapping("/{organizationId}/leader")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> delegateLeader(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId,
-            @RequestParam Long newLeaderId) {
-        organizationService.delegateLeader(Long.parseLong(principalDetails.getUsername()), organizationId, newLeaderId);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
-    }
-
-    @Operation(
-            summary = "멤버 강퇴 (단체장만 가능)",
-            description = "단체에서 멤버를 강퇴합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "멤버 강퇴 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @DeleteMapping("{organizationId}/banishment")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> banishMember(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId,
-            @RequestParam Long kickMemberId) {
-        organizationService.banishMember(Long.parseLong(principalDetails.getUsername()), organizationId, kickMemberId);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 
     @Operation(
