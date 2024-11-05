@@ -3,6 +3,7 @@ package ploting_server.ploting.post.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
 import ploting_server.ploting.member.entity.Member;
 
 import java.time.LocalDateTime;
@@ -42,9 +43,7 @@ public class Post {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // 게시글 삭제 (soft delete)
-    public void softDeletePost() {
-        this.content = "삭제된 글입니다.";
-        this.title = "삭제된 글입니다.";
-    }
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

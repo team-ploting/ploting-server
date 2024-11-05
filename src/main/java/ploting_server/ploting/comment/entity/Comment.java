@@ -3,6 +3,7 @@ package ploting_server.ploting.comment.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.post.entity.Post;
 
@@ -44,8 +45,7 @@ public class Comment {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // 댓글 삭제 (soft delete)
-    public void softDeleteComment() {
-        this.content = "삭제된 댓글입니다.";
-    }
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
