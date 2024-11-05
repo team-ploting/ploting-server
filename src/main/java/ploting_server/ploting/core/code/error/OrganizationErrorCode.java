@@ -15,6 +15,7 @@ public enum OrganizationErrorCode implements BaseErrorCode {
     CANNOT_LEAVE_ORGANIZATION_AS_LEADER(400, "단체장은 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_KICK_SELF_LEADER(400, "단체장은 스스로 강퇴될 수 없습니다.", HttpStatus.BAD_REQUEST),
     ALREADY_REGISTERED_MEMBER(400, "해당 단체에 이미 가입된 회원입니다.", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_ORGANIZATION_LIKE(400, "좋아요를 누르지 않은 상태입니다.", HttpStatus.BAD_REQUEST),
 
     // 403 FORBIDDEN
     NOT_ORGANIZATION_MEMBER(403, "단체에 가입된 멤버가 아닙니다.", HttpStatus.FORBIDDEN),

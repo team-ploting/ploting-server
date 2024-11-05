@@ -103,12 +103,9 @@ public class SecurityConfig {
                 antMatcher(GET, "/swagger-ui/**"), // Swagger UI 웹 인터페이스를 제공하는 경로
                 antMatcher(GET, "/v3/api-docs/**"), // Swagger의 API 문서 데이터를 JSON 형식으로 제공하는 경로
                 antMatcher(GET, "/utils/health"),
-                antMatcher(POST, "/auth/request"),
-                antMatcher(POST, "/auth/login"),
                 antMatcher(GET, "/members"),
                 antMatcher(GET, "/members/check-nickname"),
                 antMatcher(GET, "/organizations"),
-                antMatcher(GET, "/organizations/{organizationId}"),
                 antMatcher(GET, "/organizations/{organizationId}/members")
         );
 
@@ -120,18 +117,20 @@ public class SecurityConfig {
      */
     private RequestMatcher[] authenticatedRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-                antMatcher(POST, "/auth/refresh"),
                 antMatcher(PATCH, "/members"),
                 antMatcher(PATCH, "/members/registration"),
                 antMatcher(DELETE, "/members"),
                 antMatcher(DELETE, "/organizations/{organizationId}"),
                 antMatcher(DELETE, "/organizations/{organizationId}/departure"),
                 antMatcher(DELETE, "/organizations/{organizationId}/banishment"),
+                antMatcher(GET, "/organizations/{organizationId}"),
                 antMatcher(GET, "/organizations/self"),
                 antMatcher(PATCH, "/organizations/{organizationId}"),
                 antMatcher(PATCH, "/organizations/{organizationId}/leader"),
                 antMatcher(POST, "/organizations"),
-                antMatcher(POST, "/organizations/{organizationId}")
+                antMatcher(POST, "/organizations/{organizationId}"),
+                antMatcher(POST, "/organizations/{organizationId}/like"),
+                antMatcher(DELETE, "/organizations/{organizationId}/like")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
