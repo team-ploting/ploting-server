@@ -22,6 +22,7 @@ import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse
 import ploting_server.ploting.organization.dto.response.OrganizationListResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
 import ploting_server.ploting.organization.entity.Organization;
+import ploting_server.ploting.organization.entity.OrganizationLike;
 import ploting_server.ploting.organization.entity.OrganizationMember;
 import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
 import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
@@ -205,16 +206,21 @@ public class OrganizationService {
      */
     @Transactional
     public void deleteOrganization(Long memberId, Long organizationId) {
+        // 단체의 단체장인지 확인
+        checkOrganizationLeader(memberId, organizationId);
+
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
-        // 단체의 단체장인지 확인
-        checkOrganizationLeader(memberId, organizationId);
+        List<OrganizationLike> organizationLikes = organizationLikeRepository.findAllByOrganizationId(organizationId);
 
         // 멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없음
         if (organization.getMemberCount() != 1) {
             throw new OrganizationException(OrganizationErrorCode.CANNOT_DELETE_ORGANIZATION);
         }
+
+        // 단체의 좋아요 삭제
+        organizationLikeRepository.deleteAll(organizationLikes);
 
         // 단체 삭제
         organizationRepository.delete(organization);

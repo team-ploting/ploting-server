@@ -61,17 +61,17 @@ public class Organization {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // 양방향 연관관계
+    // OrganizationMember 양방향 연관관계
     @Builder.Default
     @OneToMany(mappedBy = "organization", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<OrganizationMember> organizationMembers = new ArrayList<>();
 
-    // 연관관계 편의 메서드 - 추가
+    // OrganizationMember 연관관계 편의 메서드 - 추가
     public void addOrganizationMember(OrganizationMember organizationMember) {
         this.organizationMembers.add(organizationMember);
     }
 
-    // 연관관계 편의 메서드 - 삭제
+    // OrganizationMember 연관관계 편의 메서드 - 삭제
     public void removeOrganizationMember(OrganizationMember organizationMember) {
         this.organizationMembers.remove(organizationMember);
     }
