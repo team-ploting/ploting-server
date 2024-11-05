@@ -43,6 +43,9 @@ public class OrganizationInfoResponse {
     @Schema(description = "좋아요 수", example = "16")
     private final int likeCount;
 
+    @Schema(description = "좋아요 여부", example = "true")
+    private final boolean hasLiked;
+
     @Schema(description = "멤버 수", example = "30")
     private final int memberCount;
 

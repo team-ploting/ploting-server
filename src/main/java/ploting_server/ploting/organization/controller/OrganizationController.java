@@ -84,14 +84,15 @@ public class OrganizationController {
             summary = "단체 세부 정보 조회",
             description = "단체의 세부 정보를 조회합니다."
     )
-    @SecurityRequirements(value = {})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "단체 세부 정보 조회 성공", useReturnTypeSchema = true),
     })
     @GetMapping("/{organizationId}")
     public ResponseEntity<BfResponse<OrganizationInfoResponse>> getOrganizationInfo(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long organizationId) {
-        OrganizationInfoResponse organizationInfoResponse = organizationService.getOrganizationInfo(organizationId);
+        OrganizationInfoResponse organizationInfoResponse = organizationService.getOrganizationInfo(
+                Long.parseLong(principalDetails.getUsername()), organizationId);
         return ResponseEntity.ok(new BfResponse<>(organizationInfoResponse));
     }
 
