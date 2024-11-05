@@ -74,7 +74,6 @@ public class AuthService {
                 .oauthId(memberLoginDto.getOauthId())
                 .provider(memberLoginDto.getProvider())
                 .name(memberLoginDto.getName())
-                .profileImageUrl(memberLoginDto.getProfileImageUrl())
                 .role(memberLoginDto.getRole())
                 .level(1)
                 .build();

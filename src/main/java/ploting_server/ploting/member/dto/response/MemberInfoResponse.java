@@ -17,9 +17,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class MemberInfoResponse {
 
-    @Schema(description = "회원의 프로필 이미지 URL", example = "https://...")
-    private final String profileImageUrl;
-
     @Schema(description = "회원의 이름", example = "이소은")
     private final String name;
 
