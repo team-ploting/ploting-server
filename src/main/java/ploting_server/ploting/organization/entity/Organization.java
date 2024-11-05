@@ -45,9 +45,6 @@ public class Organization {
     @Column(name = "min_level")
     private int minLevel;
 
-    @Column(name = "organization_image_url")
-    private String organizationImageUrl;
-
     @Column(name = "like_count")
     private int likeCount;
 
@@ -90,7 +87,6 @@ public class Organization {
         this.minAge = organizationUpdateRequest.getMinAge();
         this.maxAge = organizationUpdateRequest.getMaxAge();
         this.minLevel = organizationUpdateRequest.getMinLevel();
-        this.organizationImageUrl = organizationUpdateRequest.getOrganizationImageUrl();
     }
 
     /**
