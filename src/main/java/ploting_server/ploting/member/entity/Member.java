@@ -34,9 +34,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
-
     @Column(name = "name")
     private String name;
 

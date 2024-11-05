@@ -49,7 +49,6 @@ public class MemberService {
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
         return MemberInfoResponse.builder()
-                .profileImageUrl(findMember.getProfileImageUrl())
                 .name(findMember.getName())
                 .nickname(findMember.getNickname())
                 .location(findMember.getLocation())

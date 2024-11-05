@@ -233,7 +233,6 @@ public class OrganizationService {
                 .map(organizationMember -> OrganizationMemberListResponse.builder()
                         .nickname(organizationMember.getMember().getNickname())
                         .level(organizationMember.getMember().getLevel())
-                        .profileImageUrl(organizationMember.getMember().getProfileImageUrl())
                         .introduction(organizationMember.getIntroduction())
                         .leaderStatus(organizationMember.isLeaderStatus())
                         .build())
