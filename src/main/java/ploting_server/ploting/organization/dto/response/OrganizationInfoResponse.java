@@ -37,9 +37,6 @@ public class OrganizationInfoResponse {
     @Schema(description = "최소 레벨 제한", example = "5")
     private final int minLevel;
 
-    @Schema(description = "단체의 이미지", example = "https://...")
-    private final String organizationImageUrl;
-
     @Schema(description = "좋아요 수", example = "16")
     private final int likeCount;
 

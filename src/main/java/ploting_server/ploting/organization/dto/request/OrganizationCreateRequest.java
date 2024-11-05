@@ -33,7 +33,4 @@ public class OrganizationCreateRequest {
 
     @Schema(description = "최소 레벨 제한", example = "5", required = true)
     private final int minLevel;
-
-    @Schema(description = "단체의 이미지", example = "https://...", required = true)
-    private final String organizationImageUrl;
 }
