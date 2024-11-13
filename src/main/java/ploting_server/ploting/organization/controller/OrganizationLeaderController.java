@@ -27,14 +27,14 @@ public class OrganizationLeaderController {
 
     @Operation(
             summary = "단체 생성",
-            description = "리더로서 단체를 생성합니다."
+            description = "단체장으로서 단체를 생성합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "단체 생성 성공",
                     content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
     })
     @PostMapping("")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> registerMember(
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> createOrganization(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestBody OrganizationCreateRequest organizationCreateRequest) {
         organizationLeaderService.createOrganization(Long.parseLong(principalDetails.getUsername()), organizationCreateRequest);
