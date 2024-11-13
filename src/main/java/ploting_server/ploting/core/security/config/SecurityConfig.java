@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ploting_server.ploting.core.security.filter.JwtFilter;
+import ploting_server.ploting.core.security.handler.CustomAccessDeniedHandler;
 import ploting_server.ploting.core.security.service.jwt.JwtService;
 import ploting_server.ploting.core.security.service.oauth.CustomOAuth2FailureHandler;
 import ploting_server.ploting.core.security.service.oauth.CustomOAuth2SuccessHandler;
@@ -41,6 +42,8 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final JwtService jwtService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
@@ -76,7 +79,7 @@ public class SecurityConfig {
      */
     @Bean
     @Order(2)
-    public SecurityFilterChain authenticatedFilterChain(HttpSecurity http, JwtService jwtService) throws Exception {
+    public SecurityFilterChain authenticatedFilterChain(HttpSecurity http) throws Exception {
         defaultSecuritySetting(http);
         http
                 .securityMatchers(matcher -> matcher
@@ -85,9 +88,8 @@ public class SecurityConfig {
                         .requestMatchers(authenticatedRequestMatchers())
                         .hasAnyAuthority(RoleType.ROLE_USER.name(), RoleType.ROLE_ADMIN.name())
                         .anyRequest().authenticated())
-//                  TODO: 예외 처리
-//                .exceptionHandling(exception -> exception
-//                        .accessDeniedHandler())
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(new JwtFilter(jwtService), ExceptionTranslationFilter.class);
 
         return http.build();
