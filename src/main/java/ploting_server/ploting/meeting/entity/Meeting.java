@@ -3,9 +3,12 @@ package ploting_server.ploting.meeting.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import ploting_server.ploting.member.entity.GenderType;
 import ploting_server.ploting.organization.entity.Organization;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 모임을 관리하는 엔티티 클래스입니다.
@@ -25,11 +28,11 @@ public class Meeting {
     @JoinColumn(name = "organization_id")
     private Organization organization;
 
-    @Column(name = "location")
-    private String location;
-
     @Column(name = "name")
     private String name;
+
+    @Column(name = "location")
+    private String location;
 
     @Column(name = "description")
     private String description;
@@ -61,10 +64,69 @@ public class Meeting {
     @Column(name = "female_count")
     private int femaleCount;
 
+    @Column(name = "active_status")
+    private boolean activeStatus;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "active_status")
-    private boolean activeStatus;
+    // MeetingMember 양방향 연관관계
+    @Builder.Default
+    @OneToMany(mappedBy = "meeting", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MeetingMember> meetingMembers = new ArrayList<>();
+
+    // MeetingMember 연관관계 편의 메서드 - 추가
+    public void addMeetingMember(MeetingMember meetingMember) {
+        this.meetingMembers.add(meetingMember);
+    }
+
+    // MeetingMember 연관관계 편의 메서드 - 삭제
+    public void removeMeetingMember(MeetingMember meetingMember) {
+        this.meetingMembers.remove(meetingMember);
+    }
+
+    /**
+     * 멤버 수, 성별 수 증가
+     */
+    public void incrementMemberAndGenderCount(GenderType genderType) {
+        if (genderType.equals(GenderType.MALE)) {
+            this.maleCount++;
+        }
+
+        if (genderType.equals(GenderType.FEMALE)) {
+            this.femaleCount++;
+        }
+
+        this.memberCount++;
+    }
+
+    /**
+     * 멤버 수, 성별 수 감소
+     */
+    public void decrementMemberAndGenderCount(GenderType genderType) {
+        if (genderType.equals(GenderType.MALE)) {
+            this.maleCount--;
+        }
+
+        if (genderType.equals(GenderType.FEMALE)) {
+            this.femaleCount--;
+        }
+
+        this.memberCount--;
+    }
+
+    /**
+     * 좋아요 수 증가
+     */
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    /**
+     * 좋아요 수 감소
+     */
+    public void decrementLikeCount() {
+        this.likeCount--;
+    }
 }
