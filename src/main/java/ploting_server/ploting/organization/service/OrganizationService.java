@@ -181,6 +181,10 @@ public class OrganizationService {
                 .build();
 
         organizationMemberRepository.save(organizationMember);
+
+        organization.addOrganizationMember(organizationMember);
+
+        organization.incrementMemberAndGenderCount(member.getGender());
     }
 
     /**

@@ -145,6 +145,12 @@ public class OrganizationLeaderService {
         // 단체장 권한 확인
         checkOrganizationLeader(memberId, organizationId);
 
+        Member kickMember = memberRepository.findById(kickMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        Organization organization = organizationRepository.findById(organizationId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
         OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, kickMemberId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
 
@@ -155,6 +161,8 @@ public class OrganizationLeaderService {
 
         // 멤버 강퇴
         organizationMemberRepository.delete(organizationMember);
+
+        organization.decrementMemberAndGenderCount(kickMember.getGender());
     }
 
     /**
