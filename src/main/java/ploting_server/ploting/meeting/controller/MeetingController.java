@@ -93,4 +93,20 @@ public class MeetingController {
         meetingService.registerMeeting(Long.parseLong(principalDetails.getUsername()), meetingId, introduction);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
+
+    @Operation(
+            summary = "모임 탈퇴",
+            description = "모임을 탈퇴합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모임 탈퇴 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @DeleteMapping("{meetingId}/departure")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> departMeeting(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long meetingId) {
+        meetingService.departMeeting(Long.parseLong(principalDetails.getUsername()), meetingId);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
 }
