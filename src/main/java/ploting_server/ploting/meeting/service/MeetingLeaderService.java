@@ -12,7 +12,9 @@ import ploting_server.ploting.core.exception.OrganizationException;
 import ploting_server.ploting.meeting.dto.request.MeetingCreateRequest;
 import ploting_server.ploting.meeting.dto.request.MeetingUpdateRequest;
 import ploting_server.ploting.meeting.entity.Meeting;
+import ploting_server.ploting.meeting.entity.MeetingLike;
 import ploting_server.ploting.meeting.entity.MeetingMember;
+import ploting_server.ploting.meeting.repository.MeetingLikeRepository;
 import ploting_server.ploting.meeting.repository.MeetingMemberRepository;
 import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.member.entity.Member;
@@ -24,6 +26,7 @@ import ploting_server.ploting.organization.repository.OrganizationRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * 모임을 관리하는 서비스 클래스입니다.
@@ -36,10 +39,11 @@ public class MeetingLeaderService {
     private final OrganizationRepository organizationRepository;
     private final OrganizationMemberRepository organizationMemberRepository;
     private final MeetingMemberRepository meetingMemberRepository;
+    private final MeetingLikeRepository meetingLikeRepository;
     private final MemberRepository memberRepository;
 
     /**
-     * 모임을 생성합니다.
+     * 모임을 생성합니다. (모임장만 가능)
      */
     @Transactional
     public void createMeeting(Long memberId, Long organizationId, MeetingCreateRequest meetingCreateRequest) {
@@ -90,6 +94,9 @@ public class MeetingLeaderService {
         meeting.addMeetingMember(meetingMember);
     }
 
+    /**
+     * 모임을 수정합니다. (모임장만 가능)
+     */
     public void updateMeeting(Long memberId, Long meetingId, MeetingUpdateRequest meetingUpdateRequest) {
         // 단체에 속해있는지 확인
         checkBelongToOrganization(memberId, meetingId);
@@ -106,6 +113,31 @@ public class MeetingLeaderService {
         }
 
         meeting.updateMeeting(meetingUpdateRequest);
+    }
+
+    /**
+     * 모임을 삭제합니다. (모임장만 가능)
+     */
+    @Transactional
+    public void deleteMeeting(Long memberId, Long meetingId) {
+        // 모임의 모임장인지 확인
+        checkMeetingLeader(memberId, meetingId);
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
+
+        List<MeetingLike> meetingLikes = meetingLikeRepository.findAllByMeetingId(meetingId);
+
+        // 멤버 수가 1명(모임장)이 아닐 경우 모임을 삭제할 수 없음
+        if (meeting.getMemberCount() != 1) {
+            throw new MeetingException(MeetingErrorCode.CANNOT_DELETE_MEETING);
+        }
+
+        // 모임의 좋아요 삭제
+        meetingLikeRepository.deleteAll(meetingLikes);
+
+        // 모임 삭제
+        meetingRepository.delete(meeting);
     }
 
     /**
