@@ -156,7 +156,6 @@ public class SecurityConfig {
                 antMatcher(DELETE, "/meetings/{meetingId}"),
                 antMatcher(DELETE, "/meetings/{meetingId}/banishment"),
                 antMatcher(PATCH, "/meetings/{meetingId}"),
-                antMatcher(PATCH, "/meetings/{meetingId}/leader"),
                 antMatcher(POST, "/meetings")
         );
 

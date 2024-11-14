@@ -76,23 +76,6 @@ public class MeetingLeaderController {
     }
 
     @Operation(
-            summary = "모임장 권한 위임",
-            description = "모임장 권한을 다른 회원에게 위임합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모임장 권한 위임 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @PatchMapping("/{meetingId}/leader")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> delegateLeader(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long meetingId,
-            @RequestParam Long newLeaderId) {
-        meetingLeaderService.delegateLeader(Long.parseLong(principalDetails.getUsername()), meetingId, newLeaderId);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
-    }
-
-    @Operation(
             summary = "멤버 강퇴",
             description = "모임에서 멤버를 강퇴합니다."
     )
