@@ -3,10 +3,13 @@ package ploting_server.ploting.meeting.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import ploting_server.ploting.meeting.dto.request.MeetingUpdateRequest;
 import ploting_server.ploting.member.entity.GenderType;
 import ploting_server.ploting.organization.entity.Organization;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +87,24 @@ public class Meeting {
     // MeetingMember 연관관계 편의 메서드 - 삭제
     public void removeMeetingMember(MeetingMember meetingMember) {
         this.meetingMembers.remove(meetingMember);
+    }
+
+    /**
+     * 모임 수정
+     */
+    public void updateMeeting(MeetingUpdateRequest meetingUpdateRequest) {
+        this.name = meetingUpdateRequest.getName();
+        this.location = meetingUpdateRequest.getLocation();
+        this.description = meetingUpdateRequest.getDescription();
+        this.maxMember = meetingUpdateRequest.getMaxMember();
+        this.minAge = meetingUpdateRequest.getMinAge();
+        this.maxAge = meetingUpdateRequest.getMaxAge();
+        this.minLevel = meetingUpdateRequest.getMinLevel();
+
+        LocalDate date = meetingUpdateRequest.getMeetDate();
+        int hour = meetingUpdateRequest.getMeetHour();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
+        this.meetDate = LocalDateTime.parse(date + " " + hour, formatter);
     }
 
     /**
