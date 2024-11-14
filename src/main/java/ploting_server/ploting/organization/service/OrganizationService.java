@@ -44,7 +44,7 @@ public class OrganizationService {
      * 모든 단체 목록을 조회합니다. (페이징 처리)
      */
     @Transactional(readOnly = true)
-    public Page<OrganizationListResponse> getAllOrganizationList(int page, int size) {
+    public Page<OrganizationListResponse> getAllOrganizations(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Page<Organization> organizationPage = organizationRepository.findAll(pageable);
@@ -67,7 +67,7 @@ public class OrganizationService {
      * 나의 단체 목록을 조회합니다. (페이징 처리)
      */
     @Transactional(readOnly = true)
-    public Page<OrganizationListResponse> getMyOrganizationList(Long memberId, int page, int size) {
+    public Page<OrganizationListResponse> getMyOrganizations(Long memberId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         Page<Organization> organizationPage = organizationRepository.findAllByMemberId(memberId, pageable);
@@ -105,6 +105,7 @@ public class OrganizationService {
         // 모임 리스트를 MeetingListResponse 리스트로 변환
         List<MeetingListResponse> meetingListResponse = meetingList.stream()
                 .map(meeting -> MeetingListResponse.builder()
+                        .id(meeting.getId())
                         .name(meeting.getName())
                         .location(meeting.getLocation())
                         .maxMember(meeting.getMaxMember())
@@ -114,7 +115,10 @@ public class OrganizationService {
                         .memberCount(meeting.getMemberCount())
                         .maleCount(meeting.getMaleCount())
                         .femaleCount(meeting.getFemaleCount())
-                        .meetDate(meeting.getMeetDate())
+                        .meetDate(String.join("-",
+                                String.valueOf(meeting.getMeetDate().getYear()),
+                                String.valueOf(meeting.getMeetDate().getMonthValue()),
+                                String.valueOf(meeting.getMeetDate().getDayOfMonth())))
                         .build())
                 .toList();
 
