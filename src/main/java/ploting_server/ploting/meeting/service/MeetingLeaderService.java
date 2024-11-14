@@ -160,6 +160,34 @@ public class MeetingLeaderService {
     }
 
     /**
+     * 모임의 멤버를 강퇴합니다. (모임장만 가능)
+     */
+    @Transactional
+    public void banishMember(Long memberId, Long meetingId, Long kickMemberId) {
+        // 모임장 권한 확인
+        checkMeetingLeader(memberId, meetingId);
+
+        Member kickMember = memberRepository.findById(kickMemberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
+
+        MeetingMember meetingMember = meetingMemberRepository.findByMeetingIdAndMemberId(meetingId, kickMemberId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_MEETING_MEMBER));
+
+        // 모임장 스스로를 강퇴할 수 없음
+        if (meetingMember.isLeaderStatus()) {
+            throw new MeetingException(MeetingErrorCode.CANNOT_KICK_SELF_LEADER);
+        }
+
+        // 멤버 강퇴
+        meetingMemberRepository.delete(meetingMember);
+
+        meeting.decrementMemberAndGenderCount(kickMember.getGender());
+    }
+
+    /**
      * 단체에 속해있는지 확인합니다.
      */
     private void checkBelongToOrganization(Long memberId, Long organizationId) {

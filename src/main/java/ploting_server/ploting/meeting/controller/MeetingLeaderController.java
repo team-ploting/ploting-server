@@ -30,7 +30,7 @@ public class MeetingLeaderController {
             description = "모임장으로서 모임을 생성합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 생성 성공", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "200", description = "모임 생성 성공", useReturnTypeSchema = true),
     })
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createMeeting(
@@ -89,6 +89,23 @@ public class MeetingLeaderController {
             @PathVariable Long meetingId,
             @RequestParam Long newLeaderId) {
         meetingLeaderService.delegateLeader(Long.parseLong(principalDetails.getUsername()), meetingId, newLeaderId);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
+
+    @Operation(
+            summary = "멤버 강퇴",
+            description = "모임에서 멤버를 강퇴합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "멤버 강퇴 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @DeleteMapping("{meetingId}/banishment")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> banishMember(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long meetingId,
+            @RequestParam Long kickMemberId) {
+        meetingLeaderService.banishMember(Long.parseLong(principalDetails.getUsername()), meetingId, kickMemberId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 }
