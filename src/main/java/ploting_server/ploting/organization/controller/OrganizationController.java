@@ -87,10 +87,10 @@ public class OrganizationController {
             @ApiResponse(responseCode = "200", description = "단체 멤버 리스트 조회 성공", useReturnTypeSchema = true),
     })
     @GetMapping("/{organizationId}/members")
-    public ResponseEntity<BfResponse<List<OrganizationMemberListResponse>>> getOrganizationMemberList(
+    public ResponseEntity<BfResponse<List<OrganizationMemberListResponse>>> getOrganizationMembers(
             @PathVariable Long organizationId) {
-        List<OrganizationMemberListResponse> organizationMemberList = organizationService.getOrganizationMemberList(organizationId);
-        return ResponseEntity.ok(new BfResponse<>(organizationMemberList));
+        List<OrganizationMemberListResponse> organizationMembers = organizationService.getOrganizationMembers(organizationId);
+        return ResponseEntity.ok(new BfResponse<>(organizationMembers));
     }
 
     @Operation(

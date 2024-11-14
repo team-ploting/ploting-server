@@ -11,6 +11,7 @@ import ploting_server.ploting.core.code.error.MeetingErrorCode;
 import ploting_server.ploting.core.exception.MeetingException;
 import ploting_server.ploting.meeting.dto.response.MeetingInfoResponse;
 import ploting_server.ploting.meeting.dto.response.MeetingListResponse;
+import ploting_server.ploting.meeting.dto.response.MeetingMemberListResponse;
 import ploting_server.ploting.meeting.entity.Meeting;
 import ploting_server.ploting.meeting.entity.MeetingMember;
 import ploting_server.ploting.meeting.repository.MeetingLikeRepository;
@@ -101,5 +102,24 @@ public class MeetingService {
                 .organizationName(organization.getName())
                 .organizationMemberCount(organization.getMemberCount())
                 .build();
+    }
+
+    /**
+     * 모임의 멤버를 조회합니다.
+     */
+    @Transactional(readOnly = true)
+    public List<MeetingMemberListResponse> getMeetingMembers(Long meetingId) {
+        // 모임의 멤버 리스트 조회
+        List<MeetingMember> meetingMembers = meetingMemberRepository.findAllByMeetingId(meetingId);
+
+        // 모임_멤버 리스트를 MeetingMemberListResponse 리스트로 변환
+        return meetingMembers.stream()
+                .map(meetingMember -> MeetingMemberListResponse.builder()
+                        .nickname(meetingMember.getMember().getNickname())
+                        .level(meetingMember.getMember().getLevel())
+                        .introduction(meetingMember.getIntroduction())
+                        .leaderStatus(meetingMember.isLeaderStatus())
+                        .build())
+                .toList();
     }
 }
