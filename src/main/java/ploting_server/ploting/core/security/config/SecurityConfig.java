@@ -118,7 +118,11 @@ public class SecurityConfig {
 
                 // 단체
                 antMatcher(GET, "/organizations"),
-                antMatcher(GET, "/organizations/{organizationId}/members")
+                antMatcher(GET, "/organizations/{organizationId}/members"),
+
+                // 모임
+                antMatcher(GET, "/meetings"),
+                antMatcher(GET, "/meetings/{meetings}/members")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -156,7 +160,12 @@ public class SecurityConfig {
                 antMatcher(DELETE, "/meetings/{meetingId}"),
                 antMatcher(DELETE, "/meetings/{meetingId}/banishment"),
                 antMatcher(PATCH, "/meetings/{meetingId}"),
-                antMatcher(POST, "/meetings")
+                antMatcher(POST, "/meetings"),
+
+                // 모임
+                antMatcher(DELETE, "/meetings/{meetingId}/departure"),
+                antMatcher(GET, "/meetings/{meetingId}"),
+                antMatcher(POST, "/meetings/{meetingId}")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
