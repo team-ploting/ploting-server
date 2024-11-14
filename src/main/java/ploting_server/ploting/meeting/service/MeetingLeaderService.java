@@ -36,11 +36,11 @@ import java.util.List;
 public class MeetingLeaderService {
 
     private final MeetingRepository meetingRepository;
-    private final OrganizationRepository organizationRepository;
-    private final OrganizationMemberRepository organizationMemberRepository;
     private final MeetingMemberRepository meetingMemberRepository;
     private final MeetingLikeRepository meetingLikeRepository;
     private final MemberRepository memberRepository;
+    private final OrganizationRepository organizationRepository;
+    private final OrganizationMemberRepository organizationMemberRepository;
 
     /**
      * 모임을 생성합니다. (모임장만 가능)

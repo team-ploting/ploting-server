@@ -39,11 +39,11 @@ public class OrganizationController {
             @ApiResponse(responseCode = "200", description = "모든 단체 목록 조회 성공", useReturnTypeSchema = true),
     })
     @GetMapping("")
-    public ResponseEntity<BfResponse<Page<OrganizationListResponse>>> getAllOrganizationList(
+    public ResponseEntity<BfResponse<Page<OrganizationListResponse>>> getAllOrganizations(
             @RequestParam int page,
             @RequestParam int size) {
-        Page<OrganizationListResponse> allOrganizationList = organizationService.getAllOrganizationList(page, size);
-        return ResponseEntity.ok(new BfResponse<>(allOrganizationList));
+        Page<OrganizationListResponse> allOrganizations = organizationService.getAllOrganizations(page, size);
+        return ResponseEntity.ok(new BfResponse<>(allOrganizations));
     }
 
     @Operation(
@@ -54,12 +54,12 @@ public class OrganizationController {
             @ApiResponse(responseCode = "200", description = "나의 단체 목록 조회 성공", useReturnTypeSchema = true),
     })
     @GetMapping("/self")
-    public ResponseEntity<BfResponse<Page<OrganizationListResponse>>> getMyOrganizationList(
+    public ResponseEntity<BfResponse<Page<OrganizationListResponse>>> getMyOrganizations(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestParam int page,
             @RequestParam int size) {
-        Page<OrganizationListResponse> myOrganizationList = organizationService.getMyOrganizationList(Long.parseLong(principalDetails.getUsername()), page, size);
-        return ResponseEntity.ok(new BfResponse<>(myOrganizationList));
+        Page<OrganizationListResponse> myOrganizations = organizationService.getMyOrganizations(Long.parseLong(principalDetails.getUsername()), page, size);
+        return ResponseEntity.ok(new BfResponse<>(myOrganizations));
     }
 
     @Operation(
