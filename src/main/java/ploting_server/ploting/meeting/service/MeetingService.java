@@ -152,8 +152,38 @@ public class MeetingService {
 
         meetingMemberRepository.save(meetingMember);
 
+        // 양방향 연관관계 설정
         meeting.addMeetingMember(meetingMember);
 
+        // 멤버 수, 성별 수 증가
         meeting.incrementMemberAndGenderCount(member.getGender());
+    }
+
+    /**
+     * 모임을 탈퇴합니다.
+     */
+    @Transactional
+    public void departMeeting(Long memberId, Long meetingId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        MeetingMember meetingMember = meetingMemberRepository.findByMeetingIdAndMemberId(meetingId, memberId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_MEETING_MEMBER));
+
+        // 모임장은 탈퇴할 수 없음
+        if (meetingMember.isLeaderStatus()) {
+            throw new MeetingException(MeetingErrorCode.CANNOT_LEAVE_ORGANIZATION_AS_LEADER);
+        }
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
+
+        // 양방향 연관관계 해제
+        meeting.removeMeetingMember(meetingMember);
+
+        // 멤버 수, 성별 수 감소
+        meeting.decrementMemberAndGenderCount(member.getGender());
+
+        meetingMemberRepository.delete(meetingMember);
     }
 }
