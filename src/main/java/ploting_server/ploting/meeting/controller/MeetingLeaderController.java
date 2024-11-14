@@ -35,10 +35,10 @@ public class MeetingLeaderController {
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createMeeting(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @RequestParam Long meetingId,
+            @RequestParam Long organizationId,
             @RequestBody MeetingCreateRequest meetingCreateRequest
     ) {
-        meetingLeaderService.createMeeting(Long.parseLong(principalDetails.getUsername()), meetingId, meetingCreateRequest);
+        meetingLeaderService.createMeeting(Long.parseLong(principalDetails.getUsername()), organizationId, meetingCreateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 

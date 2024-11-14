@@ -100,13 +100,23 @@ public class SecurityConfig {
      */
     private RequestMatcher[] publicRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-                antMatcher(GET, "/oauth2/**"), // OAuth 인증 요청 경로
-                antMatcher(GET, "/login/oauth2/**"), // OAuth 리다이렉트 경로
+
+                // Swagger
                 antMatcher(GET, "/swagger-ui/**"), // Swagger UI 웹 인터페이스를 제공하는 경로
                 antMatcher(GET, "/v3/api-docs/**"), // Swagger의 API 문서 데이터를 JSON 형식으로 제공하는 경로
+
+                // OAuth
+                antMatcher(GET, "/oauth2/**"), // OAuth 인증 요청 경로
+                antMatcher(GET, "/login/oauth2/**"), // OAuth 리다이렉트 경로
+
+                // 유틸리티
                 antMatcher(GET, "/utils/health"),
+
+                // 회원
                 antMatcher(GET, "/members"),
                 antMatcher(GET, "/members/check-nickname"),
+
+                // 단체
                 antMatcher(GET, "/organizations"),
                 antMatcher(GET, "/organizations/{organizationId}/members")
         );
@@ -119,20 +129,35 @@ public class SecurityConfig {
      */
     private RequestMatcher[] authenticatedRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
+
+                // 회원
                 antMatcher(PATCH, "/members"),
                 antMatcher(PATCH, "/members/registration"),
                 antMatcher(DELETE, "/members"),
+
+                // 단체장
                 antMatcher(DELETE, "/organizations/{organizationId}"),
-                antMatcher(DELETE, "/organizations/{organizationId}/departure"),
                 antMatcher(DELETE, "/organizations/{organizationId}/banishment"),
-                antMatcher(GET, "/organizations/{organizationId}"),
-                antMatcher(GET, "/organizations/self"),
                 antMatcher(PATCH, "/organizations/{organizationId}"),
                 antMatcher(PATCH, "/organizations/{organizationId}/leader"),
                 antMatcher(POST, "/organizations"),
+
+                // 단체
+                antMatcher(DELETE, "/organizations/{organizationId}/departure"),
+                antMatcher(GET, "/organizations/{organizationId}"),
+                antMatcher(GET, "/organizations/self"),
                 antMatcher(POST, "/organizations/{organizationId}"),
+
+                // 단체 좋아요
                 antMatcher(POST, "/organizations/{organizationId}/like"),
-                antMatcher(DELETE, "/organizations/{organizationId}/like")
+                antMatcher(DELETE, "/organizations/{organizationId}/like"),
+
+                // 모임장
+                antMatcher(DELETE, "/meetings/{meetingId}"),
+                antMatcher(DELETE, "/meetings/{meetingId}/banishment"),
+                antMatcher(PATCH, "/meetings/{meetingId}"),
+                antMatcher(PATCH, "/meetings/{meetingId}/leader"),
+                antMatcher(POST, "/meetings")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
