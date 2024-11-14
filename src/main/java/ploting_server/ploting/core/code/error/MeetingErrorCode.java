@@ -13,6 +13,7 @@ public enum MeetingErrorCode implements BaseErrorCode {
     INVALID_MEMBER_LIMIT(400, "최대 멤버 제한이 현재 멤버 수보다 작을 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_DELETE_MEETING(400, "멤버 수가 1명(모임장)이 아닐 경우 모임을 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_KICK_SELF_LEADER(400, "모임장은 스스로 강퇴될 수 없습니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_REGISTERED_MEMBER(400, "해당 모임에 이미 가입된 회원입니다.", HttpStatus.BAD_REQUEST),
 
     // 403 FORBIDDEN
     NOT_MEETING_MEMBER(403, "모임에 가입된 멤버가 아닙니다.", HttpStatus.FORBIDDEN),
