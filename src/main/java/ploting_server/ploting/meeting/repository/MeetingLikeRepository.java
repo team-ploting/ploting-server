@@ -11,4 +11,5 @@ import java.util.List;
 public interface MeetingLikeRepository extends JpaRepository<MeetingLike, Long> {
     List<MeetingLike> findAllByMeetingId(Long meetingId);
 
+    boolean existsByMemberIdAndMeetingId(Long memberId, Long meetingId);
 }

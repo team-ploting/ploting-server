@@ -8,11 +8,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import ploting_server.ploting.core.response.BfResponse;
+import ploting_server.ploting.core.security.principal.PrincipalDetails;
+import ploting_server.ploting.meeting.dto.response.MeetingInfoResponse;
 import ploting_server.ploting.meeting.dto.response.MeetingListResponse;
 import ploting_server.ploting.meeting.service.MeetingService;
 
@@ -38,5 +38,21 @@ public class MeetingController {
             @RequestParam int size) {
         Page<MeetingListResponse> allMeetings = meetingService.getAllMeetings(page, size);
         return ResponseEntity.ok(new BfResponse<>(allMeetings));
+    }
+
+    @Operation(
+            summary = "모임 세부 정보 조회",
+            description = "모임의 세부 정보를 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모임 세부 정보 조회 성공", useReturnTypeSchema = true),
+    })
+    @GetMapping("/{meetingId}")
+    public ResponseEntity<BfResponse<MeetingInfoResponse>> getMeetingInfo(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long meetingId) {
+        MeetingInfoResponse meetingInfoResponse = meetingService.getMeetingInfo(
+                Long.parseLong(principalDetails.getUsername()), meetingId);
+        return ResponseEntity.ok(new BfResponse<>(meetingInfoResponse));
     }
 }
