@@ -85,6 +85,7 @@ public class MeetingLeaderService {
         MeetingMember meetingMember = MeetingMember.builder()
                 .meeting(meeting)
                 .member(member)
+                .introduction("")
                 .leaderStatus(true)
                 .build();
 

@@ -145,12 +145,12 @@ public class OrganizationService {
      * 단체의 멤버를 조회합니다.
      */
     @Transactional(readOnly = true)
-    public List<OrganizationMemberListResponse> getOrganizationMemberList(Long organizationId) {
+    public List<OrganizationMemberListResponse> getOrganizationMembers(Long organizationId) {
         // 단체의 멤버 리스트 조회
-        List<OrganizationMember> organizationMemberList = organizationMemberRepository.findAllByOrganizationId(organizationId);
+        List<OrganizationMember> organizationMembers = organizationMemberRepository.findAllByOrganizationId(organizationId);
 
-        // 모임_멤버 리스트를 OrganizationMemberInfoResponse 리스트로 변환
-        return organizationMemberList.stream()
+        // 단체_멤버 리스트를 OrganizationMemberListResponse 리스트로 변환
+        return organizationMembers.stream()
                 .map(organizationMember -> OrganizationMemberListResponse.builder()
                         .nickname(organizationMember.getMember().getNickname())
                         .level(organizationMember.getMember().getLevel())

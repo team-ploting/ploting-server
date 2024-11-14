@@ -14,7 +14,10 @@ import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.meeting.dto.response.MeetingInfoResponse;
 import ploting_server.ploting.meeting.dto.response.MeetingListResponse;
+import ploting_server.ploting.meeting.dto.response.MeetingMemberListResponse;
 import ploting_server.ploting.meeting.service.MeetingService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("meetings")
@@ -54,5 +57,20 @@ public class MeetingController {
         MeetingInfoResponse meetingInfoResponse = meetingService.getMeetingInfo(
                 Long.parseLong(principalDetails.getUsername()), meetingId);
         return ResponseEntity.ok(new BfResponse<>(meetingInfoResponse));
+    }
+
+    @Operation(
+            summary = "모임 멤버 리스트 조회",
+            description = "모임의 멤버 리스트를 조회합니다."
+    )
+    @SecurityRequirements(value = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모임 멤버 리스트 조회 성공", useReturnTypeSchema = true),
+    })
+    @GetMapping("/{meetingId}/members")
+    public ResponseEntity<BfResponse<List<MeetingMemberListResponse>>> getMeetingMembers(
+            @PathVariable Long meetingId) {
+        List<MeetingMemberListResponse> meetingMembers = meetingService.getMeetingMembers(meetingId);
+        return ResponseEntity.ok(new BfResponse<>(meetingMembers));
     }
 }

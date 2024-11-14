@@ -15,4 +15,6 @@ public interface MeetingMemberRepository extends JpaRepository<MeetingMember, Lo
     Optional<MeetingMember> findByMeetingIdAndMemberId(Long meetingId, Long memberId);
 
     List<MeetingMember> findTop3ByMeetingIdOrderByCreatedAtAsc(Long meetingId);
+
+    List<MeetingMember> findAllByMeetingId(Long meetingId);
 }
