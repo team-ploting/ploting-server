@@ -58,4 +58,20 @@ public class MeetingLeaderController {
         meetingLeaderService.updateMeeting(Long.parseLong(principalDetails.getUsername()), meetingId, meetingUpdateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
+
+    @Operation(
+            summary = "모임 삭제",
+            description = "모임을 삭제합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모임 삭제 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @DeleteMapping("/{meetingId}")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteMeeting(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long meetingId) {
+        meetingLeaderService.deleteMeeting(Long.parseLong(principalDetails.getUsername()), meetingId);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
 }

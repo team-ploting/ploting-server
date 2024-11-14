@@ -63,7 +63,7 @@ public class OrganizationLeaderController {
             description = "단체를 삭제합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 정보 수정 성공",
+            @ApiResponse(responseCode = "200", description = "단체 삭제 성공",
                     content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
     })
     @DeleteMapping("/{organizationId}")
