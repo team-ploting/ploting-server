@@ -1,6 +1,8 @@
 package ploting_server.ploting.meeting.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +14,7 @@ import ploting_server.ploting.core.code.success.GlobalSuccessCode;
 import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.meeting.dto.request.MeetingCreateRequest;
+import ploting_server.ploting.meeting.dto.request.MeetingUpdateRequest;
 import ploting_server.ploting.meeting.service.MeetingLeaderService;
 
 @RestController
@@ -36,6 +39,23 @@ public class MeetingLeaderController {
             @RequestBody MeetingCreateRequest meetingCreateRequest
     ) {
         meetingLeaderService.createMeeting(Long.parseLong(principalDetails.getUsername()), meetingId, meetingCreateRequest);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
+
+    @Operation(
+            summary = "모임 정보 수정",
+            description = "모임의 정보를 수정합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모임 정보 수정 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @PatchMapping("/{meetingId}")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> updateMeeting(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long meetingId,
+            @RequestBody MeetingUpdateRequest meetingUpdateRequest) {
+        meetingLeaderService.updateMeeting(Long.parseLong(principalDetails.getUsername()), meetingId, meetingUpdateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 }

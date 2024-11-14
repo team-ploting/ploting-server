@@ -3,14 +3,16 @@ package ploting_server.ploting.meeting.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ploting_server.ploting.core.code.error.MeetingErrorCode;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.code.error.OrganizationErrorCode;
+import ploting_server.ploting.core.exception.MeetingException;
 import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.core.exception.OrganizationException;
 import ploting_server.ploting.meeting.dto.request.MeetingCreateRequest;
+import ploting_server.ploting.meeting.dto.request.MeetingUpdateRequest;
 import ploting_server.ploting.meeting.entity.Meeting;
 import ploting_server.ploting.meeting.entity.MeetingMember;
-import ploting_server.ploting.meeting.repository.MeetingLikeRepository;
 import ploting_server.ploting.meeting.repository.MeetingMemberRepository;
 import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.member.entity.Member;
@@ -34,7 +36,6 @@ public class MeetingLeaderService {
     private final OrganizationRepository organizationRepository;
     private final OrganizationMemberRepository organizationMemberRepository;
     private final MeetingMemberRepository meetingMemberRepository;
-    private final MeetingLikeRepository meetingLikeRepository;
     private final MemberRepository memberRepository;
 
     /**
@@ -89,13 +90,44 @@ public class MeetingLeaderService {
         meeting.addMeetingMember(meetingMember);
     }
 
+    public void updateMeeting(Long memberId, Long meetingId, MeetingUpdateRequest meetingUpdateRequest) {
+        // 단체에 속해있는지 확인
+        checkBelongToOrganization(memberId, meetingId);
+
+        // 모임의 모임장인지 확인
+        checkMeetingLeader(memberId, meetingId);
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
+
+        // 최대 멤버 제한이 현재 멤버 수보다 작을 수 없음
+        if (meeting.getMemberCount() > meetingUpdateRequest.getMaxMember()) {
+            throw new MeetingException(MeetingErrorCode.INVALID_MEMBER_LIMIT);
+        }
+
+        meeting.updateMeeting(meetingUpdateRequest);
+    }
 
     /**
      * 단체에 속해있는지 확인합니다.
      */
     private void checkBelongToOrganization(Long memberId, Long organizationId) {
-
         organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, memberId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
+    }
+
+    /**
+     * 모임의 모임장인지 확인합니다.
+     */
+    private MeetingMember checkMeetingLeader(Long memberId, Long meetingId) {
+        MeetingMember meetingMember = meetingMemberRepository.findByMeetingIdAndLeaderStatusTrue(meetingId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
+
+        // 모임의 모임장인지 확인
+        if (!meetingMember.getMember().getId().equals(memberId)) {
+            throw new MeetingException(MeetingErrorCode.NOT_MEETING_LEADER);
+        }
+
+        return meetingMember;
     }
 }
