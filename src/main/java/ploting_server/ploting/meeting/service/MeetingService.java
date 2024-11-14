@@ -8,7 +8,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ploting_server.ploting.core.code.error.MeetingErrorCode;
+import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.exception.MeetingException;
+import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.meeting.dto.response.MeetingInfoResponse;
 import ploting_server.ploting.meeting.dto.response.MeetingListResponse;
 import ploting_server.ploting.meeting.dto.response.MeetingMemberListResponse;
@@ -17,6 +19,7 @@ import ploting_server.ploting.meeting.entity.MeetingMember;
 import ploting_server.ploting.meeting.repository.MeetingLikeRepository;
 import ploting_server.ploting.meeting.repository.MeetingMemberRepository;
 import ploting_server.ploting.meeting.repository.MeetingRepository;
+import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.entity.Organization;
 import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
@@ -121,5 +124,36 @@ public class MeetingService {
                         .leaderStatus(meetingMember.isLeaderStatus())
                         .build())
                 .toList();
+    }
+
+    /**
+     * 모임을 가입합니다.
+     */
+    @Transactional
+    public void registerMeeting(Long memberId, Long meetingId, String introduction) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
+
+        // 이미 가입된 회원인지 확인
+        boolean isMemberExists = meetingMemberRepository.existsByMeetingIdAndMemberId(meetingId, memberId);
+        if (isMemberExists) {
+            throw new MeetingException(MeetingErrorCode.ALREADY_REGISTERED_MEMBER);
+        }
+
+        MeetingMember meetingMember = MeetingMember.builder()
+                .meeting(meeting)
+                .member(member)
+                .introduction(introduction)
+                .leaderStatus(false)
+                .build();
+
+        meetingMemberRepository.save(meetingMember);
+
+        meeting.addMeetingMember(meetingMember);
+
+        meeting.incrementMemberAndGenderCount(member.getGender());
     }
 }
