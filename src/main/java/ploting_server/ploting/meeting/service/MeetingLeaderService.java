@@ -141,6 +141,25 @@ public class MeetingLeaderService {
     }
 
     /**
+     * 모임장 권한을 다른 회원에게 위임합니다. (모임장만 가능)
+     */
+    @Transactional
+    public void delegateLeader(Long memberId, Long meetingId, Long newLeaderId) {
+        // 현재 모임장
+        MeetingMember currentLeader = checkMeetingLeader(memberId, meetingId);
+
+        // 새로운 모임장
+        MeetingMember newLeader = meetingMemberRepository.findByMeetingIdAndMemberId(meetingId, newLeaderId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_MEETING_MEMBER));
+
+        // 기존 모임장의 권한을 해제
+        currentLeader.revokeLeader();
+
+        // 새로운 모임장에게 권한을 부여
+        newLeader.assignLeader();
+    }
+
+    /**
      * 단체에 속해있는지 확인합니다.
      */
     private void checkBelongToOrganization(Long memberId, Long organizationId) {

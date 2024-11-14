@@ -35,4 +35,14 @@ public class MeetingMember {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    // 새로운 모임장에게 권한을 부여
+    public void assignLeader() {
+        this.leaderStatus = true;
+    }
+
+    // 기존 모임장의 권한을 해제
+    public void revokeLeader() {
+        this.leaderStatus = false;
+    }
 }
