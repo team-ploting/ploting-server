@@ -82,4 +82,14 @@ public class GlobalExceptionHandler {
         BaseErrorCode errorCode = exception.getErrorCode();
         return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
     }
+
+    /**
+     * Meeting 관련 예외 Handler
+     */
+    @ExceptionHandler(MeetingException.class)
+    protected ResponseEntity<ErrorResponse> handleMeetingException(MeetingException exception) {
+        log.error(">>>>> MeetingException : {}", exception);
+        BaseErrorCode errorCode = exception.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
+    }
 }
