@@ -97,10 +97,8 @@ public class MeetingLeaderService {
     /**
      * 모임을 수정합니다. (모임장만 가능)
      */
+    @Transactional
     public void updateMeeting(Long memberId, Long meetingId, MeetingUpdateRequest meetingUpdateRequest) {
-        // 단체에 속해있는지 확인
-        checkBelongToOrganization(memberId, meetingId);
-
         // 모임의 모임장인지 확인
         checkMeetingLeader(memberId, meetingId);
 
@@ -138,25 +136,6 @@ public class MeetingLeaderService {
 
         // 모임 삭제
         meetingRepository.delete(meeting);
-    }
-
-    /**
-     * 모임장 권한을 다른 회원에게 위임합니다. (모임장만 가능)
-     */
-    @Transactional
-    public void delegateLeader(Long memberId, Long meetingId, Long newLeaderId) {
-        // 현재 모임장
-        MeetingMember currentLeader = checkMeetingLeader(memberId, meetingId);
-
-        // 새로운 모임장
-        MeetingMember newLeader = meetingMemberRepository.findByMeetingIdAndMemberId(meetingId, newLeaderId)
-                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_MEETING_MEMBER));
-
-        // 기존 모임장의 권한을 해제
-        currentLeader.revokeLeader();
-
-        // 새로운 모임장에게 권한을 부여
-        newLeader.assignLeader();
     }
 
     /**
@@ -198,7 +177,7 @@ public class MeetingLeaderService {
     /**
      * 모임의 모임장인지 확인합니다.
      */
-    private MeetingMember checkMeetingLeader(Long memberId, Long meetingId) {
+    private void checkMeetingLeader(Long memberId, Long meetingId) {
         MeetingMember meetingMember = meetingMemberRepository.findByMeetingIdAndLeaderStatusTrue(meetingId)
                 .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
 
@@ -206,7 +185,5 @@ public class MeetingLeaderService {
         if (!meetingMember.getMember().getId().equals(memberId)) {
             throw new MeetingException(MeetingErrorCode.NOT_MEETING_LEADER);
         }
-
-        return meetingMember;
     }
 }
