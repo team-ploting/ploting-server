@@ -14,6 +14,8 @@ import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 
+import java.util.Optional;
+
 /**
  * 모임 좋아요를 관리하는 서비스 클래스입니다.
  */
@@ -36,6 +38,12 @@ public class MeetingLikeService {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
 
+        Optional<MeetingLike> checkMeetingLike = meetingLikeRepository.findByMemberIdAndMeetingId(memberId, meetingId);
+
+        if (checkMeetingLike.isPresent()) {
+            throw new MeetingException(MeetingErrorCode.ALREADY_EXIST_MEETING_LIKE);
+        }
+
         MeetingLike meetingLike = MeetingLike.builder()
                 .meeting(meeting)
                 .member(member)
@@ -55,7 +63,7 @@ public class MeetingLikeService {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
 
-        MeetingLike meetingLike = meetingLikeRepository.findByMemberIdAndMeetingId(memberId, memberId)
+        MeetingLike meetingLike = meetingLikeRepository.findByMemberIdAndMeetingId(memberId, meetingId)
                 .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_LIKE));
 
         // 좋아요 수 감소
