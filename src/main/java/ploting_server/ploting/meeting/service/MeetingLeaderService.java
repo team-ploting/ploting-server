@@ -167,6 +167,17 @@ public class MeetingLeaderService {
     }
 
     /**
+     * 만료된 모임의 activeStatus를 비활성화로 변경합니다.
+     */
+    @Transactional
+    public void deactivateExpiredMeetings() {
+        List<Meeting> expiredMeetings = meetingRepository.findAllByActiveStatusTrueAndMeetDateBefore(LocalDateTime.now());
+        for (Meeting meeting : expiredMeetings) {
+            meeting.deactivate();
+        }
+    }
+
+    /**
      * 단체에 속해있는지 확인합니다.
      */
     private void checkBelongToOrganization(Long memberId, Long organizationId) {

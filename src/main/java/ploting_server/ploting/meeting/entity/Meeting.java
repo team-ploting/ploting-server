@@ -150,4 +150,11 @@ public class Meeting {
     public void decrementLikeCount() {
         this.likeCount--;
     }
+
+    /**
+     * 비활성화 상태로 변경
+     */
+    public void deactivate() {
+        this.activeStatus = false;
+    }
 }
