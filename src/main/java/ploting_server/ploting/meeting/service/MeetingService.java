@@ -83,6 +83,14 @@ public class MeetingService {
         // 가입된 순으로 세명의 멤버 조회
         List<MeetingMember> top3MembersByCreatedAt = meetingMemberRepository.findTop3ByMeetingIdOrderByCreatedAtAsc(meetingId);
 
+        List<MeetingMemberListResponse> top3Members = top3MembersByCreatedAt.stream()
+                .map(meetingMember -> MeetingMemberListResponse.builder()
+                        .nickname(meetingMember.getMember().getNickname())
+                        .level(meetingMember.getMember().getLevel())
+                        .leaderStatus(meetingMember.isLeaderStatus())
+                        .build())
+                .toList();
+
         // 사용자가 좋아요를 누른 모임인지 조회
         boolean hasLiked = meetingLikeRepository.existsByMemberIdAndMeetingId(memberId, meetingId);
 
@@ -101,7 +109,7 @@ public class MeetingService {
                 .maleCount(meeting.getMaleCount())
                 .femaleCount(meeting.getFemaleCount())
                 .activeStatus(meeting.isActiveStatus())
-                .top3Members(top3MembersByCreatedAt)
+                .top3Members(top3Members)
                 .organizationName(organization.getName())
                 .organizationMemberCount(organization.getMemberCount())
                 .build();

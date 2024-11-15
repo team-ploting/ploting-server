@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import ploting_server.ploting.meeting.entity.MeetingMember;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,7 +59,7 @@ public class MeetingInfoResponse {
     private final boolean activeStatus;
 
     @Schema(description = "가입 순으로 멤버 세명")
-    private final List<MeetingMember> top3Members;
+    private final List<MeetingMemberListResponse> top3Members;
 
     @Schema(description = "단체 이름", example = "환경지킴이 단체")
     private final String organizationName;
