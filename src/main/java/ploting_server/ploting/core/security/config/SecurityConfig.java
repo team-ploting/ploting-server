@@ -169,7 +169,13 @@ public class SecurityConfig {
 
                 // 모임 좋아요
                 antMatcher(POST, "/meetings/{meetingId}/like"),
-                antMatcher(DELETE, "/meetings/{meetingId}/like")
+                antMatcher(DELETE, "/meetings/{meetingId}/like"),
+                
+                // 게시글
+                antMatcher(DELETE, "/posts/{postId}"),
+                antMatcher(GET, "/posts/{postId}"),
+                antMatcher(PATCH, "/posts/{postId}"),
+                antMatcher(POST, "/posts")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
