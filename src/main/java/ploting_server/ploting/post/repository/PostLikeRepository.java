@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     List<PostLike> findAllByPostId(Long postId);
+
+    boolean existsByMemberIdAndPostId(Long memberId, Long postId);
 }
