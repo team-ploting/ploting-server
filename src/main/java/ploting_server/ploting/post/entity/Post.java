@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 import ploting_server.ploting.member.entity.Member;
+import ploting_server.ploting.post.dto.request.PostUpdateRequest;
 
 import java.time.LocalDateTime;
 
@@ -42,4 +43,12 @@ public class Post {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    /**
+     * 게시글 수정
+     */
+    public void updatePost(PostUpdateRequest postUpdateRequest) {
+        this.title = postUpdateRequest.getTitle();
+        this.content = postUpdateRequest.getContent();
+    }
 }
