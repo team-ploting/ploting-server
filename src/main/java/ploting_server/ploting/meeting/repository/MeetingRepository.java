@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     List<Meeting> findAllByOrganizationId(Long organizationId);
 
+    List<Meeting> findAllByOrganizationIdAndActiveStatusIsTrue(Long organizationId);
+
     @Query("SELECT m.organization FROM Meeting m WHERE m.id = :meetingId")
     Optional<Organization> findOrganizationByMeetingId(@Param("meetingId") Long meetingId);
 }
