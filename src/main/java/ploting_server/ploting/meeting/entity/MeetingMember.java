@@ -29,9 +29,6 @@ public class MeetingMember {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @JoinColumn(name = "introduction", columnDefinition = "TEXT")
-    private String introduction;
-
     @Column(name = "leader_status")
     private boolean leaderStatus;
 
