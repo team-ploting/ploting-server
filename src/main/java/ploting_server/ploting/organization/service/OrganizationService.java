@@ -19,6 +19,7 @@ import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationListResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
+import ploting_server.ploting.organization.dto.response.OrganizationMemberResponse;
 import ploting_server.ploting.organization.entity.Organization;
 import ploting_server.ploting.organization.entity.OrganizationMember;
 import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
@@ -145,12 +146,12 @@ public class OrganizationService {
      * 단체의 멤버를 조회합니다.
      */
     @Transactional(readOnly = true)
-    public List<OrganizationMemberListResponse> getOrganizationMembers(Long organizationId) {
+    public OrganizationMemberResponse getOrganizationMembers(Long organizationId) {
         // 단체의 멤버 리스트 조회
         List<OrganizationMember> organizationMembers = organizationMemberRepository.findAllByOrganizationId(organizationId);
 
         // 단체_멤버 리스트를 OrganizationMemberListResponse 리스트로 변환
-        return organizationMembers.stream()
+        List<OrganizationMemberListResponse> organizationMemberListResponse = organizationMembers.stream()
                 .map(organizationMember -> OrganizationMemberListResponse.builder()
                         .nickname(organizationMember.getMember().getNickname())
                         .level(organizationMember.getMember().getLevel())
@@ -158,6 +159,11 @@ public class OrganizationService {
                         .leaderStatus(organizationMember.isLeaderStatus())
                         .build())
                 .toList();
+
+        return OrganizationMemberResponse.builder()
+                .memberCount(organizationMemberListResponse.size())
+                .organizationMemberListResponse(organizationMemberListResponse)
+                .build();
     }
 
     /**
