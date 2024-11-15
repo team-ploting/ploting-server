@@ -22,8 +22,6 @@ import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.entity.Organization;
-import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
-import ploting_server.ploting.organization.repository.OrganizationRepository;
 
 import java.util.List;
 
@@ -38,8 +36,6 @@ public class MeetingService {
     private final MeetingMemberRepository meetingMemberRepository;
     private final MeetingLikeRepository meetingLikeRepository;
     private final MemberRepository memberRepository;
-    private final OrganizationRepository organizationRepository;
-    private final OrganizationMemberRepository organizationMemberRepository;
 
     /**
      * 모든 모임 목록을 조회합니다. (페이징 처리)

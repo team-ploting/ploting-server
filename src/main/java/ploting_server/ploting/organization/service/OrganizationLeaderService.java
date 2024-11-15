@@ -7,6 +7,8 @@ import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.code.error.OrganizationErrorCode;
 import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.core.exception.OrganizationException;
+import ploting_server.ploting.meeting.entity.Meeting;
+import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.dto.request.OrganizationCreateRequest;
@@ -31,6 +33,7 @@ public class OrganizationLeaderService {
     private final OrganizationMemberRepository organizationMemberRepository;
     private final OrganizationLikeRepository organizationLikeRepository;
     private final MemberRepository memberRepository;
+    private final MeetingRepository meetingRepository;
 
     /**
      * 단체를 생성합니다.
@@ -104,11 +107,18 @@ public class OrganizationLeaderService {
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
+        List<Meeting> meetings = meetingRepository.findAllByOrganizationIdAndActiveStatusIsTrue(organizationId);
+
         List<OrganizationLike> organizationLikes = organizationLikeRepository.findAllByOrganizationId(organizationId);
 
         // 멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없음
         if (organization.getMemberCount() != 1) {
-            throw new OrganizationException(OrganizationErrorCode.CANNOT_DELETE_ORGANIZATION);
+            throw new OrganizationException(OrganizationErrorCode.CANNOT_DELETE_ORGANIZATION_WITH_MULTIPLE_MEMBERS);
+        }
+
+        // 진행 중인 모임 수가 1개 이상일 경우 단체를 삭제할 수 없음
+        if (!meetings.isEmpty()) {
+            throw new OrganizationException(OrganizationErrorCode.CANNOT_DELETE_ORGANIZATION_WITH_EXISTING_MEETINGS);
         }
 
         // 단체의 좋아요 삭제

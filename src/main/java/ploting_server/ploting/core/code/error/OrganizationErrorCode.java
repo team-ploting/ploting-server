@@ -11,7 +11,8 @@ import ploting_server.ploting.core.response.ErrorResponse;
 public enum OrganizationErrorCode implements BaseErrorCode {
     // 400 BAD_REQUEST
     INVALID_MEMBER_LIMIT(400, "최대 멤버 제한이 현재 멤버 수보다 작을 수 없습니다.", HttpStatus.BAD_REQUEST),
-    CANNOT_DELETE_ORGANIZATION(400, "멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_DELETE_ORGANIZATION_WITH_MULTIPLE_MEMBERS(400, "멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_DELETE_ORGANIZATION_WITH_EXISTING_MEETINGS(400, "모임 수가 1개 이상일 경우 단체를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_LEAVE_ORGANIZATION_AS_LEADER(400, "단체장은 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_KICK_SELF_LEADER(400, "단체장은 스스로 강퇴될 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_WITHDRAW_AS_ORGANIZATION_LEADER(400, "회원이 단체장인 단체가 있어 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
