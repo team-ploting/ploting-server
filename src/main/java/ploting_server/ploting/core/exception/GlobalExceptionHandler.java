@@ -102,4 +102,14 @@ public class GlobalExceptionHandler {
         BaseErrorCode errorCode = exception.getErrorCode();
         return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
     }
+
+    /**
+     * Comment 관련 예외 Handler
+     */
+    @ExceptionHandler(CommentException.class)
+    protected ResponseEntity<ErrorResponse> handleCommentException(CommentException exception) {
+        log.error(">>>>> CommentException : {}", exception);
+        BaseErrorCode errorCode = exception.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
+    }
 }
