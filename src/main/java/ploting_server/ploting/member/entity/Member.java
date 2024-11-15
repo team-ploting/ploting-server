@@ -3,11 +3,15 @@ package ploting_server.ploting.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import ploting_server.ploting.comment.entity.Comment;
 import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
 import ploting_server.ploting.member.dto.request.MemberUpdateRequest;
+import ploting_server.ploting.post.entity.Post;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 회원을 관리하는 엔티티 클래스입니다.
@@ -56,6 +60,36 @@ public class Member {
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    // Post 양방향 연관관계
+    @Builder.Default
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
+
+    // Comment 양방향 연관관계
+    @Builder.Default
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    // Post 연관관계 편의 메서드 - 추가
+    public void addPost(Post post) {
+        this.posts.add(post);
+    }
+
+    // Post 연관관계 편의 메서드 - 삭제
+    public void removePost(Post post) {
+        this.posts.remove(post);
+    }
+
+    // Comment 연관관계 편의 메서드 - 추가
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+
+    // Comment 연관관계 편의 메서드 - 삭제
+    public void removeComment(Comment comment) {
+        this.comments.remove(comment);
+    }
 
     // 회원 가입 시 정보 업데이트
     public void registerMember(MemberRegisterRequest memberRegisterRequest) {
