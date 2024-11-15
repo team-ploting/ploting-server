@@ -10,7 +10,8 @@ import ploting_server.ploting.core.response.ErrorResponse;
 @Getter
 public enum OAuthErrorCode implements BaseErrorCode {
     // 400 BAD_REQUEST
-    UNSUPPORTED_OAUTH_PROVIDER(400, "지원하지 않는 OAuth Provider 입니다.", HttpStatus.BAD_REQUEST);
+    UNSUPPORTED_OAUTH_PROVIDER(400, "지원하지 않는 OAuth Provider 입니다.", HttpStatus.BAD_REQUEST),
+    ;
 
     private final int errorCode;
     private final String errorMessage;
