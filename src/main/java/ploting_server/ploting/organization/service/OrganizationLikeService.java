@@ -14,8 +14,6 @@ import ploting_server.ploting.organization.entity.OrganizationLike;
 import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
 import ploting_server.ploting.organization.repository.OrganizationRepository;
 
-import java.time.LocalDateTime;
-
 /**
  * 단체 좋아요를 관리하는 서비스 클래스입니다.
  */
@@ -23,9 +21,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class OrganizationLikeService {
 
+    private final OrganizationLikeRepository organizationLikeRepository;
     private final OrganizationRepository organizationRepository;
     private final MemberRepository memberRepository;
-    private final OrganizationLikeRepository organizationLikeRepository;
 
     /**
      * 단체의 좋아요를 누릅니다.
@@ -41,7 +39,6 @@ public class OrganizationLikeService {
         OrganizationLike organizationLike = OrganizationLike.builder()
                 .organization(organization)
                 .member(member)
-                .createdAt(LocalDateTime.now())
                 .build();
 
         // 좋아요 수 증가
