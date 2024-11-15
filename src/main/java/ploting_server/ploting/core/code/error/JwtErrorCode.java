@@ -21,7 +21,8 @@ public enum JwtErrorCode implements BaseErrorCode {
     INVALID_TOKEN_SIGNATURE(401, "유효하지 않은 토큰 서명입니다.", HttpStatus.UNAUTHORIZED),
 
     // 500 INTERNAL_SERVER_ERROR
-    TOKEN_PROCESSING_ERROR(500, "토큰 처리 중 서버 오류가 발생했습니다. 관리자에게 문의하세요.", HttpStatus.INTERNAL_SERVER_ERROR);
+    TOKEN_PROCESSING_ERROR(500, "토큰 처리 중 서버 오류가 발생했습니다. 관리자에게 문의하세요.", HttpStatus.INTERNAL_SERVER_ERROR),
+    ;
 
     private final int errorCode;
     private final String errorMessage;
