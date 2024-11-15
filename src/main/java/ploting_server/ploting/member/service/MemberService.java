@@ -39,6 +39,10 @@ public class MemberService {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
+        if (memberRepository.existsByNickname(memberRegisterRequest.getNickname())) {
+            throw new MemberException(MemberErrorCode.DUPLICATE_NICKNAME);
+        }
+
         findMember.registerMember(memberRegisterRequest);
     }
 
