@@ -165,7 +165,11 @@ public class SecurityConfig {
                 // 모임
                 antMatcher(DELETE, "/meetings/{meetingId}/departure"),
                 antMatcher(GET, "/meetings/{meetingId}"),
-                antMatcher(POST, "/meetings/{meetingId}")
+                antMatcher(POST, "/meetings/{meetingId}"),
+
+                // 모임 좋아요
+                antMatcher(POST, "/meetings/{meetingId}/like"),
+                antMatcher(DELETE, "/meetings/{meetingId}/like")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
