@@ -84,8 +84,11 @@ public class OrganizationLeaderService {
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
-        // 단체의 단체장인지 확인
-        checkOrganizationLeader(memberId, organizationId);
+        OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        // 단체장 권한 확인
+        checkOrganizationLeader(memberId, organizationMember);
 
         // 최대 멤버 제한이 현재 멤버 수보다 작을 수 없음
         if (organization.getMemberCount() > organizationUpdateRequest.getMaxMember()) {
@@ -101,8 +104,11 @@ public class OrganizationLeaderService {
      */
     @Transactional
     public void deleteOrganization(Long memberId, Long organizationId) {
-        // 단체의 단체장인지 확인
-        checkOrganizationLeader(memberId, organizationId);
+        OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        // 단체장 권한 확인
+        checkOrganizationLeader(memberId, organizationMember);
 
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
@@ -134,7 +140,11 @@ public class OrganizationLeaderService {
     @Transactional
     public void delegateLeader(Long memberId, Long organizationId, Long newLeaderId) {
         // 현재 단체장
-        OrganizationMember currentLeader = checkOrganizationLeader(memberId, organizationId);
+        OrganizationMember currentLeader = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        // 단체장 권한 확인
+        checkOrganizationLeader(memberId, currentLeader);
 
         // 새로운 단체장
         OrganizationMember newLeader = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, newLeaderId)
@@ -152,17 +162,17 @@ public class OrganizationLeaderService {
      */
     @Transactional
     public void banishMember(Long memberId, Long organizationId, Long kickMemberId) {
+        OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
+                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
         // 단체장 권한 확인
-        checkOrganizationLeader(memberId, organizationId);
+        checkOrganizationLeader(memberId, organizationMember);
 
         Member kickMember = memberRepository.findById(kickMemberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
-
-        OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, kickMemberId)
-                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
 
         // 단체장 스스로를 강퇴할 수 없음
         if (organizationMember.isLeaderStatus()) {
@@ -178,15 +188,10 @@ public class OrganizationLeaderService {
     /**
      * 단체의 단체장인지 확인합니다.
      */
-    private OrganizationMember checkOrganizationLeader(Long memberId, Long organizationId) {
-        OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
-                .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
-
+    private void checkOrganizationLeader(Long memberId, OrganizationMember organizationMember) {
         // 단체의 단체장인지 확인
         if (!organizationMember.getMember().getId().equals(memberId)) {
             throw new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_LEADER);
         }
-
-        return organizationMember;
     }
 }
