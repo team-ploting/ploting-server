@@ -15,6 +15,7 @@ import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.post.dto.request.PostCreateRequest;
 import ploting_server.ploting.post.dto.request.PostUpdateRequest;
+import ploting_server.ploting.post.dto.response.PostInfoResponse;
 import ploting_server.ploting.post.service.PostService;
 
 @RestController
@@ -72,5 +73,20 @@ public class PostController {
             @PathVariable Long postId) {
         postService.deletePost(Long.parseLong(principalDetails.getUsername()), postId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
+
+    @Operation(
+            summary = "게시글 세부 정보 조회",
+            description = "게시글의 세부 정보를 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "게시글 세부 정보 조회 성공", useReturnTypeSchema = true)
+    })
+    @GetMapping("/{postId}")
+    public ResponseEntity<BfResponse<PostInfoResponse>> getPostInfo(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long postId) {
+        PostInfoResponse postInfo = postService.getPostInfo(Long.parseLong(principalDetails.getUsername()), postId);
+        return ResponseEntity.ok(new BfResponse<>(postInfo));
     }
 }

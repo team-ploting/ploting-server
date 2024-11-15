@@ -3,14 +3,17 @@ package ploting_server.ploting.post.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ploting_server.ploting.comment.dto.response.CommentListResponse;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.code.error.PostErrorCode;
+import ploting_server.ploting.core.exception.MeetingException;
 import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.core.exception.PostException;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.post.dto.request.PostCreateRequest;
 import ploting_server.ploting.post.dto.request.PostUpdateRequest;
+import ploting_server.ploting.post.dto.response.PostInfoResponse;
 import ploting_server.ploting.post.entity.Post;
 import ploting_server.ploting.post.entity.PostLike;
 import ploting_server.ploting.post.repository.PostLikeRepository;
@@ -41,6 +44,7 @@ public class PostService {
                 .member(member)
                 .title(postCreateRequest.getTitle())
                 .content(postCreateRequest.getContent())
+                .commentCount(0)
                 .likeCount(0)
                 .build();
 
@@ -64,8 +68,14 @@ public class PostService {
         post.updatePost(postUpdateRequest);
     }
 
+    /**
+     * 게시글을 삭제합니다.
+     */
     @Transactional
     public void deletePost(Long memberId, Long postId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MeetingException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_ID));
 
@@ -79,6 +89,42 @@ public class PostService {
 
         // 게시글 삭제
         postRepository.delete(post);
+
+        // 양방향 연관관계 해제
+        member.removePost(post);
+    }
+
+    /**
+     * 게시글의 세부 정보를 조회합니다.
+     */
+    @Transactional(readOnly = true)
+    public PostInfoResponse getPostInfo(Long memberId, Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_ID));
+
+        boolean hasLiked = postLikeRepository.existsByMemberIdAndPostId(memberId, postId);
+
+        List<CommentListResponse> commentListResponse = post.getComments().stream()
+                .map(comment -> CommentListResponse.builder()
+                        .authorNickname(comment.getMember().getNickname())
+                        .authorLocation(comment.getMember().getLocation())
+                        .authorLevel(comment.getMember().getLevel())
+                        .content(comment.getContent())
+                        .likeCount(comment.getLikeCount())
+                        .build())
+                .toList();
+
+        return PostInfoResponse.builder()
+                .authorNickname(post.getMember().getNickname())
+                .authorLocation(post.getMember().getLocation())
+                .authorLevel(post.getMember().getLevel())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .likeCount(post.getLikeCount())
+                .commentCount(post.getCommentCount())
+                .hasLiked(hasLiked)
+                .commentListResponse(commentListResponse)
+                .build();
     }
 
     /**

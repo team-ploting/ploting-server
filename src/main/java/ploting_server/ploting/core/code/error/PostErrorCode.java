@@ -10,7 +10,7 @@ import ploting_server.ploting.core.response.ErrorResponse;
 @Getter
 public enum PostErrorCode implements BaseErrorCode {
     // 403 FORBIDDEN
-    NOT_POST_AUTHOR(403, "게시글의 작성자가 아닙니다", HttpStatus.FORBIDDEN),
+    NOT_POST_AUTHOR(403, "게시글의 작성자가 아닙니다.", HttpStatus.FORBIDDEN),
 
     // 404 NOT_FOUND
     NOT_FOUND_POST_ID(404, "존재하지 않는 게시글입니다.", HttpStatus.NOT_FOUND),
