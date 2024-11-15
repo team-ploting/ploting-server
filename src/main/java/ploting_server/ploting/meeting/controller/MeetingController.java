@@ -17,10 +17,8 @@ import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.meeting.dto.response.MeetingInfoResponse;
 import ploting_server.ploting.meeting.dto.response.MeetingListResponse;
-import ploting_server.ploting.meeting.dto.response.MeetingMemberListResponse;
+import ploting_server.ploting.meeting.dto.response.MeetingMemberResponse;
 import ploting_server.ploting.meeting.service.MeetingService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("meetings")
@@ -71,9 +69,9 @@ public class MeetingController {
             @ApiResponse(responseCode = "200", description = "모임 멤버 리스트 조회 성공", useReturnTypeSchema = true),
     })
     @GetMapping("/{meetingId}/members")
-    public ResponseEntity<BfResponse<List<MeetingMemberListResponse>>> getMeetingMembers(
+    public ResponseEntity<BfResponse<MeetingMemberResponse>> getMeetingMembers(
             @PathVariable Long meetingId) {
-        List<MeetingMemberListResponse> meetingMembers = meetingService.getMeetingMembers(meetingId);
+        MeetingMemberResponse meetingMembers = meetingService.getMeetingMembers(meetingId);
         return ResponseEntity.ok(new BfResponse<>(meetingMembers));
     }
 

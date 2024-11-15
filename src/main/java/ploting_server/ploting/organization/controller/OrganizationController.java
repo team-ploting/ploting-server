@@ -17,10 +17,8 @@ import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationListResponse;
-import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
+import ploting_server.ploting.organization.dto.response.OrganizationMemberResponse;
 import ploting_server.ploting.organization.service.OrganizationService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("organizations")
@@ -87,9 +85,9 @@ public class OrganizationController {
             @ApiResponse(responseCode = "200", description = "단체 멤버 리스트 조회 성공", useReturnTypeSchema = true),
     })
     @GetMapping("/{organizationId}/members")
-    public ResponseEntity<BfResponse<List<OrganizationMemberListResponse>>> getOrganizationMembers(
+    public ResponseEntity<BfResponse<OrganizationMemberResponse>> getOrganizationMembers(
             @PathVariable Long organizationId) {
-        List<OrganizationMemberListResponse> organizationMembers = organizationService.getOrganizationMembers(organizationId);
+        OrganizationMemberResponse organizationMembers = organizationService.getOrganizationMembers(organizationId);
         return ResponseEntity.ok(new BfResponse<>(organizationMembers));
     }
 
