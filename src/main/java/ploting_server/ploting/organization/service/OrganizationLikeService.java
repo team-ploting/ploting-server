@@ -14,6 +14,8 @@ import ploting_server.ploting.organization.entity.OrganizationLike;
 import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
 import ploting_server.ploting.organization.repository.OrganizationRepository;
 
+import java.util.Optional;
+
 /**
  * 단체 좋아요를 관리하는 서비스 클래스입니다.
  */
@@ -35,6 +37,12 @@ public class OrganizationLikeService {
 
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
+
+        Optional<OrganizationLike> checkOrganizationLike = organizationLikeRepository.findByMemberIdAndOrganizationId(memberId, organizationId);
+
+        if (checkOrganizationLike.isPresent()) {
+            throw new OrganizationException(OrganizationErrorCode.ALREADY_EXIST_ORGANIZATION_LIKE);
+        }
 
         OrganizationLike organizationLike = OrganizationLike.builder()
                 .organization(organization)
