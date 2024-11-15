@@ -57,4 +57,20 @@ public class PostController {
         postService.updatePost(Long.parseLong(principalDetails.getUsername()), postId, postUpdateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
+
+    @Operation(
+            summary = "게시글 삭제",
+            description = "게시글을 삭제합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "게시글 삭제 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+    })
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<BfResponse<GlobalSuccessCode>> deletePost(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long postId) {
+        postService.deletePost(Long.parseLong(principalDetails.getUsername()), postId);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
 }

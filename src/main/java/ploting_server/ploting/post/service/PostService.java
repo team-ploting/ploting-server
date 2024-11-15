@@ -12,7 +12,11 @@ import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.post.dto.request.PostCreateRequest;
 import ploting_server.ploting.post.dto.request.PostUpdateRequest;
 import ploting_server.ploting.post.entity.Post;
+import ploting_server.ploting.post.entity.PostLike;
+import ploting_server.ploting.post.repository.PostLikeRepository;
 import ploting_server.ploting.post.repository.PostRepository;
+
+import java.util.List;
 
 /**
  * 게시글을 관리하는 서비스 클래스입니다.
@@ -21,8 +25,9 @@ import ploting_server.ploting.post.repository.PostRepository;
 @RequiredArgsConstructor
 public class PostService {
 
-    private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 게시글을 생성합니다.
@@ -50,9 +55,6 @@ public class PostService {
      */
     @Transactional
     public void updatePost(Long memberId, Long postId, PostUpdateRequest postUpdateRequest) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
-
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_ID));
 
@@ -60,6 +62,23 @@ public class PostService {
         checkPostAuthor(memberId, post);
 
         post.updatePost(postUpdateRequest);
+    }
+
+    @Transactional
+    public void deletePost(Long memberId, Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_ID));
+
+        // 게시글의 작성자인지 확인
+        checkPostAuthor(memberId, post);
+
+        List<PostLike> postLikes = postLikeRepository.findAllByPostId(postId);
+
+        // 게시글의 좋아요 삭제
+        postLikeRepository.deleteAll(postLikes);
+
+        // 게시글 삭제
+        postRepository.delete(post);
     }
 
     /**
