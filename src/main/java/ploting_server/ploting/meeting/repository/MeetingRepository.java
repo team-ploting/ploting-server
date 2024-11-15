@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import ploting_server.ploting.meeting.entity.Meeting;
 import ploting_server.ploting.organization.entity.Organization;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,8 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     List<Meeting> findAllByOrganizationId(Long organizationId);
 
     List<Meeting> findAllByOrganizationIdAndActiveStatusIsTrue(Long organizationId);
+
+    List<Meeting> findAllByActiveStatusTrueAndMeetDateBefore(LocalDateTime now);
 
     @Query("SELECT m.organization FROM Meeting m WHERE m.id = :meetingId")
     Optional<Organization> findOrganizationByMeetingId(@Param("meetingId") Long meetingId);
