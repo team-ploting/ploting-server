@@ -46,4 +46,21 @@ public class MeetingLikeService {
 
         meetingLikeRepository.save(meetingLike);
     }
+
+    /**
+     * 모임의 좋아요를 취소합니다.
+     */
+    @Transactional
+    public void cancelMeetingLike(Long memberId, Long meetingId) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
+
+        MeetingLike meetingLike = meetingLikeRepository.findByMemberIdAndMeetingId(memberId, memberId)
+                .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_LIKE));
+
+        // 좋아요 수 감소
+        meeting.decrementLikeCount();
+
+        meetingLikeRepository.delete(meetingLike);
+    }
 }
