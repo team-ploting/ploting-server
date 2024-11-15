@@ -26,10 +26,6 @@ public class Post {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "post_type")
-    @Enumerated(EnumType.STRING)
-    private PostType postType;
-
     @Column(name = "title")
     private String title;
 
