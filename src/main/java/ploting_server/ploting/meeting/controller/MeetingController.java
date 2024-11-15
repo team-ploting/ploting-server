@@ -88,9 +88,8 @@ public class MeetingController {
     @PostMapping("{meetingId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerMeeting(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long meetingId,
-            @RequestParam String introduction) {
-        meetingService.registerMeeting(Long.parseLong(principalDetails.getUsername()), meetingId, introduction);
+            @PathVariable Long meetingId) {
+        meetingService.registerMeeting(Long.parseLong(principalDetails.getUsername()), meetingId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 

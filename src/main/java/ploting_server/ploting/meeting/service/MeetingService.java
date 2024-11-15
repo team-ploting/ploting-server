@@ -120,7 +120,6 @@ public class MeetingService {
                 .map(meetingMember -> MeetingMemberListResponse.builder()
                         .nickname(meetingMember.getMember().getNickname())
                         .level(meetingMember.getMember().getLevel())
-                        .introduction(meetingMember.getIntroduction())
                         .leaderStatus(meetingMember.isLeaderStatus())
                         .build())
                 .toList();
@@ -130,7 +129,7 @@ public class MeetingService {
      * 모임을 가입합니다.
      */
     @Transactional
-    public void registerMeeting(Long memberId, Long meetingId, String introduction) {
+    public void registerMeeting(Long memberId, Long meetingId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
@@ -146,7 +145,6 @@ public class MeetingService {
         MeetingMember meetingMember = MeetingMember.builder()
                 .meeting(meeting)
                 .member(member)
-                .introduction(introduction)
                 .leaderStatus(false)
                 .build();
 
