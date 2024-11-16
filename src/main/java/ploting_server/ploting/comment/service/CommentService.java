@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ploting_server.ploting.comment.dto.request.CommentCreateRequest;
 import ploting_server.ploting.comment.dto.request.CommentUpdateRequest;
 import ploting_server.ploting.comment.entity.Comment;
+import ploting_server.ploting.comment.entity.CommentLike;
 import ploting_server.ploting.comment.repository.CommentLikeRepository;
 import ploting_server.ploting.comment.repository.CommentRepository;
 import ploting_server.ploting.core.code.error.CommentErrorCode;
@@ -18,6 +19,8 @@ import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.post.entity.Post;
 import ploting_server.ploting.post.repository.PostRepository;
+
+import java.util.List;
 
 /**
  * 댓글을 관리하는 서비스 클래스입니다.
@@ -70,6 +73,35 @@ public class CommentService {
         checkCommentAuthor(memberId, comment);
 
         comment.updateComment(commentUpdateRequest);
+    }
+
+    /**
+     * 댓글을 삭제합니다.
+     */
+    @Transactional
+    public void deleteComment(Long memberId, Long commentId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.NOT_FOUND_COMMENT_ID));
+
+        // 게시글의 작성자인지 확인
+        checkCommentAuthor(memberId, comment);
+
+        List<CommentLike> commentLikes = commentLikeRepository.findAllByCommentId(commentId);
+
+        // 댓글 좋아요 삭제
+        commentLikeRepository.deleteAll(commentLikes);
+
+        // 양방향 연관관계 해제
+        member.removeComment(comment);
+
+        // 양방향 연관관계 해제
+        comment.getPost().removeComment(comment);
+
+        // 댓글 삭제
+        commentRepository.delete(comment);
     }
 
     /**

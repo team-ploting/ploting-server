@@ -87,11 +87,11 @@ public class PostService {
         // 게시글의 좋아요 삭제
         postLikeRepository.deleteAll(postLikes);
 
-        // 게시글 삭제
-        postRepository.delete(post);
-
         // 양방향 연관관계 해제
         member.removePost(post);
+
+        // 게시글 삭제
+        postRepository.delete(post);
     }
 
     /**
