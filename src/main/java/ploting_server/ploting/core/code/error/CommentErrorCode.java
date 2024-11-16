@@ -9,6 +9,9 @@ import ploting_server.ploting.core.response.ErrorResponse;
  */
 @Getter
 public enum CommentErrorCode implements BaseErrorCode {
+    // 403 FORBIDDEN
+    NOT_COMMENT_AUTHOR(403, "댓글의 작성자가 아닙니다.", HttpStatus.FORBIDDEN),
+
     // 404 NOT_FOUND
     NOT_FOUND_COMMENT_ID(404, "존재하지 않는 댓글입니다.", HttpStatus.NOT_FOUND),
     ;

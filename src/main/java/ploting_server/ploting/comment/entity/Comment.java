@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ploting_server.ploting.comment.dto.request.CommentUpdateRequest;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.post.entity.Post;
 
@@ -46,4 +47,11 @@ public class Comment {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    /**
+     * 댓글 수정
+     */
+    public void updateComment(CommentUpdateRequest commentUpdateRequest) {
+        this.content = commentUpdateRequest.getContent();
+    }
 }
