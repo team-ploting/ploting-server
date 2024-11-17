@@ -76,4 +76,18 @@ public class Post {
         this.title = postUpdateRequest.getTitle();
         this.content = postUpdateRequest.getContent();
     }
+
+    /**
+     * 좋아요 수 증가
+     */
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    /**
+     * 좋아요 수 감소
+     */
+    public void decrementLikeCount() {
+        this.likeCount--;
+    }
 }
