@@ -27,4 +27,7 @@ public class CommentListResponse {
 
     @Schema(description = "댓글 좋아요 수", example = "16")
     private final int likeCount;
+
+    @Schema(description = "댓글 좋아요 여부", example = "true")
+    private final boolean hasLiked;
 }
