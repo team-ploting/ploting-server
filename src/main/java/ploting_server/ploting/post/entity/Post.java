@@ -60,11 +60,13 @@ public class Post {
     // Comment 연관관계 편의 메서드 - 추가
     public void addComment(Comment comment) {
         this.comments.add(comment);
+        this.commentCount++;
     }
 
     // Comment 연관관계 편의 메서드 - 삭제
     public void removeComment(Comment comment) {
         this.comments.remove(comment);
+        this.commentCount--;
     }
 
     /**
