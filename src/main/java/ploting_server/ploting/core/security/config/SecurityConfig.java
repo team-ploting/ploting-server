@@ -184,7 +184,11 @@ public class SecurityConfig {
                 // 댓글
                 antMatcher(DELETE, "/comments/{commentId}"),
                 antMatcher(PATCH, "/comments/{commentId}"),
-                antMatcher(POST, "/comments")
+                antMatcher(POST, "/comments"),
+
+                // 게시글 좋아요
+                antMatcher(POST, "/comments/{commentId}/like"),
+                antMatcher(DELETE, "/comments/{commentId}/like")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
