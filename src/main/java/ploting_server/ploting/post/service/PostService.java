@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ploting_server.ploting.comment.dto.response.CommentListResponse;
+import ploting_server.ploting.comment.repository.CommentLikeRepository;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.code.error.PostErrorCode;
 import ploting_server.ploting.core.exception.MeetingException;
@@ -30,6 +31,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
     private final MemberRepository memberRepository;
 
     /**
@@ -102,8 +104,6 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_ID));
 
-        boolean hasLiked = postLikeRepository.existsByMemberIdAndPostId(memberId, postId);
-
         List<CommentListResponse> commentListResponse = post.getComments().stream()
                 .map(comment -> CommentListResponse.builder()
                         .authorNickname(comment.getMember().getNickname())
@@ -111,6 +111,7 @@ public class PostService {
                         .authorLevel(comment.getMember().getLevel())
                         .content(comment.getContent())
                         .likeCount(comment.getLikeCount())
+                        .hasLiked(commentLikeRepository.existsByMemberIdAndCommentId(memberId, comment.getId()))
                         .build())
                 .toList();
 
@@ -122,7 +123,7 @@ public class PostService {
                 .content(post.getContent())
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
-                .hasLiked(hasLiked)
+                .hasLiked(postLikeRepository.existsByMemberIdAndPostId(memberId, postId))
                 .commentListResponse(commentListResponse)
                 .build();
     }
