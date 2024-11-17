@@ -82,11 +82,13 @@ public class Meeting {
     // MeetingMember 연관관계 편의 메서드 - 추가
     public void addMeetingMember(MeetingMember meetingMember) {
         this.meetingMembers.add(meetingMember);
+        incrementMemberAndGenderCount(meetingMember.getMember().getGender());
     }
 
     // MeetingMember 연관관계 편의 메서드 - 삭제
     public void removeMeetingMember(MeetingMember meetingMember) {
         this.meetingMembers.remove(meetingMember);
+        decrementMemberAndGenderCount(meetingMember.getMember().getGender());
     }
 
     /**
@@ -110,30 +112,26 @@ public class Meeting {
     /**
      * 멤버 수, 성별 수 증가
      */
-    public void incrementMemberAndGenderCount(GenderType genderType) {
+    private void incrementMemberAndGenderCount(GenderType genderType) {
         if (genderType.equals(GenderType.MALE)) {
             this.maleCount++;
         }
-
         if (genderType.equals(GenderType.FEMALE)) {
             this.femaleCount++;
         }
-
         this.memberCount++;
     }
 
     /**
      * 멤버 수, 성별 수 감소
      */
-    public void decrementMemberAndGenderCount(GenderType genderType) {
+    private void decrementMemberAndGenderCount(GenderType genderType) {
         if (genderType.equals(GenderType.MALE)) {
             this.maleCount--;
         }
-
         if (genderType.equals(GenderType.FEMALE)) {
             this.femaleCount--;
         }
-
         this.memberCount--;
     }
 

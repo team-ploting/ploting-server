@@ -192,9 +192,8 @@ public class OrganizationService {
 
         organizationMemberRepository.save(organizationMember);
 
+        // 양방향 연관관계 설정
         organization.addOrganizationMember(organizationMember);
-
-        organization.incrementMemberAndGenderCount(member.getGender());
     }
 
     /**
@@ -202,9 +201,6 @@ public class OrganizationService {
      */
     @Transactional
     public void departOrganization(Long memberId, Long organizationId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
-
         OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndMemberId(organizationId, memberId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_MEMBER));
 
@@ -218,9 +214,6 @@ public class OrganizationService {
 
         // 양방향 연관관계 해제
         organization.removeOrganizationMember(organizationMember);
-
-        // 멤버 수, 성별 수 감소
-        organization.decrementMemberAndGenderCount(member.getGender());
 
         organizationMemberRepository.delete(organizationMember);
     }

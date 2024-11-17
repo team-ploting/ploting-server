@@ -78,9 +78,6 @@ public class MeetingLeaderService {
 
         meetingRepository.save(meeting);
 
-        // 멤버 수, 성별 수 증가
-        meeting.incrementMemberAndGenderCount(member.getGender());
-
         // 모임장으로서 MeetingMember 생성
         MeetingMember meetingMember = MeetingMember.builder()
                 .meeting(meeting)
@@ -146,24 +143,22 @@ public class MeetingLeaderService {
         // 모임장 권한 확인
         checkMeetingLeader(memberId, meetingId);
 
-        Member kickMember = memberRepository.findById(kickMemberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
-
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
 
-        MeetingMember meetingMember = meetingMemberRepository.findByMeetingIdAndMemberId(meetingId, kickMemberId)
+        MeetingMember kickMember = meetingMemberRepository.findByMeetingIdAndMemberId(meetingId, kickMemberId)
                 .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_MEETING_MEMBER));
 
         // 모임장 스스로를 강퇴할 수 없음
-        if (meetingMember.isLeaderStatus()) {
+        if (kickMember.isLeaderStatus()) {
             throw new MeetingException(MeetingErrorCode.CANNOT_KICK_SELF_LEADER);
         }
 
         // 멤버 강퇴
-        meetingMemberRepository.delete(meetingMember);
+        meetingMemberRepository.delete(kickMember);
 
-        meeting.decrementMemberAndGenderCount(kickMember.getGender());
+        // 양방향 연관관계 해제
+        meeting.removeMeetingMember(kickMember);
     }
 
     /**

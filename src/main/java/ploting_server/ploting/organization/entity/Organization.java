@@ -69,11 +69,13 @@ public class Organization {
     // OrganizationMember 연관관계 편의 메서드 - 추가
     public void addOrganizationMember(OrganizationMember organizationMember) {
         this.organizationMembers.add(organizationMember);
+        incrementMemberAndGenderCount(organizationMember.getMember().getGender());
     }
 
     // OrganizationMember 연관관계 편의 메서드 - 삭제
     public void removeOrganizationMember(OrganizationMember organizationMember) {
         this.organizationMembers.remove(organizationMember);
+        decrementMemberAndGenderCount(organizationMember.getMember().getGender());
     }
 
     /**
@@ -92,30 +94,26 @@ public class Organization {
     /**
      * 멤버 수, 성별 수 증가
      */
-    public void incrementMemberAndGenderCount(GenderType genderType) {
+    private void incrementMemberAndGenderCount(GenderType genderType) {
         if (genderType.equals(GenderType.MALE)) {
             this.maleCount++;
         }
-
         if (genderType.equals(GenderType.FEMALE)) {
             this.femaleCount++;
         }
-
         this.memberCount++;
     }
 
     /**
      * 멤버 수, 성별 수 감소
      */
-    public void decrementMemberAndGenderCount(GenderType genderType) {
+    private void decrementMemberAndGenderCount(GenderType genderType) {
         if (genderType.equals(GenderType.MALE)) {
             this.maleCount--;
         }
-
         if (genderType.equals(GenderType.FEMALE)) {
             this.femaleCount--;
         }
-
         this.memberCount--;
     }
 
