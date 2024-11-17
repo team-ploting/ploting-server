@@ -162,9 +162,6 @@ public class MeetingService {
 
         // 양방향 연관관계 설정
         meeting.addMeetingMember(meetingMember);
-
-        // 멤버 수, 성별 수 증가
-        meeting.incrementMemberAndGenderCount(member.getGender());
     }
 
     /**
@@ -172,9 +169,6 @@ public class MeetingService {
      */
     @Transactional
     public void departMeeting(Long memberId, Long meetingId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
-
         MeetingMember meetingMember = meetingMemberRepository.findByMeetingIdAndMemberId(meetingId, memberId)
                 .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_MEETING_MEMBER));
 
@@ -188,9 +182,6 @@ public class MeetingService {
 
         // 양방향 연관관계 해제
         meeting.removeMeetingMember(meetingMember);
-
-        // 멤버 수, 성별 수 감소
-        meeting.decrementMemberAndGenderCount(member.getGender());
 
         meetingMemberRepository.delete(meetingMember);
     }

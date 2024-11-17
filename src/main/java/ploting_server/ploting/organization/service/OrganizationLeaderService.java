@@ -60,9 +60,6 @@ public class OrganizationLeaderService {
 
         organizationRepository.save(organization);
 
-        // 멤버 수, 성별 수 증가
-        organization.incrementMemberAndGenderCount(member.getGender());
-
         // 리더로서 OrganizationMember 생성
         OrganizationMember organizationMember = OrganizationMember.builder()
                 .organization(organization)
@@ -182,7 +179,8 @@ public class OrganizationLeaderService {
         // 멤버 강퇴
         organizationMemberRepository.delete(organizationMember);
 
-        organization.decrementMemberAndGenderCount(kickMember.getGender());
+        // 양방향 연관관계 해제
+        organization.removeOrganizationMember(organizationMember);
     }
 
     /**
