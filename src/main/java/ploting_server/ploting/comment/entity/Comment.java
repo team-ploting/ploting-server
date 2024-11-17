@@ -54,4 +54,18 @@ public class Comment {
     public void updateComment(CommentUpdateRequest commentUpdateRequest) {
         this.content = commentUpdateRequest.getContent();
     }
+
+    /**
+     * 좋아요 수 증가
+     */
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    /**
+     * 좋아요 수 감소
+     */
+    public void decrementLikeCount() {
+        this.likeCount--;
+    }
 }

@@ -4,10 +4,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ploting_server.ploting.comment.entity.CommentLike;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 댓글 좋아요 도메인의 Repository 입니다.
  */
 public interface CommentLikeRepository extends JpaRepository<CommentLike, Long> {
     List<CommentLike> findAllByCommentId(Long commentId);
+
+    Optional<CommentLike> findByMemberIdAndCommentId(Long memberId, Long commentId);
 }
