@@ -38,6 +38,8 @@ public class MeetingService {
     private final MeetingLikeRepository meetingLikeRepository;
     private final MemberRepository memberRepository;
 
+    // TODO: 삭제
+
     /**
      * 모든 모임 목록을 조회합니다. (페이징 처리)
      */
@@ -50,18 +52,16 @@ public class MeetingService {
         return meetingPage.map(meeting -> MeetingListResponse.builder()
                 .id(meeting.getId())
                 .name(meeting.getName())
+                .meetDate(meeting.getMeetDate().toLocalDate())
+                .meetHour(meeting.getMeetDate().getHour())
                 .location(meeting.getLocation())
+                .minLevel(meeting.getMinLevel())
+                .memberCount(meeting.getMemberCount())
                 .maxMember(meeting.getMaxMember())
                 .minAge(meeting.getMinAge())
                 .maxAge(meeting.getMaxAge())
-                .minLevel(meeting.getMinLevel())
-                .memberCount(meeting.getMemberCount())
                 .maleCount(meeting.getMaleCount())
                 .femaleCount(meeting.getFemaleCount())
-                .meetDate(String.join("-",
-                        String.valueOf(meeting.getMeetDate().getYear()),
-                        String.valueOf(meeting.getMeetDate().getMonthValue()),
-                        String.valueOf(meeting.getMeetDate().getDayOfMonth())))
                 .build());
     }
 
@@ -94,21 +94,22 @@ public class MeetingService {
         return MeetingInfoResponse.builder()
                 .name(meeting.getName())
                 .location(meeting.getLocation())
+                .meetDate(meeting.getMeetDate().toLocalDate())
+                .meetHour(meeting.getMeetDate().getHour())
                 .description(meeting.getDescription())
+                .memberCount(meeting.getMemberCount())
                 .maxMember(meeting.getMaxMember())
                 .minAge(meeting.getMinAge())
                 .maxAge(meeting.getMaxAge())
                 .minLevel(meeting.getMinLevel())
-                .meetDate(meeting.getMeetDate())
                 .likeCount(meeting.getLikeCount())
                 .hasLiked(hasLiked)
-                .memberCount(meeting.getMemberCount())
+                .top3Members(top3Members)
                 .maleCount(meeting.getMaleCount())
                 .femaleCount(meeting.getFemaleCount())
-                .activeStatus(meeting.isActiveStatus())
-                .top3Members(top3Members)
                 .organizationName(organization.getName())
                 .organizationMemberCount(organization.getMemberCount())
+                .activeStatus(meeting.isActiveStatus())
                 .build();
     }
 

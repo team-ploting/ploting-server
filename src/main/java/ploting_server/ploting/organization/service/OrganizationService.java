@@ -108,18 +108,16 @@ public class OrganizationService {
                 .map(meeting -> MeetingListResponse.builder()
                         .id(meeting.getId())
                         .name(meeting.getName())
+                        .meetDate(meeting.getMeetDate().toLocalDate())
+                        .meetHour(meeting.getMeetDate().getHour())
                         .location(meeting.getLocation())
+                        .minLevel(meeting.getMinLevel())
+                        .memberCount(meeting.getMemberCount())
                         .maxMember(meeting.getMaxMember())
                         .minAge(meeting.getMinAge())
                         .maxAge(meeting.getMaxAge())
-                        .minLevel(meeting.getMinLevel())
-                        .memberCount(meeting.getMemberCount())
                         .maleCount(meeting.getMaleCount())
                         .femaleCount(meeting.getFemaleCount())
-                        .meetDate(String.join("-",
-                                String.valueOf(meeting.getMeetDate().getYear()),
-                                String.valueOf(meeting.getMeetDate().getMonthValue()),
-                                String.valueOf(meeting.getMeetDate().getDayOfMonth())))
                         .build())
                 .toList();
 
