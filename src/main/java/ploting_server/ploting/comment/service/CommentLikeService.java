@@ -54,4 +54,21 @@ public class CommentLikeService {
 
         commentLikeRepository.save(commentLike);
     }
+
+    /**
+     * 댓글 좋아요를 취소합니다.
+     */
+    @Transactional
+    public void cancelCommentLike(Long memberId, Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.NOT_FOUND_COMMENT_ID));
+
+        CommentLike commentLike = commentLikeRepository.findByMemberIdAndCommentId(memberId, commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.NOT_FOUND_COMMENT_LIKE));
+
+        // 좋아요 수 감소
+        comment.decrementLikeCount();
+
+        commentLikeRepository.delete(commentLike);
+    }
 }
