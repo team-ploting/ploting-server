@@ -54,4 +54,21 @@ public class PostLikeService {
 
         postLikeRepository.save(postLike);
     }
+
+    /**
+     * 게시글 좋아요를 취소합니다.
+     */
+    @Transactional
+    public void cancelPostLike(Long memberId, Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_ID));
+
+        PostLike postLike = postLikeRepository.findByMemberIdAndPostId(memberId, postId)
+                .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_LIKE));
+
+        // 좋아요 수 감소
+        post.decrementLikeCount();
+
+        postLikeRepository.delete(postLike);
+    }
 }
