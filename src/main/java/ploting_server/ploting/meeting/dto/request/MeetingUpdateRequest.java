@@ -18,9 +18,6 @@ public class MeetingUpdateRequest {
     @Schema(description = "모임의 이름", example = "환경지킴이 모임", required = true)
     private final String name;
 
-    @Schema(description = "모임의 장소", example = "강서구", required = true)
-    private final String location;
-
     @Schema(description = "모임 설명", example = "모임에 대한 설명", required = true)
     private final String description;
 
@@ -41,4 +38,7 @@ public class MeetingUpdateRequest {
 
     @Schema(description = "모임 시간", example = "11", required = true)
     private final int meetHour;
+
+    @Schema(description = "모임의 장소", example = "강서구", required = true)
+    private final String location;
 }
