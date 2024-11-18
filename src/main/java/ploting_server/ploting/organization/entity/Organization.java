@@ -63,7 +63,7 @@ public class Organization {
 
     // OrganizationMember 양방향 연관관계
     @Builder.Default
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<OrganizationMember> organizationMembers = new ArrayList<>();
 
     // OrganizationMember 연관관계 편의 메서드 - 추가

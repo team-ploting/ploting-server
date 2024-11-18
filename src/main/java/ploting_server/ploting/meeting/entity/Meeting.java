@@ -76,7 +76,7 @@ public class Meeting {
 
     // MeetingMember 양방향 연관관계
     @Builder.Default
-    @OneToMany(mappedBy = "meeting", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "meeting", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MeetingMember> meetingMembers = new ArrayList<>();
 
     // MeetingMember 연관관계 편의 메서드 - 추가
