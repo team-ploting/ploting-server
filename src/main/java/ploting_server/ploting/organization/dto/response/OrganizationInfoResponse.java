@@ -52,6 +52,9 @@ public class OrganizationInfoResponse {
     @Schema(description = "단체장 레벨", example = "10")
     private final int leaderLevel;
 
+    @Schema(description = "단체장 여부", example = "true")
+    private final boolean myOrganization;
+
     @Schema(description = "남성 멤버 수", example = "10")
     private final int maleCount;
 

@@ -93,10 +93,8 @@ public class OrganizationService {
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
-        OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
+        OrganizationMember leader = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
-
-        boolean hasLiked = organizationLikeRepository.existsByMemberIdAndOrganizationId(memberId, organizationId);
 
         // 단체의 모임 리스트 조회
         List<Meeting> meetingList = meetingRepository.findAllByOrganizationId(organizationId);
@@ -129,10 +127,11 @@ public class OrganizationService {
                 .maxAge(organization.getMaxAge())
                 .minLevel(organization.getMinLevel())
                 .likeCount(organization.getLikeCount())
-                .hasLiked(hasLiked)
+                .hasLiked(organizationLikeRepository.existsByMemberIdAndOrganizationId(memberId, organizationId))
                 .memberCount(organization.getMemberCount())
-                .leaderName(organizationMember.getMember().getNickname())
-                .leaderLevel(organizationMember.getMember().getLevel())
+                .leaderName(leader.getMember().getNickname())
+                .leaderLevel(leader.getMember().getLevel())
+                .myOrganization(leader.getMember().getId().equals(memberId))
                 .maleCount(organization.getMaleCount())
                 .femaleCount(organization.getFemaleCount())
                 .meetingListResponse(meetingListResponse)
