@@ -3,7 +3,7 @@ package ploting_server.ploting.post.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ploting_server.ploting.comment.dto.response.CommentListResponse;
+import ploting_server.ploting.comment.dto.response.CommentInfoResponse;
 import ploting_server.ploting.comment.repository.CommentLikeRepository;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.code.error.PostErrorCode;
@@ -105,14 +105,15 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_ID));
 
-        List<CommentListResponse> commentListResponse = post.getComments().stream()
-                .map(comment -> CommentListResponse.builder()
+        List<CommentInfoResponse> commentInfoResponse = post.getComments().stream()
+                .map(comment -> CommentInfoResponse.builder()
                         .authorNickname(comment.getMember().getNickname())
                         .authorLocation(comment.getMember().getLocation())
                         .authorLevel(comment.getMember().getLevel())
                         .content(comment.getContent())
                         .likeCount(comment.getLikeCount())
                         .hasLiked(commentLikeRepository.existsByMemberIdAndCommentId(memberId, comment.getId()))
+                        .myComment(comment.getMember().getId().equals(memberId))
                         .build())
                 .toList();
 
@@ -125,7 +126,8 @@ public class PostService {
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
                 .hasLiked(postLikeRepository.existsByMemberIdAndPostId(memberId, postId))
-                .commentListResponse(commentListResponse)
+                .myPost(post.getMember().getId().equals(memberId))
+                .comments(commentInfoResponse)
                 .build();
     }
 
