@@ -12,7 +12,7 @@ import ploting_server.ploting.post.entity.Post;
 import java.time.LocalDateTime;
 
 /**
- * 댓글과 대댓글을 관리하는 클래스입니다.
+ * 댓글을 관리하는 클래스입니다.
  */
 @Entity
 @Getter
