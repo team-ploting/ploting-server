@@ -179,6 +179,8 @@ public class SecurityConfig {
                 antMatcher(GET, "/posts/{postId}"),
                 antMatcher(PATCH, "/posts/{postId}"),
                 antMatcher(POST, "/posts"),
+                antMatcher(GET, "/posts/self"),
+                antMatcher(GET, "/posts/self/comments"),
 
                 // 게시글 좋아요
                 antMatcher(POST, "/posts/{postId}/like"),
