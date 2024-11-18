@@ -38,8 +38,6 @@ public class MeetingService {
     private final MeetingLikeRepository meetingLikeRepository;
     private final MemberRepository memberRepository;
 
-    // TODO: 삭제
-
     /**
      * 모든 모임 목록을 조회합니다. (페이징 처리)
      */
@@ -62,6 +60,7 @@ public class MeetingService {
                 .maxAge(meeting.getMaxAge())
                 .maleCount(meeting.getMaleCount())
                 .femaleCount(meeting.getFemaleCount())
+                .createdAt(meeting.getCreatedAt())
                 .build());
     }
 

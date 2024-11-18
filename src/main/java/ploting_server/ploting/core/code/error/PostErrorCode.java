@@ -12,6 +12,7 @@ public enum PostErrorCode implements BaseErrorCode {
     // 400 BAD_REQUEST
     ALREADY_EXIST_POST_LIKE(400, "이미 좋아요를 누른 상태입니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_POST_LIKE(400, "좋아요를 누르지 않은 상태입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_FILTER_DATA_TYPE(400, "필터 데이터 타입이 잘못되었습니다.", HttpStatus.BAD_REQUEST),
 
     // 403 FORBIDDEN
     NOT_POST_AUTHOR(403, "게시글의 작성자가 아닙니다.", HttpStatus.FORBIDDEN),
