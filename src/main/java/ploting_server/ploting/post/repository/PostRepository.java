@@ -14,4 +14,9 @@ public interface
 PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE :search IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(p.content) LIKE LOWER(CONCAT('%', :search, '%'))")
     List<Post> searchPosts(@Param("search") String search);
+
+    List<Post> findAllByMemberId(Long memberId);
+
+    @Query("SELECT DISTINCT p FROM Post p JOIN p.comments c WHERE c.member.id = :memberId")
+    List<Post> findAllByCommentedMemberId(Long memberId);
 }

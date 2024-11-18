@@ -16,7 +16,10 @@ import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.post.dto.request.PostCreateRequest;
 import ploting_server.ploting.post.dto.request.PostUpdateRequest;
 import ploting_server.ploting.post.dto.response.PostInfoResponse;
+import ploting_server.ploting.post.dto.response.PostListResponse;
 import ploting_server.ploting.post.service.PostService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("posts")
@@ -88,5 +91,19 @@ public class PostController {
             @PathVariable Long postId) {
         PostInfoResponse postInfo = postService.getPostInfo(Long.parseLong(principalDetails.getUsername()), postId);
         return ResponseEntity.ok(new BfResponse<>(postInfo));
+    }
+
+    @Operation(
+            summary = "나의 게시글 목록 조회",
+            description = "나의 게시글 목록을 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "나의 게시글 목록 조회 성공", useReturnTypeSchema = true)
+    })
+    @GetMapping("/self")
+    public ResponseEntity<BfResponse<List<PostListResponse>>> getMyPosts(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        List<PostListResponse> myPosts = postService.getMyPosts(Long.parseLong(principalDetails.getUsername()));
+        return ResponseEntity.ok(new BfResponse<>(myPosts));
     }
 }

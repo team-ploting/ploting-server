@@ -15,6 +15,7 @@ import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.post.dto.request.PostCreateRequest;
 import ploting_server.ploting.post.dto.request.PostUpdateRequest;
 import ploting_server.ploting.post.dto.response.PostInfoResponse;
+import ploting_server.ploting.post.dto.response.PostListResponse;
 import ploting_server.ploting.post.entity.Post;
 import ploting_server.ploting.post.entity.PostLike;
 import ploting_server.ploting.post.repository.PostLikeRepository;
@@ -126,6 +127,26 @@ public class PostService {
                 .hasLiked(postLikeRepository.existsByMemberIdAndPostId(memberId, postId))
                 .commentListResponse(commentListResponse)
                 .build();
+    }
+
+    /**
+     * 내가 작성한 게시글을 조회합니다.
+     */
+    @Transactional(readOnly = true)
+    public List<PostListResponse> getMyPosts(Long memberId) {
+        List<Post> myPosts = postRepository.findAllByMemberId(memberId);
+
+        return myPosts.stream()
+                .map(post -> PostListResponse.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .authorNickName(post.getMember().getNickname())
+                        .likeCount(post.getLikeCount())
+                        .commentCount(post.getCommentCount())
+                        .createdAt(post.getCreatedAt())
+                        .build())
+                .toList();
     }
 
     /**
