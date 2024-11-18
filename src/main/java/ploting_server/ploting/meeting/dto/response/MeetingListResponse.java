@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -47,4 +48,7 @@ public class MeetingListResponse {
 
     @Schema(description = "여성 멤버 수", example = "8")
     private final int femaleCount;
+
+    @Schema(description = "모임 생성 시간", example = "2024-09-21T12:30:00")
+    private final LocalDateTime createdAt;
 }
