@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import ploting_server.ploting.comment.dto.response.CommentListResponse;
+import ploting_server.ploting.comment.dto.response.CommentInfoResponse;
 
 import java.util.List;
 
@@ -40,6 +40,9 @@ public class PostInfoResponse {
     @Schema(description = "좋아요 여부", example = "true")
     private final boolean hasLiked;
 
+    @Schema(description = "게시글 작성자 여부", example = "true")
+    private final boolean myPost;
+
     @Schema(description = "게시글의 댓글")
-    private final List<CommentListResponse> commentListResponse;
+    private final List<CommentInfoResponse> comments;
 }
