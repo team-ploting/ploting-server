@@ -71,5 +71,5 @@ jwt:
 springdoc:
   path: /swagger-ui/index.html
   swagger-ui:
-    tags-sorter: default
+    tags-sorter: alpha
     operations-sorter: method
