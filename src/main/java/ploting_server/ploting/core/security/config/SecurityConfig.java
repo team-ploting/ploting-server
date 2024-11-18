@@ -112,6 +112,9 @@ public class SecurityConfig {
                 // 유틸리티
                 antMatcher(GET, "/utils/health"),
 
+                // 메인
+                antMatcher(GET, "/mains"),
+
                 // 회원
                 antMatcher(GET, "/members"),
                 antMatcher(GET, "/members/check-nickname"),
