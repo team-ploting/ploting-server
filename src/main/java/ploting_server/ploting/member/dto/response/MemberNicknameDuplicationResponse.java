@@ -14,5 +14,5 @@ import lombok.RequiredArgsConstructor;
 public class MemberNicknameDuplicationResponse {
 
     @Schema(description = "닉네임 중복 여부, 중복이면 true", example = "true")
-    private final boolean isMemberNicknameDuplicated;
+    private final boolean nicknameDuplicated;
 }

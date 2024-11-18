@@ -73,7 +73,7 @@ public class MemberService {
         Boolean existsByNickname = memberRepository.existsByNickname(nickname);
 
         return MemberNicknameDuplicationResponse.builder()
-                .isMemberNicknameDuplicated(existsByNickname)
+                .nicknameDuplicated(existsByNickname)
                 .build();
     }
 

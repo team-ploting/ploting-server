@@ -19,5 +19,5 @@ public class OrganizationMemberResponse {
     private final int memberCount;
 
     @Schema(description = "단체의 멤버 리스트")
-    private final List<OrganizationMemberListResponse> organizationMemberListResponse;
+    private final List<OrganizationMemberListResponse> members;
 }
