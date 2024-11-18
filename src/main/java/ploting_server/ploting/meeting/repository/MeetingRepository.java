@@ -25,4 +25,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
     @Query("SELECT m FROM Meeting m WHERE :search IS NULL OR LOWER(m.name) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(m.description) LIKE LOWER(CONCAT('%', :search, '%'))")
     List<Meeting> searchMeetings(@Param("search") String search);
+
+    @Query("select m from Meeting m join m.meetingMembers mm where mm.member.id = :memberId ORDER BY m.createdAt DESC")
+    List<Meeting> findAllByMemberIdOrderByCreatedAtDesc(Long memberId);
 }
