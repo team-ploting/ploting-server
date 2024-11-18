@@ -124,7 +124,6 @@ public class SecurityConfig {
                 antMatcher(GET, "/organizations/{organizationId}/members"),
 
                 // 모임
-                antMatcher(GET, "/meetings"),
                 antMatcher(GET, "/meetings/{meetings}/members")
         );
 
@@ -166,6 +165,7 @@ public class SecurityConfig {
                 antMatcher(POST, "/meetings"),
 
                 // 모임
+                antMatcher(GET, "/meetings/self"),
                 antMatcher(DELETE, "/meetings/{meetingId}/departure"),
                 antMatcher(GET, "/meetings/{meetingId}"),
                 antMatcher(POST, "/meetings/{meetingId}"),

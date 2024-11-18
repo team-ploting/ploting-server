@@ -1,10 +1,6 @@
 package ploting_server.ploting.meeting.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ploting_server.ploting.core.code.error.MeetingErrorCode;
@@ -39,29 +35,29 @@ public class MeetingService {
     private final MemberRepository memberRepository;
 
     /**
-     * 모든 모임 목록을 조회합니다. (페이징 처리)
+     * 나의 모임 목록을 조회합니다.
      */
     @Transactional(readOnly = true)
-    public Page<MeetingListResponse> getAllMeetings(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+    public List<MeetingListResponse> getMyMeetings(Long memberId) {
+        List<Meeting> meetings = meetingRepository.findAllByMemberIdOrderByCreatedAtDesc(memberId);
 
-        Page<Meeting> meetingPage = meetingRepository.findAll(pageable);
-
-        return meetingPage.map(meeting -> MeetingListResponse.builder()
-                .id(meeting.getId())
-                .name(meeting.getName())
-                .meetDate(meeting.getMeetDate().toLocalDate())
-                .meetHour(meeting.getMeetDate().getHour())
-                .location(meeting.getLocation())
-                .minLevel(meeting.getMinLevel())
-                .memberCount(meeting.getMemberCount())
-                .maxMember(meeting.getMaxMember())
-                .minAge(meeting.getMinAge())
-                .maxAge(meeting.getMaxAge())
-                .maleCount(meeting.getMaleCount())
-                .femaleCount(meeting.getFemaleCount())
-                .createdAt(meeting.getCreatedAt())
-                .build());
+        return meetings.stream()
+                .map(meeting -> MeetingListResponse.builder()
+                        .id(meeting.getId())
+                        .name(meeting.getName())
+                        .meetDate(meeting.getMeetDate().toLocalDate())
+                        .meetHour(meeting.getMeetDate().getHour())
+                        .location(meeting.getLocation())
+                        .minLevel(meeting.getMinLevel())
+                        .memberCount(meeting.getMemberCount())
+                        .maxMember(meeting.getMaxMember())
+                        .minAge(meeting.getMinAge())
+                        .maxAge(meeting.getMaxAge())
+                        .maleCount(meeting.getMaleCount())
+                        .femaleCount(meeting.getFemaleCount())
+                        .createdAt(meeting.getCreatedAt())
+                        .build())
+                .toList();
     }
 
     /**
