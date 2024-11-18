@@ -150,6 +150,26 @@ public class PostService {
     }
 
     /**
+     * 내가 작성한 댓글의 게시글을 조회합니다.
+     */
+    @Transactional(readOnly = true)
+    public List<PostListResponse> getPostsFromMyComments(Long memberId) {
+        List<Post> postsByMyComments = postRepository.findAllByCommentedMemberId(memberId);
+
+        return postsByMyComments.stream()
+                .map(post -> PostListResponse.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .authorNickName(post.getMember().getNickname())
+                        .likeCount(post.getLikeCount())
+                        .commentCount(post.getCommentCount())
+                        .createdAt(post.getCreatedAt())
+                        .build())
+                .toList();
+    }
+
+    /**
      * 게시글의 작성자인지 확인합니다.
      */
     private void checkPostAuthor(Long memberId, Post post) {

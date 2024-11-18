@@ -106,4 +106,18 @@ public class PostController {
         List<PostListResponse> myPosts = postService.getMyPosts(Long.parseLong(principalDetails.getUsername()));
         return ResponseEntity.ok(new BfResponse<>(myPosts));
     }
+
+    @Operation(
+            summary = "나의 댓글의 게시글 목록 조회",
+            description = "나의 댓글의 게시글 목록을 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "나의 댓글의 게시글 목록 조회 성공", useReturnTypeSchema = true)
+    })
+    @GetMapping("/self/comments")
+    public ResponseEntity<BfResponse<List<PostListResponse>>> getPostsFromMyComments(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        List<PostListResponse> postsFromMyComments = postService.getPostsFromMyComments(Long.parseLong(principalDetails.getUsername()));
+        return ResponseEntity.ok(new BfResponse<>(postsFromMyComments));
+    }
 }
