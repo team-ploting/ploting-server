@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Builder
 @RequiredArgsConstructor
-public class CommentListResponse {
+public class CommentInfoResponse {
 
     @Schema(description = "댓글 작성자 닉네임", example = "환경지킴이")
     private final String authorNickname;
@@ -30,4 +30,7 @@ public class CommentListResponse {
 
     @Schema(description = "댓글 좋아요 여부", example = "true")
     private final boolean hasLiked;
+
+    @Schema(description = "댓글 작성자 여부", example = "true")
+    private final boolean myComment;
 }
