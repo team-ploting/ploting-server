@@ -52,6 +52,9 @@ public class MeetingInfoResponse {
     @Schema(description = "좋아요 여부", example = "true")
     private final boolean hasLiked;
 
+    @Schema(description = "모임장 여부", example = "true")
+    private final boolean myMeeting;
+
     @Schema(description = "가입 순으로 멤버 세명")
     private final List<MeetingMemberListResponse> top3Members;
 

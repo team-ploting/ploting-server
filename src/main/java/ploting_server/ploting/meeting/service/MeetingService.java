@@ -83,9 +83,6 @@ public class MeetingService {
                         .build())
                 .toList();
 
-        // 사용자가 좋아요를 누른 모임인지 조회
-        boolean hasLiked = meetingLikeRepository.existsByMemberIdAndMeetingId(memberId, meetingId);
-
         return MeetingInfoResponse.builder()
                 .name(meeting.getName())
                 .location(meeting.getLocation())
@@ -98,7 +95,8 @@ public class MeetingService {
                 .maxAge(meeting.getMaxAge())
                 .minLevel(meeting.getMinLevel())
                 .likeCount(meeting.getLikeCount())
-                .hasLiked(hasLiked)
+                .hasLiked(meetingLikeRepository.existsByMemberIdAndMeetingId(memberId, meetingId))
+                .myMeeting(top3MembersByCreatedAt.get(0).getMember().getId().equals(memberId))
                 .top3Members(top3Members)
                 .maleCount(meeting.getMaleCount())
                 .femaleCount(meeting.getFemaleCount())
