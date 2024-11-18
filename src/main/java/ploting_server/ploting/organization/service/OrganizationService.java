@@ -1,10 +1,6 @@
 package ploting_server.ploting.organization.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
@@ -42,49 +38,51 @@ public class OrganizationService {
     private final MeetingRepository meetingRepository;
 
     /**
-     * 모든 단체 목록을 조회합니다. (페이징 처리)
+     * 모든 단체 목록을 조회합니다.
      */
     @Transactional(readOnly = true)
-    public Page<OrganizationListResponse> getAllOrganizations(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+    public List<OrganizationListResponse> getAllOrganizations() {
+        List<Organization> organizations = organizationRepository.findAllOrderByCreatedAtDesc();
 
-        Page<Organization> organizationPage = organizationRepository.findAll(pageable);
-
-        return organizationPage.map(organization -> OrganizationListResponse.builder()
-                .id(organization.getId())
-                .name(organization.getName())
-                .description(organization.getDescription())
-                .location(organization.getLocation())
-                .minAge(organization.getMinAge())
-                .maxAge(organization.getMaxAge())
-                .minLevel(organization.getMinLevel())
-                .memberCount(organization.getMemberCount())
-                .maleCount(organization.getMaleCount())
-                .femaleCount(organization.getFemaleCount())
-                .build());
+        return organizations.stream()
+                .map(organization -> OrganizationListResponse.builder()
+                        .id(organization.getId())
+                        .location(organization.getLocation())
+                        .name(organization.getName())
+                        .description(organization.getDescription())
+                        .minLevel(organization.getMinLevel())
+                        .memberCount(organization.getMemberCount())
+                        .maxMember(organization.getMaxMember())
+                        .minAge(organization.getMinAge())
+                        .maxAge(organization.getMaxAge())
+                        .maleCount(organization.getMaleCount())
+                        .femaleCount(organization.getFemaleCount())
+                        .build())
+                .toList();
     }
 
     /**
-     * 나의 단체 목록을 조회합니다. (페이징 처리)
+     * 나의 단체 목록을 조회합니다.
      */
     @Transactional(readOnly = true)
-    public Page<OrganizationListResponse> getMyOrganizations(Long memberId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+    public List<OrganizationListResponse> getMyOrganizations(Long memberId) {
+        List<Organization> myOrganizations = organizationRepository.findAllByMemberIdOrderByCreatedAtDesc(memberId);
 
-        Page<Organization> organizationPage = organizationRepository.findAllByMemberId(memberId, pageable);
-
-        return organizationPage.map(organization -> OrganizationListResponse.builder()
-                .id(organization.getId())
-                .name(organization.getName())
-                .description(organization.getDescription())
-                .location(organization.getLocation())
-                .minAge(organization.getMinAge())
-                .maxAge(organization.getMaxAge())
-                .minLevel(organization.getMinLevel())
-                .memberCount(organization.getMemberCount())
-                .maleCount(organization.getMaleCount())
-                .femaleCount(organization.getFemaleCount())
-                .build());
+        return myOrganizations.stream()
+                .map(organization -> OrganizationListResponse.builder()
+                        .id(organization.getId())
+                        .location(organization.getLocation())
+                        .name(organization.getName())
+                        .description(organization.getDescription())
+                        .minLevel(organization.getMinLevel())
+                        .memberCount(organization.getMemberCount())
+                        .maxMember(organization.getMaxMember())
+                        .minAge(organization.getMinAge())
+                        .maxAge(organization.getMaxAge())
+                        .maleCount(organization.getMaleCount())
+                        .femaleCount(organization.getFemaleCount())
+                        .build())
+                .toList();
     }
 
     /**
