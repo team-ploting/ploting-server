@@ -30,7 +30,8 @@ public class MeetingLeaderController {
             description = "모임장으로서 모임을 생성합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모임 생성 성공", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "200", description = "모임 생성 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
     })
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createMeeting(
