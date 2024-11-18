@@ -134,7 +134,7 @@ public class OrganizationService {
                 .myOrganization(leader.getMember().getId().equals(memberId))
                 .maleCount(organization.getMaleCount())
                 .femaleCount(organization.getFemaleCount())
-                .meetingListResponse(meetingListResponse)
+                .meetings(meetingListResponse)
                 .build();
     }
 
@@ -158,7 +158,7 @@ public class OrganizationService {
 
         return OrganizationMemberResponse.builder()
                 .memberCount(organizationMemberListResponse.size())
-                .organizationMemberListResponse(organizationMemberListResponse)
+                .members(organizationMemberListResponse)
                 .build();
     }
 

@@ -13,5 +13,5 @@ public class FilteredResponse {
     private FilterType type;
 
     @Schema(description = "필터링된 데이터")
-    private Object data;
+    private Object body;
 }

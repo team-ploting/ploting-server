@@ -32,7 +32,7 @@ public class MainService {
         List<FilteredResponse> posts = postRepository.searchPosts(search).stream()
                 .map(post -> FilteredResponse.builder()
                         .type(FilterType.POST)
-                        .data(PostListResponse.builder()
+                        .body(PostListResponse.builder()
                                 .id(post.getId())
                                 .title(post.getTitle())
                                 .content(post.getContent())
@@ -47,7 +47,7 @@ public class MainService {
         List<FilteredResponse> meetings = meetingRepository.searchMeetings(search).stream()
                 .map(meeting -> FilteredResponse.builder()
                         .type(FilterType.MEETING)
-                        .data(MeetingListResponse.builder()
+                        .body(MeetingListResponse.builder()
                                 .id(meeting.getId())
                                 .name(meeting.getName())
                                 .meetDate(meeting.getMeetDate().toLocalDate())
@@ -70,11 +70,11 @@ public class MainService {
         combinedList.addAll(meetings);
 
         combinedList.sort(Comparator.comparing((FilteredResponse item) -> {
-            if (item.getData() instanceof MeetingListResponse) {
-                return ((MeetingListResponse) item.getData()).getCreatedAt();
+            if (item.getBody() instanceof MeetingListResponse) {
+                return ((MeetingListResponse) item.getBody()).getCreatedAt();
             }
-            if (item.getData() instanceof PostListResponse) {
-                return ((PostListResponse) item.getData()).getCreatedAt();
+            if (item.getBody() instanceof PostListResponse) {
+                return ((PostListResponse) item.getBody()).getCreatedAt();
             }
             throw new PostException(PostErrorCode.INVALID_FILTER_DATA_TYPE);
         }).reversed());

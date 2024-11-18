@@ -125,7 +125,7 @@ public class MeetingService {
 
         return MeetingMemberResponse.builder()
                 .memberCount(meetingMemberListResponse.size())
-                .meetingMembersListResponse(meetingMemberListResponse)
+                .members(meetingMemberListResponse)
                 .build();
     }
 
