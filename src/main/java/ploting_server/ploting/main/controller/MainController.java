@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.main.dto.response.FilteredResponse;
@@ -33,8 +34,9 @@ public class MainController {
             @ApiResponse(responseCode = "200", description = "모든 게시글과 모임 조회 성공", useReturnTypeSchema = true)
     })
     @GetMapping("")
-    public ResponseEntity<BfResponse<List<FilteredResponse>>> getFilteredPostAndMeeting() {
-        List<FilteredResponse> filteredPostAndMeeting = mainService.getFilteredPostAndMeeting();
+    public ResponseEntity<BfResponse<List<FilteredResponse>>> getFilteredPostAndMeeting(
+            @RequestParam(required = false) String search) {
+        List<FilteredResponse> filteredPostAndMeeting = mainService.getFilteredPostAndMeeting(search);
         return ResponseEntity.ok(new BfResponse<>(filteredPostAndMeeting));
     }
 }

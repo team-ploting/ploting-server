@@ -22,4 +22,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
     @Query("SELECT m.organization FROM Meeting m WHERE m.id = :meetingId")
     Optional<Organization> findOrganizationByMeetingId(@Param("meetingId") Long meetingId);
+
+    @Query("SELECT m FROM Meeting m WHERE :search IS NULL OR LOWER(m.name) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(m.description) LIKE LOWER(CONCAT('%', :search, '%'))")
+    List<Meeting> searchMeetings(@Param("search") String search);
 }

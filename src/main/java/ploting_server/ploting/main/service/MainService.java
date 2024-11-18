@@ -28,8 +28,8 @@ public class MainService {
     /**
      * 게시글과 모임을 조회합니다.
      */
-    public List<FilteredResponse> getFilteredPostAndMeeting() {
-        List<FilteredResponse> posts = postRepository.findAll().stream()
+    public List<FilteredResponse> getFilteredPostAndMeeting(String search) {
+        List<FilteredResponse> posts = postRepository.searchPosts(search).stream()
                 .map(post -> FilteredResponse.builder()
                         .type(FilterType.POST)
                         .data(PostListResponse.builder()
@@ -44,7 +44,7 @@ public class MainService {
                         .build())
                 .toList();
 
-        List<FilteredResponse> meetings = meetingRepository.findAll().stream()
+        List<FilteredResponse> meetings = meetingRepository.searchMeetings(search).stream()
                 .map(meeting -> FilteredResponse.builder()
                         .type(FilterType.MEETING)
                         .data(MeetingListResponse.builder()
