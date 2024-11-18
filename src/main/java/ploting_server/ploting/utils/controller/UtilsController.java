@@ -1,6 +1,8 @@
 package ploting_server.ploting.utils.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
@@ -25,7 +27,8 @@ public class UtilsController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "헬스 체크 성공", useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "200", description = "헬스 체크 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
     })
     @GetMapping("/health")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> checkHealth() {
