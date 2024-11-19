@@ -1,9 +1,10 @@
-package ploting_server.ploting.mission.entity;
+package ploting_server.ploting.point.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import ploting_server.ploting.member.entity.Member;
+import ploting_server.ploting.mission.entity.Mission;
 
 import java.time.LocalDateTime;
 
