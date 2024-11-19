@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.exception.MemberException;
-import ploting_server.ploting.core.security.dto.jwt.server.JwtTokenDto;
+import ploting_server.ploting.core.security.dto.jwt.response.JwtTokenResponse;
 import ploting_server.ploting.core.security.dto.oauth.CustomOAuth2User;
 import ploting_server.ploting.core.security.service.jwt.JwtService;
 import ploting_server.ploting.member.dto.server.MemberLoginDto;
@@ -53,7 +53,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
                 .build();
 
         // 로그인 처리 및 JWT 토큰 생성
-        JwtTokenDto jwtTokens = authService.login(memberLoginDto);
+        JwtTokenResponse jwtTokens = authService.login(memberLoginDto);
 
         // JWT 토큰을 응답 헤더에 추가
         jwtService.setAccessTokenToHeader(response, jwtTokens.getAccessToken());
