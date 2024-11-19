@@ -224,7 +224,8 @@ public class SecurityConfig {
     private RequestMatcher[] adminRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
                 // 미션
-                antMatcher(POST, "/missions")
+                antMatcher(POST, "/missions"),
+                antMatcher(DELETE, "/missions")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
