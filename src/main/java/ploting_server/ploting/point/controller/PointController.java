@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import ploting_server.ploting.core.code.success.GlobalSuccessCode;
 import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
+import ploting_server.ploting.point.dto.response.PointInfoResponse;
 import ploting_server.ploting.point.dto.response.PointListResponse;
 import ploting_server.ploting.point.service.PointService;
 
@@ -57,5 +58,19 @@ public class PointController {
             @RequestParam LocalDate endDate) {
         List<PointListResponse> pointsByDate = pointService.getPointsByDate(Long.parseLong(principalDetails.getUsername()), startDate, endDate);
         return ResponseEntity.ok(new BfResponse<>(pointsByDate));
+    }
+
+    @Operation(
+            summary = "레벨 및 포인트 수 조회",
+            description = "레벨 및 포인트 수를 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "레벨 및 포인트 수 조회 성공", useReturnTypeSchema = true)
+    })
+    @GetMapping("/self")
+    public ResponseEntity<BfResponse<PointInfoResponse>> getMyPointAndLevel(
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        PointInfoResponse pointInfoResponse = pointService.getMyPointAndLevel(Long.parseLong(principalDetails.getUsername()));
+        return ResponseEntity.ok(new BfResponse<>(pointInfoResponse));
     }
 }

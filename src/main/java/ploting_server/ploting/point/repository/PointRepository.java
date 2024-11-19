@@ -21,4 +21,7 @@ public interface PointRepository extends JpaRepository<Point, Long> {
     List<Object[]> findPointsByDate(@Param("memberId") Long memberId,
                                     @Param("startDate") LocalDate startDate,
                                     @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT SUM(p.mission.point) FROM Point p WHERE p.member.id = :memberId")
+    int findTotalPointByMemberId(@Param("memberId") Long memberId);
 }
