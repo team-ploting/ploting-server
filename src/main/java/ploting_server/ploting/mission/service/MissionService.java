@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ploting_server.ploting.core.code.error.MissionErrorCode;
 import ploting_server.ploting.core.exception.MissionException;
 import ploting_server.ploting.mission.dto.request.MissionCreateRequest;
+import ploting_server.ploting.mission.dto.response.MissionInfoResponse;
 import ploting_server.ploting.mission.dto.response.MissionListResponse;
 import ploting_server.ploting.mission.entity.Mission;
 import ploting_server.ploting.mission.repository.MissionRepository;
@@ -60,5 +61,20 @@ public class MissionService {
                         .point(mission.getPoint())
                         .build())
                 .toList();
+    }
+
+    /**
+     * 미션 세부 정보를 조회합니다.
+     */
+    @Transactional(readOnly = true)
+    public MissionInfoResponse getMissionInfo(Long missionId) {
+        Mission mission = missionRepository.findById(missionId)
+                .orElseThrow(() -> new MissionException(MissionErrorCode.NOT_FOUND_MISSION_ID));
+
+        return MissionInfoResponse.builder()
+                .name(mission.getName())
+                .description(mission.getDescription())
+                .point(mission.getPoint())
+                .build();
     }
 }
