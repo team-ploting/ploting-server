@@ -3,6 +3,8 @@ package ploting_server.ploting.mission.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ploting_server.ploting.core.code.error.MissionErrorCode;
+import ploting_server.ploting.core.exception.MissionException;
 import ploting_server.ploting.mission.dto.request.MissionCreateRequest;
 import ploting_server.ploting.mission.entity.Mission;
 import ploting_server.ploting.mission.repository.MissionRepository;
@@ -28,5 +30,16 @@ public class MissionService {
                 .build();
 
         missionRepository.save(mission);
+    }
+
+    /**
+     * 미션을 삭제합니다.
+     */
+    @Transactional
+    public void deleteMission(Long missionId) {
+        Mission mission = missionRepository.findById(missionId)
+                .orElseThrow(() -> new MissionException(MissionErrorCode.NOT_FOUND_MISSION_ID));
+
+        missionRepository.delete(mission);
     }
 }
