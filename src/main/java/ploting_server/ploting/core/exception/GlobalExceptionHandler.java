@@ -132,4 +132,14 @@ public class GlobalExceptionHandler {
         BaseErrorCode errorCode = exception.getErrorCode();
         return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
     }
+
+    /**
+     * Point 관련 예외 Handler
+     */
+    @ExceptionHandler(PointException.class)
+    protected ResponseEntity<ErrorResponse> handlePointException(PointException exception) {
+        log.error(">>>>> PointException : {}", exception);
+        BaseErrorCode errorCode = exception.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
+    }
 }
