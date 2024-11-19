@@ -57,6 +57,7 @@ public class OrganizationService {
                         .maxAge(organization.getMaxAge())
                         .maleCount(organization.getMaleCount())
                         .femaleCount(organization.getFemaleCount())
+                        .createdAt(organization.getCreatedAt())
                         .build())
                 .toList();
     }
@@ -81,6 +82,7 @@ public class OrganizationService {
                         .maxAge(organization.getMaxAge())
                         .maleCount(organization.getMaleCount())
                         .femaleCount(organization.getFemaleCount())
+                        .createdAt(organization.getCreatedAt())
                         .build())
                 .toList();
     }

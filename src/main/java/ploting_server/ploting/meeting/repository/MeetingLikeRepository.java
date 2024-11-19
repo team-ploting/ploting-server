@@ -10,6 +10,8 @@ import java.util.Optional;
  * MeetingLike의 Repository 입니다.
  */
 public interface MeetingLikeRepository extends JpaRepository<MeetingLike, Long> {
+    List<MeetingLike> findAllByMemberId(Long memberId);
+
     List<MeetingLike> findAllByMeetingId(Long meetingId);
 
     boolean existsByMemberIdAndMeetingId(Long memberId, Long meetingId);

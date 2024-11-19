@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * 단체 정보를 담는 DTO 클래스입니다.
  */
@@ -45,4 +47,7 @@ public class OrganizationListResponse {
 
     @Schema(description = "여성 멤버 수", example = "20")
     private final int femaleCount;
+
+    @Schema(description = "단체 생성 시간", example = "2024-09-21T12:30:00")
+    private final LocalDateTime createdAt;
 }

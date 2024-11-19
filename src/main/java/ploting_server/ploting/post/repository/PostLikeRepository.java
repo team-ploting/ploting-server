@@ -10,6 +10,8 @@ import java.util.Optional;
  * 게시글 좋아요 도메인의 Repository 입니다.
  */
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
+    List<PostLike> findAllByMemberId(Long memberId);
+
     List<PostLike> findAllByPostId(Long postId);
 
     boolean existsByMemberIdAndPostId(Long memberId, Long postId);

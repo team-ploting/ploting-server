@@ -1,9 +1,9 @@
-package ploting_server.ploting.main.dto.response;
+package ploting_server.ploting.filter.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
-import ploting_server.ploting.main.entity.FilterType;
+import ploting_server.ploting.filter.entity.FilterType;
 
 @Getter
 @Builder
