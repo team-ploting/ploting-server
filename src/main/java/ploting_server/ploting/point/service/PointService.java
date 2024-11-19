@@ -11,8 +11,13 @@ import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.mission.entity.Mission;
 import ploting_server.ploting.mission.repository.MissionRepository;
+import ploting_server.ploting.point.dto.response.PointListResponse;
 import ploting_server.ploting.point.entity.Point;
 import ploting_server.ploting.point.repository.PointRepository;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * 포인트를 관리하는 서비스 클래스입니다.
@@ -42,5 +47,20 @@ public class PointService {
                 .build();
 
         pointRepository.save(point);
+    }
+
+    /**
+     * 날짜별 포인트 수를 조회합니다. (잔디)
+     */
+    @Transactional(readOnly = true)
+    public List<PointListResponse> getPointsByDate(Long memberId, LocalDate startDate, LocalDate endDate) {
+        List<Object[]> points = pointRepository.findPointsByDate(memberId, startDate, endDate);
+
+        return points.stream()
+                .map((point -> PointListResponse.builder()
+                        .date(((Date) point[0]).toLocalDate())
+                        .totalPoints(((Number) point[1]).intValue())
+                        .build()))
+                .toList();
     }
 }
