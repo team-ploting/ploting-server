@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -90,7 +90,28 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler(customAccessDeniedHandler))
-                .addFilterBefore(new JwtFilter(jwtService), ExceptionTranslationFilter.class);
+                .addFilterBefore(new JwtFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    /**
+     * 어드민 권한이 필요한 필터 체인
+     */
+    @Bean
+    @Order(3)
+    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
+        defaultSecuritySetting(http);
+        http
+                .securityMatchers(matcher -> matcher
+                        .requestMatchers(adminRequestMatchers()))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(adminRequestMatchers())
+                        .hasAuthority(RoleType.ROLE_ADMIN.name())
+                        .anyRequest().authenticated())
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(customAccessDeniedHandler))
+                .addFilterBefore(new JwtFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -100,7 +121,6 @@ public class SecurityConfig {
      */
     private RequestMatcher[] publicRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-
                 // Swagger
                 antMatcher(GET, "/swagger-ui/**"), // Swagger UI 웹 인터페이스를 제공하는 경로
                 antMatcher(GET, "/v3/api-docs/**"), // Swagger의 API 문서 데이터를 JSON 형식으로 제공하는 경로
@@ -135,7 +155,6 @@ public class SecurityConfig {
      */
     private RequestMatcher[] authenticatedRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-
                 // 회원
                 antMatcher(PATCH, "/members"),
                 antMatcher(PATCH, "/members/registration"),
@@ -194,6 +213,18 @@ public class SecurityConfig {
                 // 댓글 좋아요
                 antMatcher(POST, "/comments/{commentId}/like"),
                 antMatcher(DELETE, "/comments/{commentId}/like")
+        );
+
+        return requestMatchers.toArray(RequestMatcher[]::new);
+    }
+
+    /**
+     * 어드민 권한이 필요한 endpoint
+     */
+    private RequestMatcher[] adminRequestMatchers() {
+        List<RequestMatcher> requestMatchers = List.of(
+                // 미션
+                antMatcher(POST, "/missions")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
