@@ -132,8 +132,8 @@ public class SecurityConfig {
                 // 유틸리티
                 antMatcher(GET, "/utils/health"),
 
-                // 메인
-                antMatcher(GET, "/mains"),
+                // 필터
+                antMatcher(GET, "/filters/main"),
 
                 // 회원
                 antMatcher(GET, "/members"),
@@ -159,6 +159,9 @@ public class SecurityConfig {
      */
     private RequestMatcher[] authenticatedRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
+                // 필터
+                antMatcher(GET, "/filters/like"),
+
                 // 회원
                 antMatcher(PATCH, "/members"),
                 antMatcher(PATCH, "/members/registration"),
