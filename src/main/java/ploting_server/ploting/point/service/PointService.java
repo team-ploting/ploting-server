@@ -11,7 +11,9 @@ import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.mission.entity.Mission;
 import ploting_server.ploting.mission.repository.MissionRepository;
+import ploting_server.ploting.point.dto.response.PointInfoResponse;
 import ploting_server.ploting.point.dto.response.PointListResponse;
+import ploting_server.ploting.point.entity.LevelType;
 import ploting_server.ploting.point.entity.Point;
 import ploting_server.ploting.point.repository.PointRepository;
 
@@ -29,6 +31,8 @@ public class PointService {
     private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
     private final MissionRepository missionRepository;
+
+    private static final int LEVEL_UP_UNIT = 30;
 
     /**
      * 포인트를 받습니다.
@@ -62,5 +66,22 @@ public class PointService {
                         .totalPoints(((Number) point[1]).intValue())
                         .build()))
                 .toList();
+    }
+
+    /**
+     * 포인트 수 및 레벨 조회
+     */
+    @Transactional(readOnly = true)
+    public PointInfoResponse getMyPointAndLevel(Long memberId) {
+        int totalPoints = pointRepository.findTotalPointByMemberId(memberId);
+
+        return PointInfoResponse.builder()
+                .currentLevelPoints(totalPoints % LEVEL_UP_UNIT)
+                .nextLevelPoints(LEVEL_UP_UNIT)
+                .level(totalPoints / LEVEL_UP_UNIT)
+                .levelType(LevelType.findLevelTypeByLevel(totalPoints / LEVEL_UP_UNIT))
+                .totalPoints(totalPoints)
+                .build();
+
     }
 }
