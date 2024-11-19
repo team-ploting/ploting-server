@@ -147,7 +147,8 @@ public class SecurityConfig {
                 antMatcher(GET, "/meetings/{meetings}/members"),
 
                 // 미션
-                antMatcher(GET, "/missions")
+                antMatcher(GET, "/missions"),
+                antMatcher(GET, "/missions/{missionId}")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
