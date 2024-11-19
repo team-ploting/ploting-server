@@ -112,4 +112,14 @@ public class GlobalExceptionHandler {
         BaseErrorCode errorCode = exception.getErrorCode();
         return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
     }
+
+    /**
+     * Mission 관련 예외 Handler
+     */
+    @ExceptionHandler(MissionException.class)
+    protected ResponseEntity<ErrorResponse> handleMissionException(MissionException exception) {
+        log.error(">>>>> MissionException : {}", exception);
+        BaseErrorCode errorCode = exception.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
+    }
 }
