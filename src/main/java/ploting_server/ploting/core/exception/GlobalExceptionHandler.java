@@ -64,6 +64,16 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Filter 관련 예외 Handler
+     */
+    @ExceptionHandler(FilterException.class)
+    protected ResponseEntity<ErrorResponse> handleFilterException(FilterException exception) {
+        log.error(">>>>> FilterException : {}", exception);
+        BaseErrorCode errorCode = exception.getErrorCode();
+        return ResponseEntity.status(errorCode.getStatus()).body(errorCode.getErrorResponse());
+    }
+
+    /**
      * Member 관련 예외 Handler
      */
     @ExceptionHandler(MemberException.class)
