@@ -8,7 +8,8 @@ import ploting_server.ploting.core.code.error.JwtErrorCode;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.exception.JwtException;
 import ploting_server.ploting.core.exception.MemberException;
-import ploting_server.ploting.core.security.dto.jwt.server.JwtTokenDto;
+import ploting_server.ploting.core.security.dto.jwt.request.RefreshTokenRequest;
+import ploting_server.ploting.core.security.dto.jwt.response.JwtTokenResponse;
 import ploting_server.ploting.core.security.service.jwt.JwtService;
 import ploting_server.ploting.member.dto.server.MemberJwtDto;
 import ploting_server.ploting.member.dto.server.MemberLoginDto;
@@ -29,7 +30,7 @@ public class AuthService {
      * OAuth 로그인
      */
     @Transactional
-    public JwtTokenDto login(MemberLoginDto memberLoginDto) {
+    public JwtTokenResponse login(MemberLoginDto memberLoginDto) {
         // DB 회원 정보 조회
         Member member = memberRepository.findByOauthIdAndRole(memberLoginDto.getOauthId(), memberLoginDto.getRole())
                 .orElseGet(() -> registerOAuthMember(memberLoginDto)); // 회원 정보가 없을 경우 회원가입
@@ -44,16 +45,16 @@ public class AuthService {
      * 기존 Refresh token 으로 신규 Access token 및 Refresh token 발급
      */
     @Transactional
-    public JwtTokenDto refreshTokens(String refreshToken) {
+    public JwtTokenResponse refreshTokens(RefreshTokenRequest refreshTokenRequest) {
         // 유효성 검증
         try {
-            jwtService.validateToken(refreshToken);
+            jwtService.validateToken(refreshTokenRequest.getRefreshToken());
         } catch (Exception e) {
             throw new JwtException(JwtErrorCode.INVALID_TOKEN);
         }
 
         // ID로 회원 조회
-        Claims claims = jwtService.getClaims(refreshToken);
+        Claims claims = jwtService.getClaims(refreshTokenRequest.getRefreshToken());
         Long memberId = Long.valueOf(claims.getSubject());
 
         // DB 조회
@@ -84,11 +85,11 @@ public class AuthService {
     /**
      * Access Token 및 Refresh Token 발급
      */
-    private JwtTokenDto createAccessTokenAndRefreshToken(MemberJwtDto memberJwtDto) {
+    private JwtTokenResponse createAccessTokenAndRefreshToken(MemberJwtDto memberJwtDto) {
         String accessToken = jwtService.createAccessToken(memberJwtDto);
         String refreshToken = jwtService.createRefreshToken(memberJwtDto);
 
-        return JwtTokenDto.builder()
+        return JwtTokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

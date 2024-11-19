@@ -63,14 +63,16 @@ public class JwtService {
      * JWT 토큰 생성 공통 로직
      */
     private String createToken(MemberJwtDto memberJwtDto, long expirationTime) {
-        // 토큰 생성에 사용할 변수들 정의
+        // 최신 권한 조회
+        UserDetails userDetails = principalDetailsService.loadUserByUsername(String.valueOf(memberJwtDto.getId()));
+        String role = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        // 토큰 생성
         String memberId = String.valueOf(memberJwtDto.getId());
         Date issuedAt = Date.from(Instant.now());
         Date expiration = Date.from(Instant.now().plusSeconds(expirationTime));
-        String role = (memberJwtDto.getAuthorities() == null || memberJwtDto.getAuthorities().isEmpty()) ? "" :
-                memberJwtDto.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.joining(","));
 
         // JWT 토큰 생성
         return Jwts.builder()
