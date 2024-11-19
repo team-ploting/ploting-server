@@ -2,6 +2,7 @@ package ploting_server.ploting.filter.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ploting_server.ploting.core.code.error.FilterErrorCode;
 import ploting_server.ploting.core.exception.FilterException;
 import ploting_server.ploting.filter.dto.response.FilteredResponse;
@@ -35,6 +36,7 @@ public class FilterService {
     /**
      * 게시글과 모임을 조회합니다.
      */
+    @Transactional(readOnly = true)
     public List<FilteredResponse> getMainItems(String search) {
         List<FilteredResponse> posts = postRepository.searchPosts(search).stream()
                 .map(post -> FilteredResponse.builder()
@@ -92,6 +94,7 @@ public class FilterService {
     /**
      * 좋아요를 누른 단체, 모임, 게시글을 조회합니다.
      */
+    @Transactional(readOnly = true)
     public List<FilteredResponse> getLikedItems(Long memberId) {
         List<FilteredResponse> organizations = organizationLikeRepository.findAllByMemberId(memberId).stream()
                 .map(organizationLike -> FilteredResponse.builder()
