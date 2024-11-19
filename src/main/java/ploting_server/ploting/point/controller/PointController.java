@@ -9,14 +9,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ploting_server.ploting.core.code.success.GlobalSuccessCode;
 import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
+import ploting_server.ploting.point.dto.response.PointListResponse;
 import ploting_server.ploting.point.service.PointService;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("points")
@@ -40,5 +41,21 @@ public class PointController {
             @RequestParam Long missionId) {
         pointService.receivePoints(Long.parseLong(principalDetails.getUsername()), missionId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+    }
+
+    @Operation(
+            summary = "날짜별 포인트 수 조회 (잔디)",
+            description = "날짜별 포인트 수를 조회합니다."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "포인트 수 조회 성공", useReturnTypeSchema = true)
+    })
+    @GetMapping("/grass")
+    public ResponseEntity<BfResponse<List<PointListResponse>>> receivePoints(
+            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate) {
+        List<PointListResponse> pointsByDate = pointService.getPointsByDate(Long.parseLong(principalDetails.getUsername()), startDate, endDate);
+        return ResponseEntity.ok(new BfResponse<>(pointsByDate));
     }
 }
