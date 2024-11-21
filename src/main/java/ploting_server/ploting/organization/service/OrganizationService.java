@@ -99,7 +99,7 @@ public class OrganizationService {
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
         // 단체의 모임 리스트 조회
-        List<Meeting> meetingList = meetingRepository.findAllByOrganizationId(organizationId);
+        List<Meeting> meetingList = meetingRepository.findAllByOrganizationIdOrderByCreatedAtDesc(organizationId);
 
         // 모임 리스트를 MeetingListResponse 리스트로 변환
         List<MeetingListResponse> meetingListResponse = meetingList.stream()
