@@ -106,6 +106,7 @@ public class Member {
         this.name = memberUpdateRequest.getName();
         this.nickname = memberUpdateRequest.getNickname();
         this.location = memberUpdateRequest.getLocation();
+        this.gender = memberUpdateRequest.getGender();
         this.birth = memberUpdateRequest.getBirth();
     }
 }
