@@ -3,6 +3,7 @@ package ploting_server.ploting.member.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
+import ploting_server.ploting.member.entity.GenderType;
 
 import java.time.LocalDate;
 
@@ -22,6 +23,9 @@ public class MemberUpdateRequest {
     @Schema(description = "회원의 지역", example = "동대문구", required = true)
     private final String location;
 
+    @Schema(description = "회원의 성별", example = "FEMALE", required = true)
+    private final GenderType gender;
+
     @Schema(description = "회원의 생년월일", example = "2003-02-12", required = true)
-    private LocalDate birth;
+    private final LocalDate birth;
 }
