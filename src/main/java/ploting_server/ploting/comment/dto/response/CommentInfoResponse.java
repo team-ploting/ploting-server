@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import ploting_server.ploting.point.entity.LevelType;
 
 /**
  * 댓글 정보를 담는 DTO 클래스입니다.
@@ -21,6 +22,9 @@ public class CommentInfoResponse {
 
     @Schema(description = "댓글 작성자 레벨", example = "10")
     private final int authorLevel;
+
+    @Schema(description = "댓글 작성자 레벨 타입", example = "나뭇가지")
+    private final LevelType authorLevelType;
 
     @Schema(description = "댓글 본문", example = "네 홈화면에 있는 모임글에...")
     private final String content;

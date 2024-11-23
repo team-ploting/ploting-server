@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ploting_server.ploting.member.entity.GenderType;
+import ploting_server.ploting.point.entity.LevelType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,8 +33,11 @@ public class MemberInfoResponse {
     @Schema(description = "회원의 생년월일", example = "2003-02-12")
     private final LocalDate birth;
 
-    @Schema(description = "회원의 레벨", example = "5")
+    @Schema(description = "회원의 레벨", example = "1")
     private final int level;
+
+    @Schema(description = "회원의 레벨 타입", example = "씨앗")
+    private final LevelType levelType;
 
     @Schema(description = "계정 생성일자", example = "2024-10-12T14:34:56")
     private final LocalDateTime createdAt;

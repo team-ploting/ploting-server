@@ -19,6 +19,7 @@ import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.entity.Organization;
+import ploting_server.ploting.point.entity.LevelType;
 
 import java.util.List;
 
@@ -79,6 +80,7 @@ public class MeetingService {
                 .map(meetingMember -> MeetingMemberListResponse.builder()
                         .nickname(meetingMember.getMember().getNickname())
                         .level(meetingMember.getMember().getLevel())
+                        .levelType(LevelType.findLevelTypeByLevel(meetingMember.getMember().getLevel()))
                         .leaderStatus(meetingMember.isLeaderStatus())
                         .build())
                 .toList();
@@ -119,6 +121,7 @@ public class MeetingService {
                 .map(meetingMember -> MeetingMemberListResponse.builder()
                         .nickname(meetingMember.getMember().getNickname())
                         .level(meetingMember.getMember().getLevel())
+                        .levelType(LevelType.findLevelTypeByLevel(meetingMember.getMember().getLevel()))
                         .leaderStatus(meetingMember.isLeaderStatus())
                         .build())
                 .toList();

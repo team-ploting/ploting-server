@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ploting_server.ploting.meeting.dto.response.MeetingListResponse;
+import ploting_server.ploting.point.entity.LevelType;
 
 import java.util.List;
 
@@ -51,6 +52,9 @@ public class OrganizationInfoResponse {
 
     @Schema(description = "단체장 레벨", example = "10")
     private final int leaderLevel;
+
+    @Schema(description = "단체장 레벨 타입", example = "나뭇가지")
+    private final LevelType leaderLevelType;
 
     @Schema(description = "단체장 여부", example = "true")
     private final boolean myOrganization;
