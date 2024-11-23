@@ -63,8 +63,7 @@ public class MissionController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모든 미션 조회 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(responseCode = "200", description = "모든 미션 조회 성공", useReturnTypeSchema = true)
     })
     @GetMapping("")
     public ResponseEntity<BfResponse<List<MissionListResponse>>> getAllMissions() {
@@ -78,8 +77,7 @@ public class MissionController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "미션 세부 정보 조회 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(responseCode = "200", description = "미션 세부 정보 조회 성공", useReturnTypeSchema = true)
     })
     @GetMapping("/{missionId}")
     public ResponseEntity<BfResponse<MissionInfoResponse>> getAllMissions(
