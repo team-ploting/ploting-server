@@ -12,6 +12,7 @@ import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.core.exception.PostException;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
+import ploting_server.ploting.point.entity.LevelType;
 import ploting_server.ploting.post.dto.request.PostCreateRequest;
 import ploting_server.ploting.post.dto.request.PostUpdateRequest;
 import ploting_server.ploting.post.dto.response.PostInfoResponse;
@@ -110,6 +111,7 @@ public class PostService {
                         .authorNickname(comment.getMember().getNickname())
                         .authorLocation(comment.getMember().getLocation())
                         .authorLevel(comment.getMember().getLevel())
+                        .authorLevelType(LevelType.findLevelTypeByLevel(comment.getMember().getLevel()))
                         .content(comment.getContent())
                         .likeCount(comment.getLikeCount())
                         .hasLiked(commentLikeRepository.existsByMemberIdAndCommentId(memberId, comment.getId()))
@@ -121,6 +123,7 @@ public class PostService {
                 .authorNickname(post.getMember().getNickname())
                 .authorLocation(post.getMember().getLocation())
                 .authorLevel(post.getMember().getLevel())
+                .authorLevelType(LevelType.findLevelTypeByLevel(post.getMember().getLevel()))
                 .title(post.getTitle())
                 .content(post.getContent())
                 .likeCount(post.getLikeCount())

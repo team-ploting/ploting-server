@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import ploting_server.ploting.comment.dto.response.CommentInfoResponse;
+import ploting_server.ploting.point.entity.LevelType;
 
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class PostInfoResponse {
 
     @Schema(description = "게시글 작성자 레벨", example = "1")
     private final int authorLevel;
+
+    @Schema(description = "게시글 작성자 레벨 타입", example = "씨앗")
+    private final LevelType authorLevelType;
 
     @Schema(description = "게시글 제목", example = "안녕하세요 플로깅을 하고 싶은데")
     private final String title;

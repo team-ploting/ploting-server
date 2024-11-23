@@ -17,6 +17,7 @@ import ploting_server.ploting.organization.entity.OrganizationLike;
 import ploting_server.ploting.organization.entity.OrganizationMember;
 import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
 import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
+import ploting_server.ploting.point.entity.LevelType;
 
 import java.util.List;
 
@@ -61,6 +62,7 @@ public class MemberService {
                 .gender(findMember.getGender())
                 .birth(findMember.getBirth())
                 .level(findMember.getLevel())
+                .levelType(LevelType.findLevelTypeByLevel(findMember.getLevel()))
                 .createdAt(findMember.getCreatedAt())
                 .build();
     }

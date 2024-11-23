@@ -21,6 +21,7 @@ import ploting_server.ploting.organization.entity.OrganizationMember;
 import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
 import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
 import ploting_server.ploting.organization.repository.OrganizationRepository;
+import ploting_server.ploting.point.entity.LevelType;
 
 import java.util.List;
 
@@ -133,6 +134,7 @@ public class OrganizationService {
                 .memberCount(organization.getMemberCount())
                 .leaderName(leader.getMember().getNickname())
                 .leaderLevel(leader.getMember().getLevel())
+                .leaderLevelType(LevelType.findLevelTypeByLevel(leader.getMember().getLevel()))
                 .myOrganization(leader.getMember().getId().equals(memberId))
                 .maleCount(organization.getMaleCount())
                 .femaleCount(organization.getFemaleCount())
@@ -153,6 +155,7 @@ public class OrganizationService {
                 .map(organizationMember -> OrganizationMemberListResponse.builder()
                         .nickname(organizationMember.getMember().getNickname())
                         .level(organizationMember.getMember().getLevel())
+                        .levelType(LevelType.findLevelTypeByLevel(organizationMember.getMember().getLevel()))
                         .introduction(organizationMember.getIntroduction())
                         .leaderStatus(organizationMember.isLeaderStatus())
                         .build())

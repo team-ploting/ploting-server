@@ -45,11 +45,11 @@ public class PointController {
     }
 
     @Operation(
-            summary = "날짜별 포인트 수 조회 (잔디)",
-            description = "날짜별 포인트 수를 조회합니다."
+            summary = "나의 날짜별 포인트 수 조회 (잔디)",
+            description = "나의 날짜별 포인트 수를 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "포인트 수 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(responseCode = "200", description = "나의 포인트 수 조회 성공", useReturnTypeSchema = true)
     })
     @GetMapping("/grass")
     public ResponseEntity<BfResponse<List<PointListResponse>>> receivePoints(
@@ -61,11 +61,11 @@ public class PointController {
     }
 
     @Operation(
-            summary = "레벨 및 포인트 수 조회",
-            description = "레벨 및 포인트 수를 조회합니다."
+            summary = "나의 레벨 및 포인트 수 조회",
+            description = "나의 레벨 및 포인트 수를 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "레벨 및 포인트 수 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(responseCode = "200", description = "나의 레벨 및 포인트 수 조회 성공", useReturnTypeSchema = true)
     })
     @GetMapping("/self")
     public ResponseEntity<BfResponse<PointInfoResponse>> getMyPointAndLevel(
