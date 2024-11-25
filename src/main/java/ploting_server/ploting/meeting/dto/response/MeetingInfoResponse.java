@@ -55,7 +55,7 @@ public class MeetingInfoResponse {
     @Schema(description = "모임장 여부", example = "true")
     private final boolean myMeeting;
 
-    @Schema(description = "가입 순으로 멤버 세명")
+    @Schema(description = "가입 순으로 멤버 3명")
     private final List<MeetingMemberListResponse> top3Members;
 
     @Schema(description = "남성 멤버 수", example = "10")
