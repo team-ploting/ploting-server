@@ -17,6 +17,7 @@ public enum MeetingErrorCode implements BaseErrorCode {
     CANNOT_LEAVE_ORGANIZATION_AS_LEADER(400, "모임장은 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_MEETING_LIKE(400, "좋아요를 누르지 않은 상태입니다.", HttpStatus.BAD_REQUEST),
     ALREADY_EXIST_MEETING_LIKE(400, "이미 좋아요를 누른 상태입니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_WITHDRAW_AS_MEETING_LEADER(400, "회원이 모임장인 모임이 있어 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
 
     // 403 FORBIDDEN
     NOT_MEETING_MEMBER(403, "모임에 가입된 멤버가 아닙니다.", HttpStatus.FORBIDDEN),

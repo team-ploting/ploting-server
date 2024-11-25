@@ -10,6 +10,8 @@ import java.util.Optional;
  * MeetingMember의 Repository 입니다.
  */
 public interface MeetingMemberRepository extends JpaRepository<MeetingMember, Long> {
+    List<MeetingMember> findAllByMemberId(Long memberId);
+
     Optional<MeetingMember> findByMeetingIdAndLeaderStatusTrue(Long meetingId);
 
     Optional<MeetingMember> findByMeetingIdAndMemberId(Long meetingId, Long memberId);

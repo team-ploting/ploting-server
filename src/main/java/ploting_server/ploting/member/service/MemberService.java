@@ -3,10 +3,18 @@ package ploting_server.ploting.member.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ploting_server.ploting.comment.entity.CommentLike;
+import ploting_server.ploting.comment.repository.CommentLikeRepository;
+import ploting_server.ploting.core.code.error.MeetingErrorCode;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.code.error.OrganizationErrorCode;
+import ploting_server.ploting.core.exception.MeetingException;
 import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.core.exception.OrganizationException;
+import ploting_server.ploting.meeting.entity.MeetingLike;
+import ploting_server.ploting.meeting.entity.MeetingMember;
+import ploting_server.ploting.meeting.repository.MeetingLikeRepository;
+import ploting_server.ploting.meeting.repository.MeetingMemberRepository;
 import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
 import ploting_server.ploting.member.dto.request.MemberUpdateRequest;
 import ploting_server.ploting.member.dto.response.MemberInfoResponse;
@@ -18,6 +26,10 @@ import ploting_server.ploting.organization.entity.OrganizationMember;
 import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
 import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
 import ploting_server.ploting.point.entity.LevelType;
+import ploting_server.ploting.point.entity.Point;
+import ploting_server.ploting.point.repository.PointRepository;
+import ploting_server.ploting.post.entity.PostLike;
+import ploting_server.ploting.post.repository.PostLikeRepository;
 
 import java.util.List;
 
@@ -31,6 +43,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final OrganizationMemberRepository organizationMemberRepository;
     private final OrganizationLikeRepository organizationLikeRepository;
+    private final MeetingMemberRepository meetingMemberRepository;
+    private final MeetingLikeRepository meetingLikeRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
+    private final PointRepository pointRepository;
 
     /**
      * 회원 가입 시 회원 정보를 추가적으로 등록합니다.
@@ -107,17 +124,34 @@ public class MemberService {
             organizationMemberRepository.delete(organizationMember);
         }
 
+        // 모임 삭제, 모임장인 모임이 있으면 탈퇴할 수 없음
+        List<MeetingMember> meetingMembers = meetingMemberRepository.findAllByMemberId(memberId);
+        for (MeetingMember meetingMember : meetingMembers) {
+            if (meetingMember.isLeaderStatus()) {
+                throw new MeetingException(MeetingErrorCode.CANNOT_WITHDRAW_AS_MEETING_LEADER);
+            }
+            meetingMemberRepository.delete(meetingMember);
+        }
+
         // 단체 좋아요 삭제
         List<OrganizationLike> organizationLikes = organizationLikeRepository.findAllByMemberId(memberId);
         organizationLikeRepository.deleteAll(organizationLikes);
 
-        // TODO: 모임 삭제
+        // 모임 좋아요 삭제
+        List<MeetingLike> meetingLikes = meetingLikeRepository.findAllByMemberId(memberId);
+        meetingLikeRepository.deleteAll(meetingLikes);
 
-        // TODO: 모임 좋아요 삭제
+        // 게시글 좋아요 삭제
+        List<PostLike> postLikes = postLikeRepository.findAllByMemberId(memberId);
+        postLikeRepository.deleteAll(postLikes);
 
-        // TODO: 게시글, 댓글 삭제
+        // 댓글 좋아요 삭제
+        List<CommentLike> commentLikes = commentLikeRepository.findAllByMemberId(memberId);
+        commentLikeRepository.deleteAll(commentLikes);
 
-        // TODO: 게시글, 댓글 좋아요 삭제
+        // 포인트 삭제
+        List<Point> points = pointRepository.findAllByMemberId(memberId);
+        pointRepository.deleteAll(points);
 
         memberRepository.delete(member);
     }

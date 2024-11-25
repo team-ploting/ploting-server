@@ -14,6 +14,8 @@ import java.util.Optional;
  * 모임 도메인의 Repository 입니다.
  */
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
+    List<Meeting> findAllByOrganizationId(Long organizationId);
+
     List<Meeting> findAllByOrganizationIdOrderByCreatedAtDesc(Long organizationId);
 
     List<Meeting> findAllByOrganizationIdAndActiveStatusIsTrue(Long organizationId);
