@@ -103,7 +103,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return JwtErrorCode.INSUFFICIENT_TOKEN_PERMISSIONS;
         } else {
             // 그 외의 에러
-            return JwtErrorCode.TOKEN_PROCESSING_ERROR;
+            return JwtErrorCode.INTERNAL_SERVER_ERROR;
         }
     }
 

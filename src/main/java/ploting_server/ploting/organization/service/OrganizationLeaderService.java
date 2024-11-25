@@ -8,6 +8,8 @@ import ploting_server.ploting.core.code.error.OrganizationErrorCode;
 import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.core.exception.OrganizationException;
 import ploting_server.ploting.meeting.entity.Meeting;
+import ploting_server.ploting.meeting.entity.MeetingLike;
+import ploting_server.ploting.meeting.repository.MeetingLikeRepository;
 import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
@@ -34,6 +36,7 @@ public class OrganizationLeaderService {
     private final OrganizationLikeRepository organizationLikeRepository;
     private final MemberRepository memberRepository;
     private final MeetingRepository meetingRepository;
+    private final MeetingLikeRepository meetingLikeRepository;
 
     /**
      * 단체를 생성합니다.
@@ -110,7 +113,7 @@ public class OrganizationLeaderService {
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
-        List<Meeting> meetings = meetingRepository.findAllByOrganizationIdAndActiveStatusIsTrue(organizationId);
+        List<Meeting> activatedMeetings = meetingRepository.findAllByOrganizationIdAndActiveStatusIsTrue(organizationId);
 
         List<OrganizationLike> organizationLikes = organizationLikeRepository.findAllByOrganizationId(organizationId);
 
@@ -119,11 +122,21 @@ public class OrganizationLeaderService {
             throw new OrganizationException(OrganizationErrorCode.CANNOT_DELETE_ORGANIZATION_WITH_MULTIPLE_MEMBERS);
         }
 
-        // 진행 중인 모임 수가 1개 이상일 경우 단체를 삭제할 수 없음
-        if (!meetings.isEmpty()) {
+        // 활성화된 모임 수가 1개 이상일 경우 단체를 삭제할 수 없음
+        if (!activatedMeetings.isEmpty()) {
             throw new OrganizationException(OrganizationErrorCode.CANNOT_DELETE_ORGANIZATION_WITH_EXISTING_MEETINGS);
         }
 
+        // 모임 삭제
+        List<Meeting> meetings = meetingRepository.findAllByOrganizationId(organizationId);
+        meetingRepository.deleteAll(meetings);
+
+        // 모임 좋아요 삭제
+        for (Meeting meeting : meetings) {
+            List<MeetingLike> meetingLikes = meetingLikeRepository.findAllByMeetingId(meeting.getId());
+            meetingLikeRepository.deleteAll(meetingLikes);
+        }
+        
         // 단체의 좋아요 삭제
         organizationLikeRepository.deleteAll(organizationLikes);
 
@@ -155,7 +168,7 @@ public class OrganizationLeaderService {
     }
 
     /**
-     * 단체의 멤버를 강퇴합니다.
+     * 단체의 멤버를 강퇴합니다. (단체장만 가능)
      */
     @Transactional
     public void banishMember(Long memberId, Long organizationId, Long kickMemberId) {
