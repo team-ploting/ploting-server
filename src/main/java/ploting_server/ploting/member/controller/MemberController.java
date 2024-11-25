@@ -15,7 +15,6 @@ import ploting_server.ploting.core.code.success.GlobalSuccessCode;
 import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
 import ploting_server.ploting.member.dto.request.MemberRegisterRequest;
-import ploting_server.ploting.member.dto.request.MemberUpdateRequest;
 import ploting_server.ploting.member.dto.response.MemberInfoResponse;
 import ploting_server.ploting.member.dto.response.MemberNicknameDuplicationResponse;
 import ploting_server.ploting.member.service.MemberService;
@@ -67,27 +66,11 @@ public class MemberController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원 닉네임 중복 여부 조회 성공 (중복이면 true)", useReturnTypeSchema = true),
     })
-    @GetMapping("/check-nickname")
+    @GetMapping("/nickname")
     public ResponseEntity<BfResponse<MemberNicknameDuplicationResponse>> checkMemberNickname(
             @RequestParam String nickname) {
         MemberNicknameDuplicationResponse memberNicknameDuplicationResponse = memberService.checkNicknameDuplicate(nickname);
         return ResponseEntity.ok(new BfResponse<>(memberNicknameDuplicationResponse));
-    }
-
-    @Operation(
-            summary = "회원 정보 수정",
-            description = "회원의 정보를 수정합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원 정보 수정 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @PatchMapping("")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> updateMember(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @RequestBody MemberUpdateRequest memberUpdateRequest) {
-        memberService.updateMember(Long.parseLong(principalDetails.getUsername()), memberUpdateRequest);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 
     @Operation(
@@ -104,4 +87,20 @@ public class MemberController {
         memberService.deleteMember(Long.parseLong(principalDetails.getUsername()));
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
+
+//    @Operation(
+//            summary = "회원 정보 수정",
+//            description = "회원의 정보를 수정합니다."
+//    )
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "회원 정보 수정 성공",
+//                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+//    })
+//    @PatchMapping("")
+//    public ResponseEntity<BfResponse<GlobalSuccessCode>> updateMember(
+//            @AuthenticationPrincipal PrincipalDetails principalDetails,
+//            @RequestBody MemberUpdateRequest memberUpdateRequest) {
+//        memberService.updateMember(Long.parseLong(principalDetails.getUsername()), memberUpdateRequest);
+//        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+//    }
 }

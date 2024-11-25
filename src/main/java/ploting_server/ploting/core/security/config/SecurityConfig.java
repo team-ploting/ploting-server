@@ -163,7 +163,6 @@ public class SecurityConfig {
                 antMatcher(GET, "/filters/like"),
 
                 // 회원
-                antMatcher(PATCH, "/members"),
                 antMatcher(PATCH, "/members/registration"),
                 antMatcher(DELETE, "/members"),
 
@@ -184,7 +183,6 @@ public class SecurityConfig {
 
                 // 모임장
                 antMatcher(DELETE, "/meetings/{meetingId}"),
-                antMatcher(PATCH, "/meetings/{meetingId}"),
                 antMatcher(POST, "/meetings"),
 
                 // 모임
