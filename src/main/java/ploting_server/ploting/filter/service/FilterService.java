@@ -58,6 +58,7 @@ public class FilterService {
                         .type(FilterType.MEETING)
                         .body(MeetingListResponse.builder()
                                 .id(meeting.getId())
+                                .activeStatus(meeting.isActiveStatus())
                                 .name(meeting.getName())
                                 .meetDate(meeting.getMeetDate().toLocalDate())
                                 .meetHour(meeting.getMeetDate().getHour())

@@ -106,6 +106,7 @@ public class OrganizationService {
         List<MeetingListResponse> meetingListResponse = meetingList.stream()
                 .map(meeting -> MeetingListResponse.builder()
                         .id(meeting.getId())
+                        .activeStatus(meeting.isActiveStatus())
                         .name(meeting.getName())
                         .meetDate(meeting.getMeetDate().toLocalDate())
                         .meetHour(meeting.getMeetDate().getHour())

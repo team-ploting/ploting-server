@@ -16,6 +16,9 @@ public class MeetingListResponse {
     @Schema(description = "모임의 id", example = "1")
     private final Long id;
 
+    @Schema(description = "활성화 여부", example = "true")
+    private final boolean activeStatus;
+
     @Schema(description = "모임의 이름", example = "모임의 이름")
     private final String name;
 
