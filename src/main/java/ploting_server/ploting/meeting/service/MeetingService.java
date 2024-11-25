@@ -36,6 +36,33 @@ public class MeetingService {
     private final MemberRepository memberRepository;
 
     /**
+     * 모든 모임 목록을 조회합니다.
+     */
+    @Transactional(readOnly = true)
+    public List<MeetingListResponse> getAllMeetings() {
+        List<Meeting> meetings = meetingRepository.findAllOrderByCreatedAtDesc();
+
+        return meetings.stream()
+                .map(meeting -> MeetingListResponse.builder()
+                        .id(meeting.getId())
+                        .activeStatus(meeting.isActiveStatus())
+                        .name(meeting.getName())
+                        .meetDate(meeting.getMeetDate().toLocalDate())
+                        .meetHour(meeting.getMeetDate().getHour())
+                        .location(meeting.getLocation())
+                        .minLevel(meeting.getMinLevel())
+                        .memberCount(meeting.getMemberCount())
+                        .maxMember(meeting.getMaxMember())
+                        .minAge(meeting.getMinAge())
+                        .maxAge(meeting.getMaxAge())
+                        .maleCount(meeting.getMaleCount())
+                        .femaleCount(meeting.getFemaleCount())
+                        .createdAt(meeting.getCreatedAt())
+                        .build())
+                .toList();
+    }
+
+    /**
      * 나의 모임 목록을 조회합니다.
      */
     @Transactional(readOnly = true)
@@ -45,6 +72,7 @@ public class MeetingService {
         return meetings.stream()
                 .map(meeting -> MeetingListResponse.builder()
                         .id(meeting.getId())
+                        .activeStatus(meeting.isActiveStatus())
                         .name(meeting.getName())
                         .meetDate(meeting.getMeetDate().toLocalDate())
                         .meetHour(meeting.getMeetDate().getHour())

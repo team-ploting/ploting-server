@@ -30,6 +30,20 @@ public class MeetingController {
     private final MeetingService meetingService;
 
     @Operation(
+            summary = "모든 모임 목록 조회",
+            description = "모든 모임 목록을 조회합니다."
+    )
+    @SecurityRequirements(value = {})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "모든 모임 목록 조회 성공", useReturnTypeSchema = true),
+    })
+    @GetMapping("")
+    public ResponseEntity<BfResponse<List<MeetingListResponse>>> getAllMeetings() {
+        List<MeetingListResponse> allMeetings = meetingService.getAllMeetings();
+        return ResponseEntity.ok(new BfResponse<>(allMeetings));
+    }
+
+    @Operation(
             summary = "나의 모임 목록 조회",
             description = "나의 모임 목록을 조회합니다."
     )
