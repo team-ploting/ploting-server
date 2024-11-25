@@ -1,5 +1,6 @@
 package ploting_server.ploting.core.security.service.oauth;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -21,6 +22,7 @@ import java.util.Set;
  * OAuth2 사용자 정보 로딩 및 권한 설정을 위한 커스텀 서비스 클래스입니다.
  */
 @Service
+@Slf4j
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
@@ -43,7 +45,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2UserInfo oAuth2UserInfo = getOAuth2UserInfo(registrationId, attributes);
 
-        System.out.println(oAuth2UserInfo.getId());
+        log.debug(oAuth2UserInfo.getName());
 
         return new CustomOAuth2User(
                 authorities,
