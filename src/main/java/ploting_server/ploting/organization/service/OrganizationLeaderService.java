@@ -8,7 +8,6 @@ import ploting_server.ploting.core.code.error.OrganizationErrorCode;
 import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.core.exception.OrganizationException;
 import ploting_server.ploting.meeting.entity.Meeting;
-import ploting_server.ploting.meeting.entity.MeetingLike;
 import ploting_server.ploting.meeting.repository.MeetingLikeRepository;
 import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.member.entity.Member;
@@ -16,7 +15,6 @@ import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.dto.request.OrganizationCreateRequest;
 import ploting_server.ploting.organization.dto.request.OrganizationUpdateRequest;
 import ploting_server.ploting.organization.entity.Organization;
-import ploting_server.ploting.organization.entity.OrganizationLike;
 import ploting_server.ploting.organization.entity.OrganizationMember;
 import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
 import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
@@ -104,41 +102,34 @@ public class OrganizationLeaderService {
      */
     @Transactional
     public void deleteOrganization(Long memberId, Long organizationId) {
-        OrganizationMember organizationMember = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
+        // 단체장 권한 확인
+        OrganizationMember leader = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
-        // 단체장 권한 확인
-        checkOrganizationLeader(memberId, organizationMember);
+        checkOrganizationLeader(memberId, leader);
 
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
-        List<Meeting> activatedMeetings = meetingRepository.findAllByOrganizationIdAndActiveStatusIsTrue(organizationId);
-
-        List<OrganizationLike> organizationLikes = organizationLikeRepository.findAllByOrganizationId(organizationId);
-
         // 멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없음
-        if (organization.getMemberCount() != 1) {
+        if (organization.getMemberCount() > 1) {
             throw new OrganizationException(OrganizationErrorCode.CANNOT_DELETE_ORGANIZATION_WITH_MULTIPLE_MEMBERS);
         }
 
         // 활성화된 모임 수가 1개 이상일 경우 단체를 삭제할 수 없음
-        if (!activatedMeetings.isEmpty()) {
+        if (meetingRepository.existsByOrganizationIdAndActiveStatusIsTrue(organizationId)) {
             throw new OrganizationException(OrganizationErrorCode.CANNOT_DELETE_ORGANIZATION_WITH_EXISTING_MEETINGS);
         }
 
-        // 모임 삭제
+        // 모임 삭제 및 좋아요 삭제
         List<Meeting> meetings = meetingRepository.findAllByOrganizationId(organizationId);
+        for (Meeting meeting : meetings) {
+            meetingLikeRepository.deleteAll(meetingLikeRepository.findAllByMeetingId(meeting.getId()));
+        }
         meetingRepository.deleteAll(meetings);
 
-        // 모임 좋아요 삭제
-        for (Meeting meeting : meetings) {
-            List<MeetingLike> meetingLikes = meetingLikeRepository.findAllByMeetingId(meeting.getId());
-            meetingLikeRepository.deleteAll(meetingLikes);
-        }
-        
         // 단체의 좋아요 삭제
-        organizationLikeRepository.deleteAll(organizationLikes);
+        organizationLikeRepository.deleteAll(organizationLikeRepository.findAllByOrganizationId(organizationId));
 
         // 단체 삭제
         organizationRepository.delete(organization);
