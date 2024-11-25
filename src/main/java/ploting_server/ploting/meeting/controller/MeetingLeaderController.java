@@ -76,20 +76,20 @@ public class MeetingLeaderController {
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 
-    @Operation(
-            summary = "멤버 강퇴",
-            description = "모임에서 멤버를 강퇴합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "멤버 강퇴 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @DeleteMapping("{meetingId}/banishment")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> banishMember(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long meetingId,
-            @RequestParam Long kickMemberId) {
-        meetingLeaderService.banishMember(Long.parseLong(principalDetails.getUsername()), meetingId, kickMemberId);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
-    }
+//    @Operation(
+//            summary = "멤버 강퇴",
+//            description = "모임에서 멤버를 강퇴합니다."
+//    )
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "멤버 강퇴 성공",
+//                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+//    })
+//    @DeleteMapping("{meetingId}/banishment")
+//    public ResponseEntity<BfResponse<GlobalSuccessCode>> banishMember(
+//            @AuthenticationPrincipal PrincipalDetails principalDetails,
+//            @PathVariable Long meetingId,
+//            @RequestParam Long kickMemberId) {
+//        meetingLeaderService.banishMember(Long.parseLong(principalDetails.getUsername()), meetingId, kickMemberId);
+//        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+//    }
 }

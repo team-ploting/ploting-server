@@ -74,37 +74,37 @@ public class OrganizationLeaderController {
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 
-    @Operation(
-            summary = "단체장 권한 위임",
-            description = "단체장 권한을 다른 회원에게 위임합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체장 권한 위임 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @PatchMapping("/{organizationId}/leader")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> delegateLeader(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId,
-            @RequestParam Long newLeaderId) {
-        organizationLeaderService.delegateLeader(Long.parseLong(principalDetails.getUsername()), organizationId, newLeaderId);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
-    }
-
-    @Operation(
-            summary = "멤버 강퇴",
-            description = "단체에서 멤버를 강퇴합니다."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "멤버 강퇴 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
-    })
-    @DeleteMapping("{organizationId}/banishment")
-    public ResponseEntity<BfResponse<GlobalSuccessCode>> banishMember(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId,
-            @RequestParam Long kickMemberId) {
-        organizationLeaderService.banishMember(Long.parseLong(principalDetails.getUsername()), organizationId, kickMemberId);
-        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
-    }
+//    @Operation(
+//            summary = "단체장 권한 위임",
+//            description = "단체장 권한을 다른 회원에게 위임합니다."
+//    )
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "단체장 권한 위임 성공",
+//                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+//    })
+//    @PatchMapping("/{organizationId}/leader")
+//    public ResponseEntity<BfResponse<GlobalSuccessCode>> delegateLeader(
+//            @AuthenticationPrincipal PrincipalDetails principalDetails,
+//            @PathVariable Long organizationId,
+//            @RequestParam Long newLeaderId) {
+//        organizationLeaderService.delegateLeader(Long.parseLong(principalDetails.getUsername()), organizationId, newLeaderId);
+//        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+//    }
+//
+//    @Operation(
+//            summary = "멤버 강퇴",
+//            description = "단체에서 멤버를 강퇴합니다."
+//    )
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "멤버 강퇴 성공",
+//                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+//    })
+//    @DeleteMapping("{organizationId}/banishment")
+//    public ResponseEntity<BfResponse<GlobalSuccessCode>> banishMember(
+//            @AuthenticationPrincipal PrincipalDetails principalDetails,
+//            @PathVariable Long organizationId,
+//            @RequestParam Long kickMemberId) {
+//        organizationLeaderService.banishMember(Long.parseLong(principalDetails.getUsername()), organizationId, kickMemberId);
+//        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
+//    }
 }
