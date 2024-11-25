@@ -45,7 +45,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2UserInfo oAuth2UserInfo = getOAuth2UserInfo(registrationId, attributes);
 
-        log.debug(oAuth2UserInfo.getName());
+        log.warn(oAuth2UserInfo.getName());
 
         return new CustomOAuth2User(
                 authorities,
@@ -62,7 +62,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return switch (registrationId) {
             case "naver" -> new NaverUserInfo(attributes);
             case "kakao" -> new KakaoUserInfo(attributes);
-//            case "goggle" -> new GoogleUserInfo(attributes);
             default -> throw new OAuthException(OAuthErrorCode.UNSUPPORTED_OAUTH_PROVIDER);
         };
     }
