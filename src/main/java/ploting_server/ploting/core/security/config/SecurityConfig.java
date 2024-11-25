@@ -169,9 +169,7 @@ public class SecurityConfig {
 
                 // 단체장
                 antMatcher(DELETE, "/organizations/{organizationId}"),
-                antMatcher(DELETE, "/organizations/{organizationId}/banishment"),
                 antMatcher(PATCH, "/organizations/{organizationId}"),
-                antMatcher(PATCH, "/organizations/{organizationId}/leader"),
                 antMatcher(POST, "/organizations"),
 
                 // 단체
@@ -186,7 +184,6 @@ public class SecurityConfig {
 
                 // 모임장
                 antMatcher(DELETE, "/meetings/{meetingId}"),
-                antMatcher(DELETE, "/meetings/{meetingId}/banishment"),
                 antMatcher(PATCH, "/meetings/{meetingId}"),
                 antMatcher(POST, "/meetings"),
 
