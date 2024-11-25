@@ -65,6 +65,6 @@ public class OrganizationInfoResponse {
     @Schema(description = "여성 멤버 수", example = "20")
     private final int femaleCount;
 
-    @Schema(description = "단체의 모임 리스트")
-    private final List<MeetingListResponse> meetings;
+    @Schema(description = "최신순 활성화된 모임 3개")
+    private final List<MeetingListResponse> top3Meetings;
 }

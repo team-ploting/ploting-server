@@ -100,10 +100,10 @@ public class OrganizationService {
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
         // 단체의 모임 리스트 조회
-        List<Meeting> meetingList = meetingRepository.findAllByOrganizationIdOrderByCreatedAtDesc(organizationId);
+        List<Meeting> top3MeetingsByCreatedAt = meetingRepository.findTop3ByActiveStatusTrueOrderByCreatedAtDesc();
 
         // 모임 리스트를 MeetingListResponse 리스트로 변환
-        List<MeetingListResponse> meetingListResponse = meetingList.stream()
+        List<MeetingListResponse> top3Meetings = top3MeetingsByCreatedAt.stream()
                 .map(meeting -> MeetingListResponse.builder()
                         .id(meeting.getId())
                         .activeStatus(meeting.isActiveStatus())
@@ -139,7 +139,7 @@ public class OrganizationService {
                 .myOrganization(leader.getMember().getId().equals(memberId))
                 .maleCount(organization.getMaleCount())
                 .femaleCount(organization.getFemaleCount())
-                .meetings(meetingListResponse)
+                .top3Meetings(top3Meetings)
                 .build();
     }
 
