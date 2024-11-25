@@ -1,11 +1,16 @@
-FROM openjdk:17
-
-ARG JAR_FILE_PATH=build/libs/*.jar
+# build stage
+FROM gradle:7.6.4-jdk17 AS build
 
 WORKDIR /apps
+COPY . .
+RUN gradle clean build --no-daemon -x test
 
-COPY $JAR_FILE_PATH app.jar
+
+# runtime stage
+FROM openjdk:jre-alpine
+
+WORKDIR /apps
+COPY --from=build /apps/build/libs/*.jar app.jar
 
 EXPOSE 8080
-
-CMD ["java", "--enable-preview", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
