@@ -18,7 +18,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
     List<Meeting> findAllByOrganizationIdOrderByCreatedAtDesc(Long organizationId);
 
-    List<Meeting> findAllByOrganizationIdAndActiveStatusIsTrue(Long organizationId);
+    boolean existsByOrganizationIdAndActiveStatusIsTrue(Long organizationId);
 
     List<Meeting> findAllByActiveStatusTrueAndMeetDateBefore(LocalDateTime now);
 
