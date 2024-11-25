@@ -12,7 +12,6 @@ import ploting_server.ploting.core.exception.OrganizationException;
 import ploting_server.ploting.meeting.dto.request.MeetingCreateRequest;
 import ploting_server.ploting.meeting.dto.request.MeetingUpdateRequest;
 import ploting_server.ploting.meeting.entity.Meeting;
-import ploting_server.ploting.meeting.entity.MeetingLike;
 import ploting_server.ploting.meeting.entity.MeetingMember;
 import ploting_server.ploting.meeting.repository.MeetingLikeRepository;
 import ploting_server.ploting.meeting.repository.MeetingMemberRepository;
@@ -121,15 +120,13 @@ public class MeetingLeaderService {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
 
-        List<MeetingLike> meetingLikes = meetingLikeRepository.findAllByMeetingId(meetingId);
-
         // 멤버 수가 1명(모임장)이 아닐 경우 모임을 삭제할 수 없음
-        if (meeting.getMemberCount() != 1) {
+        if (meeting.getMemberCount() > 1) {
             throw new MeetingException(MeetingErrorCode.CANNOT_DELETE_MEETING);
         }
 
         // 모임의 좋아요 삭제
-        meetingLikeRepository.deleteAll(meetingLikes);
+        meetingLikeRepository.deleteAll(meetingLikeRepository.findAllByMeetingId(meetingId));
 
         // 모임 삭제
         meetingRepository.delete(meeting);
