@@ -29,8 +29,16 @@ public class MeetingLeaderController {
             description = "모임장으로서 모임을 생성합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모임 생성 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모임 생성 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "단체에 가입되지 않은 사용자",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 403, \"message\": \"단체에 가입된 멤버가 아닙니다.\" }"))
+            )
     })
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createMeeting(
@@ -47,8 +55,19 @@ public class MeetingLeaderController {
             description = "모임을 삭제합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모임 삭제 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모임 삭제 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "모임 삭제 불가",
+                    content = @Content(examples = {
+                            @ExampleObject(name = "권한 없음", value = "{ \"code\": 400, \"message\": \"모임의 모임장이 아닙니다.\" }"),
+                            @ExampleObject(name = "조건 미충족", value = "{ \"code\": 400, \"message\": \"모임을 삭제하려면 모임장 한 명만 남아 있어야 합니다.\" }")
+                    })
+            ),
     })
     @DeleteMapping("/{meetingId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteMeeting(

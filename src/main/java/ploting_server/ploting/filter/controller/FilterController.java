@@ -40,7 +40,6 @@ public class FilterController {
                     responseCode = "200",
                     description = "모든 게시글과 모임 조회 성공",
                     content = @Content(
-                            mediaType = "application/json",
                             schema = @Schema(implementation = FilteredResponse.class),
                             examples = @ExampleObject(value = "{\n" +
                                     "  \"code\": 200,\n" +
@@ -98,7 +97,6 @@ public class FilterController {
                     responseCode = "200",
                     description = "좋아요한 단체, 모임, 게시글 조회 성공",
                     content = @Content(
-                            mediaType = "application/json",
                             schema = @Schema(implementation = FilteredResponse.class),
                             examples = @ExampleObject(value = "{\n" +
                                     "  \"code\": 200,\n" +
