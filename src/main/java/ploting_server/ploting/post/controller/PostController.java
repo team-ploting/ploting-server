@@ -34,8 +34,11 @@ public class PostController {
             description = "게시글을 생성합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 생성 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "게시글 생성 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            )
     })
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createPost(
@@ -51,8 +54,16 @@ public class PostController {
             description = "게시글을 수정합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 수정 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "게시글 수정 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "게시글 수정 권한 없음",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 403, \"message\": \"게시글의 작성자가 아닙니다.\" }"))
+            )
     })
     @PatchMapping("/{postId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> updatePost(
@@ -69,8 +80,16 @@ public class PostController {
             description = "게시글을 삭제합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 삭제 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "게시글 삭제 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "게시글 삭제 권한 없음",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 403, \"message\": \"게시글의 작성자가 아닙니다.\" }"))
+            )
     })
     @DeleteMapping("/{postId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deletePost(
@@ -86,7 +105,11 @@ public class PostController {
             description = "게시글의 세부 정보를 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "게시글 세부 정보 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "게시글 세부 정보 조회 성공",
+                    useReturnTypeSchema = true
+            )
     })
     @GetMapping("/{postId}")
     public ResponseEntity<BfResponse<PostInfoResponse>> getPostInfo(
@@ -102,7 +125,11 @@ public class PostController {
             description = "나의 게시글 목록을 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "나의 게시글 목록 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "나의 게시글 목록 조회 성공",
+                    useReturnTypeSchema = true
+            )
     })
     @GetMapping("/self")
     public ResponseEntity<BfResponse<List<PostListResponse>>> getMyPosts(
@@ -117,7 +144,11 @@ public class PostController {
             description = "나의 댓글의 게시글 목록을 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "나의 댓글의 게시글 목록 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "나의 댓글의 게시글 목록 조회 성공",
+                    useReturnTypeSchema = true
+            )
     })
     @GetMapping("/self/comments")
     public ResponseEntity<BfResponse<List<PostListResponse>>> getPostsFromMyComments(
