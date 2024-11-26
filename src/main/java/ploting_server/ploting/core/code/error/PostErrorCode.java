@@ -20,18 +20,18 @@ public enum PostErrorCode implements BaseErrorCode {
     NOT_FOUND_POST_ID(404, "존재하지 않는 게시글입니다.", HttpStatus.NOT_FOUND),
     ;
 
-    private final int errorCode;
-    private final String errorMessage;
+    private final int code;
+    private final String message;
     private final HttpStatus status;
 
-    PostErrorCode(int errorCode, String errorMessage, HttpStatus status) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+    PostErrorCode(int code, String message, HttpStatus status) {
+        this.code = code;
+        this.message = message;
         this.status = status;
     }
 
     @Override
     public ErrorResponse getErrorResponse() {
-        return new ErrorResponse(this.errorCode, this.errorMessage);
+        return new ErrorResponse(this.code, this.message);
     }
 }

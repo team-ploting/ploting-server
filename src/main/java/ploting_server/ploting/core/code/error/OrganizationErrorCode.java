@@ -28,18 +28,18 @@ public enum OrganizationErrorCode implements BaseErrorCode {
     NOT_FOUND_ORGANIZATION_ID(404, "존재하지 않는 단체입니다.", HttpStatus.NOT_FOUND),
     ;
 
-    private final int errorCode;
-    private final String errorMessage;
+    private final int code;
+    private final String message;
     private final HttpStatus status;
 
-    OrganizationErrorCode(int errorCode, String errorMessage, HttpStatus status) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+    OrganizationErrorCode(int code, String message, HttpStatus status) {
+        this.code = code;
+        this.message = message;
         this.status = status;
     }
 
     @Override
     public ErrorResponse getErrorResponse() {
-        return new ErrorResponse(this.errorCode, this.errorMessage);
+        return new ErrorResponse(this.code, this.message);
     }
 }

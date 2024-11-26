@@ -24,18 +24,18 @@ public enum JwtErrorCode implements BaseErrorCode {
     INTERNAL_SERVER_ERROR(500, "서버 오류가 발생했습니다. 관리자에게 문의하세요.", HttpStatus.INTERNAL_SERVER_ERROR),
     ;
 
-    private final int errorCode;
-    private final String errorMessage;
+    private final int code;
+    private final String message;
     private final HttpStatus status;
 
-    JwtErrorCode(int errorCode, String errorMessage, HttpStatus status) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+    JwtErrorCode(int code, String message, HttpStatus status) {
+        this.code = code;
+        this.message = message;
         this.status = status;
     }
 
     @Override
     public ErrorResponse getErrorResponse() {
-        return new ErrorResponse(this.errorCode, this.errorMessage);
+        return new ErrorResponse(this.code, this.message);
     }
 }

@@ -13,18 +13,18 @@ public enum PointErrorCode implements BaseErrorCode {
     INVALID_LEVEL(400, "유효하지 않은 레벨입니다.", HttpStatus.BAD_REQUEST),
     ;
 
-    private final int errorCode;
-    private final String errorMessage;
+    private final int code;
+    private final String message;
     private final HttpStatus status;
 
-    PointErrorCode(int errorCode, String errorMessage, HttpStatus status) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+    PointErrorCode(int code, String message, HttpStatus status) {
+        this.code = code;
+        this.message = message;
         this.status = status;
     }
 
     @Override
     public ErrorResponse getErrorResponse() {
-        return new ErrorResponse(this.errorCode, this.errorMessage);
+        return new ErrorResponse(this.code, this.message);
     }
 }

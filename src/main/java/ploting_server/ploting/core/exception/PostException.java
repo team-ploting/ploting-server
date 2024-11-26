@@ -12,7 +12,7 @@ public class PostException extends RuntimeException {
     private final BaseErrorCode errorCode;
 
     public PostException(BaseErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }
