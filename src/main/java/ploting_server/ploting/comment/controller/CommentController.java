@@ -30,8 +30,11 @@ public class CommentController {
             description = "댓글을 생성합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "댓글 생성 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "댓글 생성 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            )
     })
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createComment(
@@ -48,8 +51,11 @@ public class CommentController {
             description = "댓글을 수정합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "댓글 수정 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "댓글 수정 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            )
     })
     @PatchMapping("/{commentId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> updatePost(
@@ -66,8 +72,11 @@ public class CommentController {
             description = "댓글을 삭제합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "댓글 삭제 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "댓글 삭제 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            )
     })
     @DeleteMapping("/{commentId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteComment(
