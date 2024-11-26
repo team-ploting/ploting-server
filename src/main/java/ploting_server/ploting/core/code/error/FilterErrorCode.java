@@ -10,7 +10,7 @@ import ploting_server.ploting.core.response.ErrorResponse;
 @Getter
 public enum FilterErrorCode implements BaseErrorCode {
     // 400 BAD_REQUEST
-    INVALID_FILTER_DATA_TYPE(400, "필터 데이터 타입이 잘못되었습니다.", HttpStatus.BAD_REQUEST),
+    INVALID_FILTER_DATA_TYPE(400, "필터 데이터의 형식이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code;
