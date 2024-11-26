@@ -32,8 +32,16 @@ public class MissionController {
             description = "미션을 생성합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "미션 생성 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "미션 생성 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "어드민 권한 필요",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 401, \"message\": \"접근 권한이 없습니다.\" }"))
+            )
     })
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createMission(
@@ -48,8 +56,15 @@ public class MissionController {
             description = "미션을 삭제합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "미션 삭제 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(responseCode = "200",
+                    description = "미션 삭제 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "어드민 권한 필요",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 401, \"message\": \"접근 권한이 없습니다.\" }"))
+            )
     })
     @DeleteMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteMission(
@@ -65,7 +80,11 @@ public class MissionController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모든 미션 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모든 미션 조회 성공",
+                    useReturnTypeSchema = true
+            )
     })
     @GetMapping("")
     public ResponseEntity<BfResponse<List<MissionListResponse>>> getAllMissions() {
@@ -79,7 +98,11 @@ public class MissionController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "미션 세부 정보 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "미션 세부 정보 조회 성공",
+                    useReturnTypeSchema = true
+            )
     })
     @GetMapping("/{missionId}")
     public ResponseEntity<BfResponse<MissionInfoResponse>> getAllMissions(
