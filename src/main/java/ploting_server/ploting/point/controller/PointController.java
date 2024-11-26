@@ -33,8 +33,11 @@ public class PointController {
             description = "포인트를 받습니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "포인트 생성 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "포인트 생성 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            )
     })
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> receivePoints(
@@ -51,7 +54,11 @@ public class PointController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "날짜별 포인트 수 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "날짜별 포인트 수 조회 성공",
+                    useReturnTypeSchema = true
+            )
     })
     @GetMapping("/{memberId}/grass")
     public ResponseEntity<BfResponse<List<PointListResponse>>> receivePoints(
@@ -67,7 +74,11 @@ public class PointController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "레벨 및 포인트 수 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "레벨 및 포인트 수 조회 성공",
+                    useReturnTypeSchema = true
+            )
     })
     @GetMapping("/{memberId}")
     public ResponseEntity<BfResponse<PointInfoResponse>> getMyPointAndLevel(
