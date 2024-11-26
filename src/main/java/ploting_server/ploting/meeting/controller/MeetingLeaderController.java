@@ -62,7 +62,7 @@ public class MeetingLeaderController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "모임 삭제 불가",
+                    description = "모임 삭제 실패",
                     content = @Content(examples = {
                             @ExampleObject(name = "권한 없음", value = "{ \"code\": 400, \"message\": \"모임의 모임장이 아닙니다.\" }"),
                             @ExampleObject(name = "조건 미충족", value = "{ \"code\": 400, \"message\": \"모임을 삭제하려면 모임장 한 명만 남아 있어야 합니다.\" }")
