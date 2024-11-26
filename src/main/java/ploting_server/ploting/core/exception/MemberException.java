@@ -12,7 +12,7 @@ public class MemberException extends RuntimeException {
     private final BaseErrorCode errorCode;
 
     public MemberException(BaseErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }

@@ -12,7 +12,7 @@ public class CustomSecurityException extends RuntimeException {
     private final BaseErrorCode errorCode;
 
     public CustomSecurityException(BaseErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }

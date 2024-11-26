@@ -12,7 +12,7 @@ public class OAuthException extends RuntimeException {
     private final BaseErrorCode errorCode;
 
     public OAuthException(BaseErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }

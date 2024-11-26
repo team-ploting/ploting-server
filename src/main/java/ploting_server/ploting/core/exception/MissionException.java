@@ -12,7 +12,7 @@ public class MissionException extends RuntimeException {
     private final BaseErrorCode errorCode;
 
     public MissionException(BaseErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }

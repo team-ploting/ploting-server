@@ -12,13 +12,13 @@ import lombok.Getter;
 public class ErrorResponse {
 
     @Schema(description = "에러 코드", example = "400")
-    private final int errorCode;
+    private final int code;
 
     @Schema(description = "에러 메시지", example = "실패")
-    private final String errorMessage;
+    private final String message;
 
-    public ErrorResponse(int errorCode, String errorMessage) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+    public ErrorResponse(int code, String message) {
+        this.code = code;
+        this.message = message;
     }
 }

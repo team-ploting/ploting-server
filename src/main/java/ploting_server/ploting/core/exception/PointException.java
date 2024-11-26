@@ -12,7 +12,7 @@ public class PointException extends RuntimeException {
     private final BaseErrorCode errorCode;
 
     public PointException(BaseErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }

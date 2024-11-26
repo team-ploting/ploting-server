@@ -12,7 +12,7 @@ public class OrganizationException extends RuntimeException {
     private final BaseErrorCode errorCode;
 
     public OrganizationException(BaseErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }

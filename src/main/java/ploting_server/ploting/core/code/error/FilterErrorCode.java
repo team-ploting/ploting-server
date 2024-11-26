@@ -13,18 +13,18 @@ public enum FilterErrorCode implements BaseErrorCode {
     INVALID_FILTER_DATA_TYPE(400, "필터 데이터 타입이 잘못되었습니다.", HttpStatus.BAD_REQUEST),
     ;
 
-    private final int errorCode;
-    private final String errorMessage;
+    private final int code;
+    private final String message;
     private final HttpStatus status;
 
-    FilterErrorCode(int errorCode, String errorMessage, HttpStatus status) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+    FilterErrorCode(int code, String message, HttpStatus status) {
+        this.code = code;
+        this.message = message;
         this.status = status;
     }
 
     @Override
     public ErrorResponse getErrorResponse() {
-        return new ErrorResponse(this.errorCode, this.errorMessage);
+        return new ErrorResponse(this.code, this.message);
     }
 }
