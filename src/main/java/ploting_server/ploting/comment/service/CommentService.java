@@ -86,7 +86,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.NOT_FOUND_COMMENT_ID));
 
-        // 게시글의 작성자인지 확인
+        // 댓글의 작성자인지 확인
         checkCommentAuthor(memberId, comment);
 
         List<CommentLike> commentLikes = commentLikeRepository.findAllByCommentId(commentId);
