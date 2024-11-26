@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import ploting_server.ploting.comment.dto.response.CommentInfoResponse;
 import ploting_server.ploting.point.entity.LevelType;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -46,6 +47,9 @@ public class PostInfoResponse {
 
     @Schema(description = "게시글 작성자 여부", example = "true")
     private final boolean myPost;
+
+    @Schema(description = "게시글 생성 시간", example = "2024-09-21T12:30:00")
+    private final LocalDateTime createdAt;
 
     @Schema(description = "게시글의 댓글")
     private final List<CommentInfoResponse> comments;
