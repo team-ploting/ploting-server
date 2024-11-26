@@ -28,7 +28,11 @@ public class AuthController {
             description = "기존 Refresh Token을 사용하여 새로운 Access Token과 Refresh Token을 발급받습니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "JWT 토큰 갱신 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "JWT 토큰 갱신 성공",
+                    useReturnTypeSchema = true
+            ),
     })
     @PostMapping("/refresh")
     public ResponseEntity<BfResponse<JwtTokenResponse>> refreshTokens(

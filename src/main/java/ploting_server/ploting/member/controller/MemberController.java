@@ -32,8 +32,16 @@ public class MemberController {
             description = "소셜 로그인 후 회원의 추가 정보를 등록합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원 추가 정보 등록 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "회원 추가 정보 등록 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "중복된 닉네임",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 400, \"message\": \"이미 사용 중인 닉네임입니다.\" }"))
+            )
     })
     @PatchMapping("/registration")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerMember(
@@ -50,7 +58,11 @@ public class MemberController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원 정보 조회 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "회원 정보 조회 성공",
+                    useReturnTypeSchema = true
+            )
     })
     @GetMapping("/{memberId}")
     public ResponseEntity<BfResponse<MemberInfoResponse>> getMember(
@@ -66,7 +78,11 @@ public class MemberController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원 닉네임 중복 여부 조회 성공 (중복이면 true)", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "회원 닉네임 중복 여부 조회 성공 (중복이면 true)",
+                    useReturnTypeSchema = true
+            )
     })
     @GetMapping("/nickname")
     public ResponseEntity<BfResponse<MemberNicknameDuplicationResponse>> checkMemberNickname(
@@ -78,11 +94,22 @@ public class MemberController {
 
     @Operation(
             summary = "회원 탈퇴",
-            description = "회원을 삭제합니다."
+            description = "회원 탈퇴를 처리합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원 삭제 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "회원 탈퇴 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "회원 탈퇴 실패",
+                    content = @Content(examples = {
+                            @ExampleObject(name = "단체장 권한", value = "{ \"code\": 400, \"message\": \"단체장을 맡고 있는 단체가 있어 회원 탈퇴가 불가능합니다.\" }"),
+                            @ExampleObject(name = "모임장 권한", value = "{ \"code\": 400, \"message\": \"모임장을 맡고 있는 모임이 있어 회원 탈퇴가 불가능합니다.\" }")
+                    })
+            ),
     })
     @DeleteMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteMember(
