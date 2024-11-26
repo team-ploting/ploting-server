@@ -27,21 +27,18 @@ public class MemberInfoResponse {
     @Schema(description = "회원의 지역", example = "동대문구")
     private final String location;
 
-    @Schema(description = "회원의 성별", example = "FEMALE")
-    private final GenderType gender;
-
-    @Schema(description = "회원의 생년월일", example = "2003-02-12")
-    private final LocalDate birth;
-
     @Schema(description = "회원의 레벨", example = "1")
     private final int level;
 
     @Schema(description = "회원의 레벨 타입", example = "씨앗")
     private final LevelType levelType;
 
+    @Schema(description = "회원의 성별", example = "FEMALE")
+    private final GenderType gender;
+
+    @Schema(description = "회원의 생년월일", example = "2003-02-12")
+    private final LocalDate birth;
+
     @Schema(description = "계정 생성일자", example = "2024-10-12T14:34:56")
     private final LocalDateTime createdAt;
-
-    @Schema(description = "계정 활성화 여부", example = "true")
-    private final boolean activeStatus;
 }

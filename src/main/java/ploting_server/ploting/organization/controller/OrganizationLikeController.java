@@ -34,7 +34,8 @@ public class OrganizationLikeController {
     @PostMapping("{organizationId}/like")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> pressOrganizationLike(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId) {
+            @PathVariable Long organizationId
+    ) {
         organizationLikeService.pressOrganizationLike(Long.parseLong(principalDetails.getUsername()), organizationId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -50,7 +51,8 @@ public class OrganizationLikeController {
     @DeleteMapping("{organizationId}/like")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> cancelOrganizationLike(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId) {
+            @PathVariable Long organizationId
+    ) {
         organizationLikeService.cancelOrganizationLike(Long.parseLong(principalDetails.getUsername()), organizationId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }

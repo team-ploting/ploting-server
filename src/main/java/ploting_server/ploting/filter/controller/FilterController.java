@@ -83,7 +83,8 @@ public class FilterController {
     })
     @GetMapping("/main")
     public ResponseEntity<BfResponse<List<FilteredResponse>>> getMainItems(
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search
+    ) {
         List<FilteredResponse> mainItems = filterService.getMainItems(search);
         return ResponseEntity.ok(new BfResponse<>(mainItems));
     }
@@ -157,7 +158,8 @@ public class FilterController {
     })
     @GetMapping("/like")
     public ResponseEntity<BfResponse<List<FilteredResponse>>> getLikedItems(
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
         List<FilteredResponse> likedItems = filterService.getLikedItems(Long.parseLong(principalDetails.getUsername()));
         return ResponseEntity.ok(new BfResponse<>(likedItems));
     }

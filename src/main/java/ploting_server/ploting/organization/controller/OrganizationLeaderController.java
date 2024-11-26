@@ -36,7 +36,8 @@ public class OrganizationLeaderController {
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createOrganization(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @RequestBody OrganizationCreateRequest organizationCreateRequest) {
+            @RequestBody OrganizationCreateRequest organizationCreateRequest
+    ) {
         organizationLeaderService.createOrganization(Long.parseLong(principalDetails.getUsername()), organizationCreateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -53,7 +54,8 @@ public class OrganizationLeaderController {
     public ResponseEntity<BfResponse<GlobalSuccessCode>> updateOrganization(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long organizationId,
-            @RequestBody OrganizationUpdateRequest organizationUpdateRequest) {
+            @RequestBody OrganizationUpdateRequest organizationUpdateRequest
+    ) {
         organizationLeaderService.updateOrganization(Long.parseLong(principalDetails.getUsername()), organizationId, organizationUpdateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -69,7 +71,8 @@ public class OrganizationLeaderController {
     @DeleteMapping("/{organizationId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteOrganization(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId) {
+            @PathVariable Long organizationId
+    ) {
         organizationLeaderService.deleteOrganization(Long.parseLong(principalDetails.getUsername()), organizationId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -86,7 +89,8 @@ public class OrganizationLeaderController {
 //    public ResponseEntity<BfResponse<GlobalSuccessCode>> delegateLeader(
 //            @AuthenticationPrincipal PrincipalDetails principalDetails,
 //            @PathVariable Long organizationId,
-//            @RequestParam Long newLeaderId) {
+//            @RequestParam Long newLeaderId
+//    ) {
 //        organizationLeaderService.delegateLeader(Long.parseLong(principalDetails.getUsername()), organizationId, newLeaderId);
 //        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
 //    }
@@ -103,7 +107,8 @@ public class OrganizationLeaderController {
 //    public ResponseEntity<BfResponse<GlobalSuccessCode>> banishMember(
 //            @AuthenticationPrincipal PrincipalDetails principalDetails,
 //            @PathVariable Long organizationId,
-//            @RequestParam Long kickMemberId) {
+//            @RequestParam Long kickMemberId
+//    ) {
 //        organizationLeaderService.banishMember(Long.parseLong(principalDetails.getUsername()), organizationId, kickMemberId);
 //        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
 //    }

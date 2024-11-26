@@ -40,7 +40,8 @@ public class PostController {
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createPost(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @RequestBody PostCreateRequest postCreateRequest) {
+            @RequestBody PostCreateRequest postCreateRequest
+    ) {
         postService.createPost(Long.parseLong(principalDetails.getUsername()), postCreateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -57,7 +58,8 @@ public class PostController {
     public ResponseEntity<BfResponse<GlobalSuccessCode>> updatePost(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long postId,
-            @RequestBody PostUpdateRequest postUpdateRequest) {
+            @RequestBody PostUpdateRequest postUpdateRequest
+    ) {
         postService.updatePost(Long.parseLong(principalDetails.getUsername()), postId, postUpdateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -73,7 +75,8 @@ public class PostController {
     @DeleteMapping("/{postId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deletePost(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long postId) {
+            @PathVariable Long postId
+    ) {
         postService.deletePost(Long.parseLong(principalDetails.getUsername()), postId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -88,7 +91,8 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<BfResponse<PostInfoResponse>> getPostInfo(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long postId) {
+            @PathVariable Long postId
+    ) {
         PostInfoResponse postInfo = postService.getPostInfo(Long.parseLong(principalDetails.getUsername()), postId);
         return ResponseEntity.ok(new BfResponse<>(postInfo));
     }
@@ -102,7 +106,8 @@ public class PostController {
     })
     @GetMapping("/self")
     public ResponseEntity<BfResponse<List<PostListResponse>>> getMyPosts(
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
         List<PostListResponse> myPosts = postService.getMyPosts(Long.parseLong(principalDetails.getUsername()));
         return ResponseEntity.ok(new BfResponse<>(myPosts));
     }
@@ -116,7 +121,8 @@ public class PostController {
     })
     @GetMapping("/self/comments")
     public ResponseEntity<BfResponse<List<PostListResponse>>> getPostsFromMyComments(
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
         List<PostListResponse> postsFromMyComments = postService.getPostsFromMyComments(Long.parseLong(principalDetails.getUsername()));
         return ResponseEntity.ok(new BfResponse<>(postsFromMyComments));
     }

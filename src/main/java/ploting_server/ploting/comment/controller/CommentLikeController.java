@@ -34,7 +34,8 @@ public class CommentLikeController {
     @PostMapping("{commentId}/like")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> pressCommentLike(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long commentId) {
+            @PathVariable Long commentId
+    ) {
         commentLikeService.pressCommentLike(Long.parseLong(principalDetails.getUsername()), commentId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -50,7 +51,8 @@ public class CommentLikeController {
     @DeleteMapping("{commentId}/like")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> cancelCommentLike(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long commentId) {
+            @PathVariable Long commentId
+    ) {
         commentLikeService.cancelCommentLike(Long.parseLong(principalDetails.getUsername()), commentId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }

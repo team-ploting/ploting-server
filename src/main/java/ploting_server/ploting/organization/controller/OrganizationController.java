@@ -52,7 +52,8 @@ public class OrganizationController {
     })
     @GetMapping("/self")
     public ResponseEntity<BfResponse<List<OrganizationListResponse>>> getMyOrganizations(
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
         List<OrganizationListResponse> myOrganizations = organizationService.getMyOrganizations(Long.parseLong(principalDetails.getUsername()));
         return ResponseEntity.ok(new BfResponse<>(myOrganizations));
     }
@@ -67,7 +68,8 @@ public class OrganizationController {
     @GetMapping("/{organizationId}")
     public ResponseEntity<BfResponse<OrganizationInfoResponse>> getOrganizationInfo(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId) {
+            @PathVariable Long organizationId
+    ) {
         OrganizationInfoResponse organizationInfoResponse = organizationService.getOrganizationInfo(
                 Long.parseLong(principalDetails.getUsername()), organizationId);
         return ResponseEntity.ok(new BfResponse<>(organizationInfoResponse));
@@ -83,7 +85,8 @@ public class OrganizationController {
     })
     @GetMapping("/{organizationId}/members")
     public ResponseEntity<BfResponse<OrganizationMemberResponse>> getOrganizationMembers(
-            @PathVariable Long organizationId) {
+            @PathVariable Long organizationId
+    ) {
         OrganizationMemberResponse organizationMembers = organizationService.getOrganizationMembers(organizationId);
         return ResponseEntity.ok(new BfResponse<>(organizationMembers));
     }
@@ -100,7 +103,8 @@ public class OrganizationController {
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerOrganization(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long organizationId,
-            @RequestParam String introduction) {
+            @RequestParam String introduction
+    ) {
         organizationService.registerOrganization(Long.parseLong(principalDetails.getUsername()), organizationId, introduction);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -116,7 +120,8 @@ public class OrganizationController {
     @DeleteMapping("{organizationId}/departure")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> departOrganization(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long organizationId) {
+            @PathVariable Long organizationId
+    ) {
         organizationService.departOrganization(Long.parseLong(principalDetails.getUsername()), organizationId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
