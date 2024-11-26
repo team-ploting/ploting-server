@@ -19,6 +19,7 @@ import ploting_server.ploting.point.repository.PointRepository;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 /**
@@ -82,14 +83,26 @@ public class PointService {
      * 날짜별 포인트 수를 조회합니다. (잔디)
      */
     @Transactional(readOnly = true)
-    public List<PointListResponse> getPointsByDate(Long memberId, LocalDate startDate, LocalDate endDate) {
+    public List<PointListResponse> getPointsByDate(Long memberId) {
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate endDate = now.with(TemporalAdjusters.lastDayOfMonth());
+
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
         List<Object[]> points = pointRepository.findPointsByDate(memberId, startDate, endDate);
 
         return points.stream()
-                .map((point -> PointListResponse.builder()
-                        .date(((Date) point[0]).toLocalDate())
-                        .totalPoints(((Number) point[1]).intValue())
-                        .build()))
+                .map(point -> {
+                    Date date = (Date) point[0];
+                    Number totalPoints = (Number) point[1];
+
+                    return PointListResponse.builder()
+                            .date(date.toLocalDate())
+                            .totalPoints(totalPoints.intValue())
+                            .build();
+                })
                 .toList();
     }
 }

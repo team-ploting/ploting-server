@@ -54,14 +54,14 @@ public class MemberService {
      */
     @Transactional
     public void registerMemberInfo(Long memberId, MemberRegisterRequest memberRegisterRequest) {
-        Member findMember = memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
         if (memberRepository.existsByNickname(memberRegisterRequest.getNickname())) {
             throw new MemberException(MemberErrorCode.DUPLICATE_NICKNAME);
         }
 
-        findMember.registerMember(memberRegisterRequest);
+        member.registerMember(memberRegisterRequest);
     }
 
     /**
@@ -69,18 +69,18 @@ public class MemberService {
      */
     @Transactional(readOnly = true)
     public MemberInfoResponse getMember(Long memberId) {
-        Member findMember = memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
         return MemberInfoResponse.builder()
-                .name(findMember.getName())
-                .nickname(findMember.getNickname())
-                .location(findMember.getLocation())
-                .gender(findMember.getGender())
-                .birth(findMember.getBirth())
-                .level(findMember.getLevel())
-                .levelType(LevelType.findLevelTypeByLevel(findMember.getLevel()))
-                .createdAt(findMember.getCreatedAt())
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .location(member.getLocation())
+                .gender(member.getGender())
+                .birth(member.getBirth())
+                .level(member.getLevel())
+                .levelType(LevelType.findLevelTypeByLevel(member.getLevel()))
+                .createdAt(member.getCreatedAt())
                 .build();
     }
 
@@ -101,10 +101,10 @@ public class MemberService {
      */
     @Transactional
     public void updateMember(Long memberId, MemberUpdateRequest memberUpdateRequest) {
-        Member findMember = memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
-        findMember.updateMember(memberUpdateRequest);
+        member.updateMember(memberUpdateRequest);
     }
 
     /**
