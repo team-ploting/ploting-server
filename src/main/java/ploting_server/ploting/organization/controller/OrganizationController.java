@@ -35,7 +35,11 @@ public class OrganizationController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모든 단체 목록 조회 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모든 단체 목록 조회 성공",
+                    useReturnTypeSchema = true
+            ),
     })
     @GetMapping("")
     public ResponseEntity<BfResponse<List<OrganizationListResponse>>> getAllOrganizations() {
@@ -48,7 +52,11 @@ public class OrganizationController {
             description = "나의 단체 목록을 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "나의 단체 목록 조회 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "나의 단체 목록 조회 성공",
+                    useReturnTypeSchema = true
+            ),
     })
     @GetMapping("/self")
     public ResponseEntity<BfResponse<List<OrganizationListResponse>>> getMyOrganizations(
@@ -63,7 +71,11 @@ public class OrganizationController {
             description = "단체의 세부 정보를 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 세부 정보 조회 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체 세부 정보 조회 성공",
+                    useReturnTypeSchema = true
+            ),
     })
     @GetMapping("/{organizationId}")
     public ResponseEntity<BfResponse<OrganizationInfoResponse>> getOrganizationInfo(
@@ -81,7 +93,11 @@ public class OrganizationController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 멤버 리스트 조회 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체 멤버 리스트 조회 성공",
+                    useReturnTypeSchema = true
+            ),
     })
     @GetMapping("/{organizationId}/members")
     public ResponseEntity<BfResponse<OrganizationMemberResponse>> getOrganizationMembers(
@@ -96,8 +112,16 @@ public class OrganizationController {
             description = "단체를 가입합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 가입 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체 가입 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "이미 가입한 단체",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 400, \"message\": \"이미 해당 단체에 가입된 상태입니다.\" }"))
+            )
     })
     @PostMapping("{organizationId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerOrganization(
@@ -114,8 +138,16 @@ public class OrganizationController {
             description = "단체를 탈퇴합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 탈퇴 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체 탈퇴 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "단체장은 탈퇴 불가",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 400, \"message\": \"단체장은 단체를 탈퇴할 수 없습니다.\" }"))
+            )
     })
     @DeleteMapping("{organizationId}/departure")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> departOrganization(

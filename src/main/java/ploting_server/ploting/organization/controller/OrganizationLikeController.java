@@ -28,8 +28,16 @@ public class OrganizationLikeController {
             description = "단체의 좋아요를 누릅니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 좋아요 생성 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체 좋아요 생성 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "이미 좋아요를 누른 상태",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 400, \"message\": \"이미 좋아요를 누른 상태입니다.\" }"))
+            )
     })
     @PostMapping("{organizationId}/like")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> pressOrganizationLike(
@@ -45,8 +53,16 @@ public class OrganizationLikeController {
             description = "단체의 좋아요를 취소합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 좋아요 삭제 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체 좋아요 삭제 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "좋아요를 누르지 않은 상태",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 400, \"message\": \"좋아요를 누르지 않은 상태입니다.\" }"))
+            )
     })
     @DeleteMapping("{organizationId}/like")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> cancelOrganizationLike(

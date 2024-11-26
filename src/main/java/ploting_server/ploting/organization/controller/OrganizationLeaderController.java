@@ -30,8 +30,11 @@ public class OrganizationLeaderController {
             description = "단체장으로서 단체를 생성합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 생성 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체 생성 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            )
     })
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createOrganization(
@@ -47,8 +50,21 @@ public class OrganizationLeaderController {
             description = "단체의 정보를 수정합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 정보 수정 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체 정보 수정 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "단체 정보 수정 실패",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 400, \"message\": \"최대 멤버 수는 현재 멤버 수보다 작을 수 없습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "단체장 권한 없음",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 403, \"message\": \"단체의 단체장이 아닙니다.\" }"))
+            )
     })
     @PatchMapping("/{organizationId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> updateOrganization(
@@ -65,8 +81,24 @@ public class OrganizationLeaderController {
             description = "단체를 삭제합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "단체 삭제 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체 삭제 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "단체 삭제 실패",
+                    content = @Content(examples = {
+                            @ExampleObject(name = "남아있는 멤버 존재", value = "{ \"code\": 400, \"message\": \"단체를 삭제하려면 단체장 한 명만 남아 있어야 합니다.\" }"),
+                            @ExampleObject(name = "활성화된 모임 존재", value = "{ \"code\": 400, \"message\": \"활성화된 모임이 있을 경우 단체를 삭제할 수 없습니다.\" }")
+                    })
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "단체장 권한 없음",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 403, \"message\": \"단체의 단체장이 아닙니다.\" }"))
+            )
     })
     @DeleteMapping("/{organizationId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteOrganization(
