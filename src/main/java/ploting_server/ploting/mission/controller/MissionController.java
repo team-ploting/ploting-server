@@ -37,7 +37,8 @@ public class MissionController {
     })
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createMission(
-            @RequestBody MissionCreateRequest missionCreateRequest) {
+            @RequestBody MissionCreateRequest missionCreateRequest
+    ) {
         missionService.createMission(missionCreateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -52,7 +53,8 @@ public class MissionController {
     })
     @DeleteMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteMission(
-            @RequestParam Long missionId) {
+            @RequestParam Long missionId
+    ) {
         missionService.deleteMission(missionId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -81,7 +83,8 @@ public class MissionController {
     })
     @GetMapping("/{missionId}")
     public ResponseEntity<BfResponse<MissionInfoResponse>> getAllMissions(
-            @PathVariable Long missionId) {
+            @PathVariable Long missionId
+    ) {
         MissionInfoResponse missionInfoResponse = missionService.getMissionInfo(missionId);
         return ResponseEntity.ok(new BfResponse<>(missionInfoResponse));
     }

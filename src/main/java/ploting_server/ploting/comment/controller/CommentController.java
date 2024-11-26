@@ -37,7 +37,8 @@ public class CommentController {
     public ResponseEntity<BfResponse<GlobalSuccessCode>> createComment(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @RequestParam Long postId,
-            @RequestBody CommentCreateRequest commentCreateRequest) {
+            @RequestBody CommentCreateRequest commentCreateRequest
+    ) {
         commentService.createComment(Long.parseLong(principalDetails.getUsername()), postId, commentCreateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -54,7 +55,8 @@ public class CommentController {
     public ResponseEntity<BfResponse<GlobalSuccessCode>> updatePost(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long commentId,
-            @RequestBody CommentUpdateRequest commentUpdateRequest) {
+            @RequestBody CommentUpdateRequest commentUpdateRequest
+    ) {
         commentService.updateComment(Long.parseLong(principalDetails.getUsername()), commentId, commentUpdateRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -70,7 +72,8 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteComment(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long commentId) {
+            @PathVariable Long commentId
+    ) {
         commentService.deleteComment(Long.parseLong(principalDetails.getUsername()), commentId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }

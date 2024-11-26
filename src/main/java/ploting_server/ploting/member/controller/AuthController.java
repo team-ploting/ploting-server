@@ -31,7 +31,9 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "JWT 토큰 갱신 성공", useReturnTypeSchema = true),
     })
     @PostMapping("/refresh")
-    public ResponseEntity<BfResponse<JwtTokenResponse>> refreshTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<BfResponse<JwtTokenResponse>> refreshTokens(
+            @RequestBody RefreshTokenRequest refreshTokenRequest
+    ) {
         JwtTokenResponse jwtTokenResponse = authService.refreshTokens(refreshTokenRequest);
         return ResponseEntity.ok(new BfResponse<>(jwtTokenResponse));
     }

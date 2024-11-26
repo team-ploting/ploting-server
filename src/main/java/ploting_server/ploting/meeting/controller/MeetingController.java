@@ -52,7 +52,8 @@ public class MeetingController {
     })
     @GetMapping("/self")
     public ResponseEntity<BfResponse<List<MeetingListResponse>>> getAllMeetings(
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
         List<MeetingListResponse> allMeetings = meetingService.getMyMeetings(Long.parseLong(principalDetails.getUsername()));
         return ResponseEntity.ok(new BfResponse<>(allMeetings));
     }
@@ -67,7 +68,8 @@ public class MeetingController {
     @GetMapping("/{meetingId}")
     public ResponseEntity<BfResponse<MeetingInfoResponse>> getMeetingInfo(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long meetingId) {
+            @PathVariable Long meetingId
+    ) {
         MeetingInfoResponse meetingInfoResponse = meetingService.getMeetingInfo(
                 Long.parseLong(principalDetails.getUsername()), meetingId);
         return ResponseEntity.ok(new BfResponse<>(meetingInfoResponse));
@@ -83,7 +85,8 @@ public class MeetingController {
     })
     @GetMapping("/{meetingId}/members")
     public ResponseEntity<BfResponse<MeetingMemberResponse>> getMeetingMembers(
-            @PathVariable Long meetingId) {
+            @PathVariable Long meetingId
+    ) {
         MeetingMemberResponse meetingMembers = meetingService.getMeetingMembers(meetingId);
         return ResponseEntity.ok(new BfResponse<>(meetingMembers));
     }
@@ -99,7 +102,8 @@ public class MeetingController {
     @PostMapping("{meetingId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerMeeting(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long meetingId) {
+            @PathVariable Long meetingId
+    ) {
         meetingService.registerMeeting(Long.parseLong(principalDetails.getUsername()), meetingId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -115,7 +119,8 @@ public class MeetingController {
     @DeleteMapping("{meetingId}/departure")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> departMeeting(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long meetingId) {
+            @PathVariable Long meetingId
+    ) {
         meetingService.departMeeting(Long.parseLong(principalDetails.getUsername()), meetingId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }

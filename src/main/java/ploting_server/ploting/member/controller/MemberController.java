@@ -38,7 +38,8 @@ public class MemberController {
     @PatchMapping("/registration")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerMember(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @RequestBody MemberRegisterRequest memberRegisterRequest) {
+            @RequestBody MemberRegisterRequest memberRegisterRequest
+    ) {
         memberService.registerMemberInfo(Long.parseLong(principalDetails.getUsername()), memberRegisterRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -53,7 +54,8 @@ public class MemberController {
     })
     @GetMapping("/{memberId}")
     public ResponseEntity<BfResponse<MemberInfoResponse>> getMember(
-            @PathVariable Long memberId) {
+            @PathVariable Long memberId
+    ) {
         MemberInfoResponse memberInfoResponse = memberService.getMember(memberId);
         return ResponseEntity.ok(new BfResponse<>(memberInfoResponse));
     }
@@ -68,7 +70,8 @@ public class MemberController {
     })
     @GetMapping("/nickname")
     public ResponseEntity<BfResponse<MemberNicknameDuplicationResponse>> checkMemberNickname(
-            @RequestParam String nickname) {
+            @RequestParam String nickname
+    ) {
         MemberNicknameDuplicationResponse memberNicknameDuplicationResponse = memberService.checkNicknameDuplicate(nickname);
         return ResponseEntity.ok(new BfResponse<>(memberNicknameDuplicationResponse));
     }
@@ -83,7 +86,8 @@ public class MemberController {
     })
     @DeleteMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteMember(
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
         memberService.deleteMember(Long.parseLong(principalDetails.getUsername()));
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -99,7 +103,8 @@ public class MemberController {
 //    @PatchMapping("")
 //    public ResponseEntity<BfResponse<GlobalSuccessCode>> updateMember(
 //            @AuthenticationPrincipal PrincipalDetails principalDetails,
-//            @RequestBody MemberUpdateRequest memberUpdateRequest) {
+//            @RequestBody MemberUpdateRequest memberUpdateRequest
+//    ) {
 //        memberService.updateMember(Long.parseLong(principalDetails.getUsername()), memberUpdateRequest);
 //        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
 //    }

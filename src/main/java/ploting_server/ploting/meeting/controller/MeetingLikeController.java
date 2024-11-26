@@ -34,7 +34,8 @@ public class MeetingLikeController {
     @PostMapping("{meetingId}/like")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> pressMeetingLike(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long meetingId) {
+            @PathVariable Long meetingId
+    ) {
         meetingLikeService.pressMeetingLike(Long.parseLong(principalDetails.getUsername()), meetingId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -50,7 +51,8 @@ public class MeetingLikeController {
     @DeleteMapping("{meetingId}/like")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> cancelMeetingLike(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long meetingId) {
+            @PathVariable Long meetingId
+    ) {
         meetingLikeService.cancelMeetingLike(Long.parseLong(principalDetails.getUsername()), meetingId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }

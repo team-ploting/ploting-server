@@ -53,7 +53,8 @@ public class MeetingLeaderController {
     @DeleteMapping("/{meetingId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> deleteMeeting(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @PathVariable Long meetingId) {
+            @PathVariable Long meetingId
+    ) {
         meetingLeaderService.deleteMeeting(Long.parseLong(principalDetails.getUsername()), meetingId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
@@ -70,11 +71,12 @@ public class MeetingLeaderController {
 //    public ResponseEntity<BfResponse<GlobalSuccessCode>> updateMeeting(
 //            @AuthenticationPrincipal PrincipalDetails principalDetails,
 //            @PathVariable Long meetingId,
-//            @RequestBody MeetingUpdateRequest meetingUpdateRequest) {
+//            @RequestBody MeetingUpdateRequest meetingUpdateRequest
+//    ) {
 //        meetingLeaderService.updateMeeting(Long.parseLong(principalDetails.getUsername()), meetingId, meetingUpdateRequest);
 //        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
 //    }
-
+//
 //    @Operation(
 //            summary = "멤버 강퇴",
 //            description = "모임에서 멤버를 강퇴합니다."
@@ -87,7 +89,8 @@ public class MeetingLeaderController {
 //    public ResponseEntity<BfResponse<GlobalSuccessCode>> banishMember(
 //            @AuthenticationPrincipal PrincipalDetails principalDetails,
 //            @PathVariable Long meetingId,
-//            @RequestParam Long kickMemberId) {
+//            @RequestParam Long kickMemberId
+//    ) {
 //        meetingLeaderService.banishMember(Long.parseLong(principalDetails.getUsername()), meetingId, kickMemberId);
 //        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
 //    }
