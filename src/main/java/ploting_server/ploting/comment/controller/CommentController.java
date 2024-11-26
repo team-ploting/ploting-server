@@ -55,6 +55,11 @@ public class CommentController {
                     responseCode = "200",
                     description = "댓글 수정 성공",
                     content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "댓글 수정 권한 없음",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 403, \"message\": \"댓글의 작성자가 아닙니다.\" }"))
             )
     })
     @PatchMapping("/{commentId}")
@@ -76,6 +81,11 @@ public class CommentController {
                     responseCode = "200",
                     description = "댓글 삭제 성공",
                     content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "댓글 삭제 권한 없음",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 403, \"message\": \"댓글의 작성자가 아닙니다.\" }"))
             )
     })
     @DeleteMapping("/{commentId}")
