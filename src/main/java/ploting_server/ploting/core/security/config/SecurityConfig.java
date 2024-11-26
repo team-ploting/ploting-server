@@ -85,6 +85,7 @@ public class SecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(authenticatedRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(authenticatedRequestMatchers())
                         .hasAnyAuthority(RoleType.ROLE_USER.name(), RoleType.ROLE_ADMIN.name())
                         .anyRequest().authenticated())
@@ -106,6 +107,7 @@ public class SecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(adminRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(adminRequestMatchers())
                         .hasAuthority(RoleType.ROLE_ADMIN.name())
                         .anyRequest().authenticated())
@@ -302,20 +304,14 @@ public class SecurityConfig {
         // 허용할 헤더
         configuration.setAllowedHeaders(
                 Arrays.asList(
-                        "*"
+                        "Authorization",
+                        "Content-Type",
+                        "Cache-Control",
+                        "X-Requested-With",
+                        "Origin",
+                        "Accept"
                 )
         );
-//        configuration.setAllowedHeaders(
-//                Arrays.asList(
-//                        "Authorization",
-//                        "Content-Type",
-//                        "Cache-Control",
-//                        "X-Requested-With",
-//                        "Origin",
-//                        "Accept",
-//                        "Key"
-//                )
-//        );
 
         configuration.setMaxAge(3600L);
 
