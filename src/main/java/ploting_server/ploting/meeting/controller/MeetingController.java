@@ -35,7 +35,11 @@ public class MeetingController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모든 모임 목록 조회 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모든 모임 목록 조회 성공",
+                    useReturnTypeSchema = true
+            ),
     })
     @GetMapping("")
     public ResponseEntity<BfResponse<List<MeetingListResponse>>> getAllMeetings() {
@@ -48,7 +52,11 @@ public class MeetingController {
             description = "나의 모임 목록을 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모든 모임 목록 조회 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모든 모임 목록 조회 성공",
+                    useReturnTypeSchema = true
+            ),
     })
     @GetMapping("/self")
     public ResponseEntity<BfResponse<List<MeetingListResponse>>> getAllMeetings(
@@ -63,7 +71,11 @@ public class MeetingController {
             description = "모임의 세부 정보를 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모임 세부 정보 조회 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모임 세부 정보 조회 성공",
+                    useReturnTypeSchema = true
+            ),
     })
     @GetMapping("/{meetingId}")
     public ResponseEntity<BfResponse<MeetingInfoResponse>> getMeetingInfo(
@@ -81,7 +93,11 @@ public class MeetingController {
     )
     @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모임 멤버 리스트 조회 성공", useReturnTypeSchema = true),
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모임 멤버 리스트 조회 성공",
+                    useReturnTypeSchema = true
+            ),
     })
     @GetMapping("/{meetingId}/members")
     public ResponseEntity<BfResponse<MeetingMemberResponse>> getMeetingMembers(
@@ -96,8 +112,16 @@ public class MeetingController {
             description = "모임을 가입합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모임 가입 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모임 가입 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "이미 가입한 모임",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 400, \"message\": \"이미 해당 모임에 가입된 상태입니다.\" }"))
+            )
     })
     @PostMapping("{meetingId}")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerMeeting(
@@ -113,8 +137,16 @@ public class MeetingController {
             description = "모임을 탈퇴합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "모임 탈퇴 성공",
-                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }")))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "모임 탈퇴 성공",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "모임장은 탈퇴 불가",
+                    content = @Content(examples = @ExampleObject(value = "{ \"code\": 400, \"message\": \"모임장은 모임을 탈퇴할 수 없습니다.\" }"))
+            )
     })
     @DeleteMapping("{meetingId}/departure")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> departMeeting(
