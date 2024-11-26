@@ -136,7 +136,7 @@ public class SecurityConfig {
                 antMatcher(GET, "/filters/main"),
 
                 // 회원
-                antMatcher(GET, "/members"),
+                antMatcher(GET, "/members/{memberId}"),
                 antMatcher(GET, "/members/check-nickname"),
 
                 // 단체
@@ -148,7 +148,11 @@ public class SecurityConfig {
 
                 // 미션
                 antMatcher(GET, "/missions"),
-                antMatcher(GET, "/missions/{missionId}")
+                antMatcher(GET, "/missions/{missionId}"),
+
+                // 포인트
+                antMatcher(GET, "/points/{memberId}"),
+                antMatcher(GET, "/points/{memberId}/grass")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -217,9 +221,7 @@ public class SecurityConfig {
                 antMatcher(DELETE, "/comments/{commentId}/like"),
 
                 // 포인트
-                antMatcher(POST, "/points"),
-                antMatcher(GET, "/points/grass"),
-                antMatcher(GET, "/points/self")
+                antMatcher(POST, "/points")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
