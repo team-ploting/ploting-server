@@ -60,10 +60,11 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
         // URL 방식으로 토큰 전달
         String redirectUrl = String.format(
-                "http://localhost:5173?accessToken=%s",
-                jwtTokens.getAccessToken()
+                "http://localhost:5173?accessToken=%s&refreshToken=%s",
+                jwtTokens.getAccessToken(),
+                jwtTokens.getRefreshToken()
         );
-
+        
         // 성공 후 리다이렉트
         response.sendRedirect(redirectUrl);
 
