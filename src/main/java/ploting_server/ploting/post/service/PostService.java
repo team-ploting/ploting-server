@@ -130,6 +130,7 @@ public class PostService {
                 .commentCount(post.getCommentCount())
                 .hasLiked(postLikeRepository.existsByMemberIdAndPostId(memberId, postId))
                 .myPost(post.getMember().getId().equals(memberId))
+                .createdAt(post.getCreatedAt())
                 .comments(commentInfoResponse)
                 .build();
     }
