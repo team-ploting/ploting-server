@@ -10,13 +10,13 @@ import ploting_server.ploting.core.response.ErrorResponse;
 @Getter
 public enum OrganizationErrorCode implements BaseErrorCode {
     // 400 BAD_REQUEST
-    INVALID_MEMBER_LIMIT(400, "최대 멤버 제한이 현재 멤버 수보다 작을 수 없습니다.", HttpStatus.BAD_REQUEST),
-    CANNOT_DELETE_ORGANIZATION_WITH_MULTIPLE_MEMBERS(400, "멤버 수가 1명(단체장)이 아닐 경우 단체를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
-    CANNOT_DELETE_ORGANIZATION_WITH_EXISTING_MEETINGS(400, "활성화된 모임 수가 1개 이상일 경우 단체를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
-    CANNOT_LEAVE_ORGANIZATION_AS_LEADER(400, "단체장은 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    INVALID_MEMBER_LIMIT(400, "최대 멤버 수는 현재 멤버 수보다 작을 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_DELETE_ORGANIZATION_WITH_MULTIPLE_MEMBERS(400, "단체를 삭제하려면 단체장 한 명만 남아 있어야 합니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_DELETE_ORGANIZATION_WITH_EXISTING_MEETINGS(400, "활성화된 모임이 있을 경우 단체를 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_KICK_SELF_LEADER(400, "단체장은 스스로 강퇴될 수 없습니다.", HttpStatus.BAD_REQUEST),
-    CANNOT_WITHDRAW_AS_ORGANIZATION_LEADER(400, "회원이 단체장인 단체가 있어 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
-    ALREADY_REGISTERED_MEMBER(400, "해당 단체에 이미 가입된 회원입니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_LEAVE_ORGANIZATION_AS_LEADER(400, "단체장은 단체를 탈퇴할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_WITHDRAW_AS_ORGANIZATION_LEADER(400, "단체장을 맡고 있는 단체가 있어 회원 탈퇴가 불가능합니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_REGISTERED_MEMBER(400, "이미 해당 단체에 가입된 상태입니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_ORGANIZATION_LIKE(400, "좋아요를 누르지 않은 상태입니다.", HttpStatus.BAD_REQUEST),
     ALREADY_EXIST_ORGANIZATION_LIKE(400, "이미 좋아요를 누른 상태입니다.", HttpStatus.BAD_REQUEST),
 
