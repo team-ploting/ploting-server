@@ -51,6 +51,31 @@ public class PointService {
                 .build();
 
         pointRepository.save(point);
+
+        // 포인트 갱신
+        Integer totalPointSum = pointRepository.findTotalPointByMemberId(memberId);
+        int totalPoints = totalPointSum != null ? totalPointSum : 0;
+        member.updateLevel((totalPoints - 1) / LEVEL_UP_UNIT + 1);
+    }
+
+    /**
+     * 포인트 수 및 레벨 조회
+     */
+    @Transactional(readOnly = true)
+    public PointInfoResponse getMyPointAndLevel(Long memberId) {
+        Integer totalPointSum = pointRepository.findTotalPointByMemberId(memberId);
+        int totalPoints = totalPointSum != null ? totalPointSum : 0;
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        return PointInfoResponse.builder()
+                .currentLevelPoints(totalPoints % LEVEL_UP_UNIT)
+                .nextLevelPoints(LEVEL_UP_UNIT)
+                .level(member.getLevel())
+                .levelType(LevelType.findLevelTypeByLevel(member.getLevel()))
+                .totalPoints(totalPoints)
+                .build();
     }
 
     /**
@@ -66,22 +91,5 @@ public class PointService {
                         .totalPoints(((Number) point[1]).intValue())
                         .build()))
                 .toList();
-    }
-
-    /**
-     * 포인트 수 및 레벨 조회
-     */
-    @Transactional(readOnly = true)
-    public PointInfoResponse getMyPointAndLevel(Long memberId) {
-        int totalPoints = pointRepository.findTotalPointByMemberId(memberId);
-
-        return PointInfoResponse.builder()
-                .currentLevelPoints(totalPoints % LEVEL_UP_UNIT)
-                .nextLevelPoints(LEVEL_UP_UNIT)
-                .level(totalPoints / LEVEL_UP_UNIT)
-                .levelType(LevelType.findLevelTypeByLevel(totalPoints / LEVEL_UP_UNIT))
-                .totalPoints(totalPoints)
-                .build();
-
     }
 }

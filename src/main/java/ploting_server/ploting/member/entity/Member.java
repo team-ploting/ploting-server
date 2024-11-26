@@ -109,4 +109,9 @@ public class Member {
         this.gender = memberUpdateRequest.getGender();
         this.birth = memberUpdateRequest.getBirth();
     }
+
+    // 회원 레벨 업데이트
+    public void updateLevel(int level) {
+        this.level = level;
+    }
 }

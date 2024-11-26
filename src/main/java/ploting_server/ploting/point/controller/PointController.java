@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,38 +40,43 @@ public class PointController {
     @PostMapping("")
     public ResponseEntity<BfResponse<GlobalSuccessCode>> receivePoints(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
-            @RequestParam Long missionId) {
+            @RequestParam Long missionId
+    ) {
         pointService.receivePoints(Long.parseLong(principalDetails.getUsername()), missionId);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 
     @Operation(
-            summary = "나의 날짜별 포인트 수 조회 (잔디)",
-            description = "나의 날짜별 포인트 수를 조회합니다."
+            summary = "날짜별 포인트 수 조회 (잔디)",
+            description = "날짜별 포인트 수를 조회합니다."
     )
+    @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "나의 포인트 수 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(responseCode = "200", description = "날짜별 포인트 수 조회 성공", useReturnTypeSchema = true)
     })
-    @GetMapping("/grass")
+    @GetMapping("/{memberId}/grass")
     public ResponseEntity<BfResponse<List<PointListResponse>>> receivePoints(
-            @AuthenticationPrincipal PrincipalDetails principalDetails,
+            @PathVariable Long memberId,
             @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate) {
-        List<PointListResponse> pointsByDate = pointService.getPointsByDate(Long.parseLong(principalDetails.getUsername()), startDate, endDate);
+            @RequestParam LocalDate endDate
+    ) {
+        List<PointListResponse> pointsByDate = pointService.getPointsByDate(memberId, startDate, endDate);
         return ResponseEntity.ok(new BfResponse<>(pointsByDate));
     }
 
     @Operation(
-            summary = "나의 레벨 및 포인트 수 조회",
-            description = "나의 레벨 및 포인트 수를 조회합니다."
+            summary = "레벨 및 포인트 수 조회",
+            description = "레벨 및 포인트 수를 조회합니다."
     )
+    @SecurityRequirements(value = {})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "나의 레벨 및 포인트 수 조회 성공", useReturnTypeSchema = true)
+            @ApiResponse(responseCode = "200", description = "레벨 및 포인트 수 조회 성공", useReturnTypeSchema = true)
     })
-    @GetMapping("/self")
+    @GetMapping("/{memberId}")
     public ResponseEntity<BfResponse<PointInfoResponse>> getMyPointAndLevel(
-            @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        PointInfoResponse pointInfoResponse = pointService.getMyPointAndLevel(Long.parseLong(principalDetails.getUsername()));
+            @PathVariable Long memberId
+    ) {
+        PointInfoResponse pointInfoResponse = pointService.getMyPointAndLevel(memberId);
         return ResponseEntity.ok(new BfResponse<>(pointInfoResponse));
     }
 }
