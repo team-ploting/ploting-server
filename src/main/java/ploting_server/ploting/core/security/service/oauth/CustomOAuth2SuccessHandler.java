@@ -1,9 +1,11 @@
 package ploting_server.ploting.core.security.service.oauth;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -12,7 +14,6 @@ import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.exception.MemberException;
 import ploting_server.ploting.core.security.dto.jwt.response.JwtTokenResponse;
 import ploting_server.ploting.core.security.dto.oauth.CustomOAuth2User;
-import ploting_server.ploting.core.security.service.jwt.JwtService;
 import ploting_server.ploting.member.dto.server.MemberLoginDto;
 import ploting_server.ploting.member.entity.ProviderType;
 import ploting_server.ploting.member.entity.RoleType;
@@ -28,7 +29,9 @@ import java.io.IOException;
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final AuthService authService;
-    private final JwtService jwtService;
+
+    @Value("${jwt.access-expiration-seconds}")
+    private long accessExpirationSeconds;
 
     /**
      * OAuth2 회원가입 및 로그인
@@ -55,14 +58,19 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         // 로그인 처리 및 JWT 토큰 생성
         JwtTokenResponse jwtTokens = authService.login(memberLoginDto);
 
-        // URL 방식으로 토큰 전달
-        String redirectUrl = String.format(
-                "http://localhost:5173?accessToken=%s&refreshToken=%s",
-                jwtTokens.getAccessToken(),
-                jwtTokens.getRefreshToken()
-        );
+        // Access Token 쿠키 설정
+        setTokenCookie(response, "accessToken", jwtTokens.getAccessToken(), (int) (accessExpirationSeconds / 1000)); // 1시간 유효기간
 
         // 성공 후 리다이렉트
-        response.sendRedirect(redirectUrl);
+        response.sendRedirect("http://localhost:5173");
+    }
+
+    private void setTokenCookie(HttpServletResponse response, String name, String value, int maxAge) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setHttpOnly(true); // JavaScript 접근 불가
+//        cookie.setSecure(true); // HTTPS에서만 전송
+        cookie.setPath("/"); // 애플리케이션 전체에서 사용 가능
+        cookie.setMaxAge(maxAge); // 쿠키 유효기간 설정
+        response.addCookie(cookie);
     }
 }
