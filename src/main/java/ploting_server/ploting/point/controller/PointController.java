@@ -18,7 +18,6 @@ import ploting_server.ploting.point.dto.response.PointInfoResponse;
 import ploting_server.ploting.point.dto.response.PointListResponse;
 import ploting_server.ploting.point.service.PointService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -56,11 +55,9 @@ public class PointController {
     })
     @GetMapping("/{memberId}/grass")
     public ResponseEntity<BfResponse<List<PointListResponse>>> receivePoints(
-            @PathVariable Long memberId,
-            @RequestParam LocalDate startDate,
-            @RequestParam LocalDate endDate
+            @PathVariable Long memberId
     ) {
-        List<PointListResponse> pointsByDate = pointService.getPointsByDate(memberId, startDate, endDate);
+        List<PointListResponse> pointsByDate = pointService.getPointsByDate(memberId);
         return ResponseEntity.ok(new BfResponse<>(pointsByDate));
     }
 
