@@ -65,7 +65,7 @@ public class MemberService {
     }
 
     /**
-     * 회원의 정보를 반환합니다.
+     * 회원의 정보를 조회합니다.
      */
     @Transactional(readOnly = true)
     public MemberInfoResponse getMember(Long memberId) {
