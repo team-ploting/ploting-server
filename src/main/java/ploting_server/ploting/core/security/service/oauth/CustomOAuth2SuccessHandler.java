@@ -58,11 +58,20 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         // 로그인 처리 및 JWT 토큰 생성
         JwtTokenResponse jwtTokens = authService.login(memberLoginDto);
 
-        // Access Token 쿠키 설정
-        setTokenCookie(response, "accessToken", jwtTokens.getAccessToken(), (int) (accessExpirationSeconds / 1000)); // 1시간 유효기간
+        // URL 방식으로 토큰 전달
+        String redirectUrl = String.format(
+                "http://localhost:5173?accessToken=%s",
+                jwtTokens.getAccessToken()
+        );
 
         // 성공 후 리다이렉트
-        response.sendRedirect("http://localhost:5173");
+        response.sendRedirect(redirectUrl);
+
+//        // Access Token 쿠키 설정
+//        setTokenCookie(response, "accessToken", jwtTokens.getAccessToken(), (int) (accessExpirationSeconds / 1000)); // 1시간 유효기간
+//
+//        // 성공 후 리다이렉트
+//        response.sendRedirect("http://localhost:5173");
     }
 
     private void setTokenCookie(HttpServletResponse response, String name, String value, int maxAge) {
