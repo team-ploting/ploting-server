@@ -13,6 +13,7 @@ import ploting_server.ploting.mission.entity.Mission;
 import ploting_server.ploting.mission.repository.MissionRepository;
 import ploting_server.ploting.point.dto.response.PointInfoResponse;
 import ploting_server.ploting.point.dto.response.PointListResponse;
+import ploting_server.ploting.point.entity.GrassType;
 import ploting_server.ploting.point.entity.LevelType;
 import ploting_server.ploting.point.entity.Point;
 import ploting_server.ploting.point.repository.PointRepository;
@@ -20,7 +21,10 @@ import ploting_server.ploting.point.repository.PointRepository;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 포인트를 관리하는 서비스 클래스입니다.
@@ -93,16 +97,26 @@ public class PointService {
 
         List<Object[]> points = pointRepository.findPointsByDate(memberId, startDate, endDate);
 
-        return points.stream()
-                .map(point -> {
-                    Date date = (Date) point[0];
-                    Number totalPoints = (Number) point[1];
+        Map<Integer, PointListResponse> dateMap = new HashMap<>();
+        for (int day = 1; day <= endDate.getDayOfMonth(); day++) {
+            dateMap.put(day, PointListResponse.builder()
+                    .date(day)
+                    .grassLevel(GrassType.ZERO.getStep())
+                    .build());
+        }
 
-                    return PointListResponse.builder()
-                            .date(date.toLocalDate())
-                            .totalPoints(totalPoints.intValue())
-                            .build();
-                })
+        for (Object[] point : points) {
+            LocalDate date = ((Date) point[0]).toLocalDate();
+            Number totalPoints = (Number) point[1];
+
+            dateMap.put(date.getDayOfMonth(), PointListResponse.builder()
+                    .date(date.getDayOfMonth())
+                    .grassLevel(GrassType.findGrassStepByPoint(totalPoints.intValue()))
+                    .build());
+        }
+
+        return dateMap.values().stream()
+                .sorted(Comparator.comparing(PointListResponse::getDate))
                 .toList();
     }
 }
