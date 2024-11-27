@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,11 +21,8 @@ public class MeetingListResponse {
     @Schema(description = "모임의 이름", example = "모임의 이름")
     private final String name;
 
-    @Schema(description = "모임 날짜", example = "2024-08-17")
-    private final LocalDate meetDate;
-
-    @Schema(description = "모임 시간", example = "18")
-    private final int meetHour;
+    @Schema(description = "모임 일자", example = "9월 21일 오후 6시")
+    private final String meetDate;
 
     @Schema(description = "모임의 지역", example = "모임의 지역")
     private final String location;

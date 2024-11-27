@@ -21,7 +21,9 @@ import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.entity.Organization;
 import ploting_server.ploting.point.entity.LevelType;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 모임을 관리하는 서비스 클래스입니다.
@@ -42,13 +44,14 @@ public class MeetingService {
     public List<MeetingListResponse> getAllMeetings() {
         List<Meeting> meetings = meetingRepository.findAllOrderByCreatedAtDesc();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
+
         return meetings.stream()
                 .map(meeting -> MeetingListResponse.builder()
                         .id(meeting.getId())
                         .activeStatus(meeting.isActiveStatus())
                         .name(meeting.getName())
-                        .meetDate(meeting.getMeetDate().toLocalDate())
-                        .meetHour(meeting.getMeetDate().getHour())
+                        .meetDate(meeting.getMeetDate().format(formatter))
                         .location(meeting.getLocation())
                         .minLevel(meeting.getMinLevel())
                         .memberCount(meeting.getMemberCount())
@@ -69,13 +72,14 @@ public class MeetingService {
     public List<MeetingListResponse> getMyMeetings(Long memberId) {
         List<Meeting> meetings = meetingRepository.findAllByMemberIdOrderByCreatedAtDesc(memberId);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
+
         return meetings.stream()
                 .map(meeting -> MeetingListResponse.builder()
                         .id(meeting.getId())
                         .activeStatus(meeting.isActiveStatus())
                         .name(meeting.getName())
-                        .meetDate(meeting.getMeetDate().toLocalDate())
-                        .meetHour(meeting.getMeetDate().getHour())
+                        .meetDate(meeting.getMeetDate().format(formatter))
                         .location(meeting.getLocation())
                         .minLevel(meeting.getMinLevel())
                         .memberCount(meeting.getMemberCount())
@@ -113,11 +117,12 @@ public class MeetingService {
                         .build())
                 .toList();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
+
         return MeetingInfoResponse.builder()
                 .name(meeting.getName())
                 .location(meeting.getLocation())
-                .meetDate(meeting.getMeetDate().toLocalDate())
-                .meetHour(meeting.getMeetDate().getHour())
+                .meetDate(meeting.getMeetDate().format(formatter))
                 .description(meeting.getDescription())
                 .memberCount(meeting.getMemberCount())
                 .maxMember(meeting.getMaxMember())
