@@ -23,7 +23,9 @@ import ploting_server.ploting.organization.repository.OrganizationMemberReposito
 import ploting_server.ploting.organization.repository.OrganizationRepository;
 import ploting_server.ploting.point.entity.LevelType;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 단체를 관리하는 서비스 클래스입니다.
@@ -102,14 +104,15 @@ public class OrganizationService {
         // 단체의 모임 리스트 조회
         List<Meeting> top3MeetingsByCreatedAt = meetingRepository.findTop3ByActiveStatusTrueOrderByCreatedAtDesc();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
+
         // 모임 리스트를 MeetingListResponse 리스트로 변환
         List<MeetingListResponse> top3Meetings = top3MeetingsByCreatedAt.stream()
                 .map(meeting -> MeetingListResponse.builder()
                         .id(meeting.getId())
                         .activeStatus(meeting.isActiveStatus())
                         .name(meeting.getName())
-                        .meetDate(meeting.getMeetDate().toLocalDate())
-                        .meetHour(meeting.getMeetDate().getHour())
+                        .meetDate(meeting.getMeetDate().format(formatter))
                         .location(meeting.getLocation())
                         .minLevel(meeting.getMinLevel())
                         .memberCount(meeting.getMemberCount())
