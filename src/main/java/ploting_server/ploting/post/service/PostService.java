@@ -22,6 +22,7 @@ import ploting_server.ploting.post.entity.PostLike;
 import ploting_server.ploting.post.repository.PostLikeRepository;
 import ploting_server.ploting.post.repository.PostRepository;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -106,6 +107,9 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_ID));
 
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
         List<CommentListResponse> commentListResponse = post.getComments().stream()
                 .map(comment -> CommentListResponse.builder()
                         .id(comment.getId())
@@ -131,7 +135,8 @@ public class PostService {
                 .commentCount(post.getCommentCount())
                 .hasLiked(postLikeRepository.existsByMemberIdAndPostId(memberId, postId))
                 .myPost(post.getMember().getId().equals(memberId))
-                .createdAt(post.getCreatedAt())
+                .createdDate(post.getCreatedAt().format(dateFormatter))
+                .createdTime(post.getCreatedAt().format(timeFormatter))
                 .comments(commentListResponse)
                 .build();
     }
@@ -143,6 +148,9 @@ public class PostService {
     public List<PostListResponse> getMyPosts(Long memberId) {
         List<Post> myPosts = postRepository.findAllByMemberId(memberId);
 
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
         return myPosts.stream()
                 .map(post -> PostListResponse.builder()
                         .id(post.getId())
@@ -151,7 +159,8 @@ public class PostService {
                         .authorNickName(post.getMember().getNickname())
                         .likeCount(post.getLikeCount())
                         .commentCount(post.getCommentCount())
-                        .createdAt(post.getCreatedAt())
+                        .createdDate(post.getCreatedAt().format(dateFormatter))
+                        .createdTime(post.getCreatedAt().format(timeFormatter))
                         .build())
                 .toList();
     }
@@ -163,6 +172,9 @@ public class PostService {
     public List<PostListResponse> getPostsFromMyComments(Long memberId) {
         List<Post> postsByMyComments = postRepository.findAllByCommentedMemberId(memberId);
 
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        
         return postsByMyComments.stream()
                 .map(post -> PostListResponse.builder()
                         .id(post.getId())
@@ -171,7 +183,8 @@ public class PostService {
                         .authorNickName(post.getMember().getNickname())
                         .likeCount(post.getLikeCount())
                         .commentCount(post.getCommentCount())
-                        .createdAt(post.getCreatedAt())
+                        .createdDate(post.getCreatedAt().format(dateFormatter))
+                        .createdTime(post.getCreatedAt().format(timeFormatter))
                         .build())
                 .toList();
     }
