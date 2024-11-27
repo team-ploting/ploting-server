@@ -24,6 +24,7 @@ import ploting_server.ploting.organization.repository.OrganizationRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -48,6 +49,14 @@ public class MeetingLeaderService {
     public void createMeeting(Long memberId, Long organizationId, MeetingCreateRequest meetingCreateRequest) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        // 모임 생성 조건 확인
+        checkMeetingCreateCondition(
+                member,
+                meetingCreateRequest.getMinAge(),
+                meetingCreateRequest.getMaxAge(),
+                meetingCreateRequest.getMinLevel()
+        );
 
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
@@ -187,6 +196,19 @@ public class MeetingLeaderService {
         // 모임의 모임장인지 확인
         if (!meetingMember.getMember().getId().equals(memberId)) {
             throw new MeetingException(MeetingErrorCode.NOT_MEETING_LEADER);
+        }
+    }
+
+    /**
+     * 모임 생성 조건을 충족하는지 확인합니다.
+     */
+    private void checkMeetingCreateCondition(Member member, int minAge, int maxAge, int minLevel) {
+        int age = Period.between(member.getBirth(), LocalDate.now()).getYears();
+        if (age < minAge || age > maxAge) {
+            throw new MeetingException(MeetingErrorCode.AGE_NOT_ELIGIBLE);
+        }
+        if (member.getLevel() < minLevel) {
+            throw new MeetingException(MeetingErrorCode.LEVEL_NOT_ELIGIBLE);
         }
     }
 }

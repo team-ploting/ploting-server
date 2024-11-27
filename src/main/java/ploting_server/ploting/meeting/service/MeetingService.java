@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ploting_server.ploting.core.code.error.MeetingErrorCode;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
+import ploting_server.ploting.core.code.error.OrganizationErrorCode;
 import ploting_server.ploting.core.exception.MeetingException;
 import ploting_server.ploting.core.exception.MemberException;
+import ploting_server.ploting.core.exception.OrganizationException;
 import ploting_server.ploting.meeting.dto.response.MeetingInfoResponse;
 import ploting_server.ploting.meeting.dto.response.MeetingListResponse;
 import ploting_server.ploting.meeting.dto.response.MeetingMemberListResponse;
@@ -21,6 +23,8 @@ import ploting_server.ploting.member.repository.MemberRepository;
 import ploting_server.ploting.organization.entity.Organization;
 import ploting_server.ploting.point.entity.LevelType;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -205,6 +209,16 @@ public class MeetingService {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new MeetingException(MeetingErrorCode.NOT_FOUND_MEETING_ID));
 
+        // 모임 가입 조건 확인
+        checkMeetingJoinCondition(
+                member,
+                meeting.getMinAge(),
+                meeting.getMaxAge(),
+                meeting.getMinLevel(),
+                meeting.getMemberCount(),
+                meeting.getMaxMember()
+        );
+
         // 이미 가입된 회원인지 확인
         boolean isMemberExists = meetingMemberRepository.existsByMeetingIdAndMemberId(meetingId, memberId);
         if (isMemberExists) {
@@ -243,5 +257,21 @@ public class MeetingService {
         meeting.removeMeetingMember(meetingMember);
 
         meetingMemberRepository.delete(meetingMember);
+    }
+
+    /**
+     * 모임 가입 조건을 충족하는지 확인합니다.
+     */
+    private void checkMeetingJoinCondition(Member member, int minAge, int maxAge, int minLevel, int memberCount, int maxMember) {
+        int age = Period.between(member.getBirth(), LocalDate.now()).getYears();
+        if (age < minAge || age > maxAge) {
+            throw new MeetingException(MeetingErrorCode.AGE_NOT_ELIGIBLE);
+        }
+        if (member.getLevel() < minLevel) {
+            throw new MeetingException(MeetingErrorCode.LEVEL_NOT_ELIGIBLE);
+        }
+        if (memberCount >= maxMember) {
+            throw new OrganizationException(OrganizationErrorCode.FULL_MEMBER_CAPACITY);
+        }
     }
 }

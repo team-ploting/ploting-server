@@ -35,6 +35,14 @@ public class MeetingLeaderController {
                     content = @Content(examples = @ExampleObject(value = "{ \"code\": 200, \"message\": \"정상 처리되었습니다.\" }"))
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "모임 생성 실패",
+                    content = @Content(examples = {
+                            @ExampleObject(name = "나이 조건 미충족", value = "{ \"code\": 400, \"message\": \"해당 모임에 가입할 수 있는 나이 조건이 아닙니다.\" }"),
+                            @ExampleObject(name = "레벨 조건 미충족", value = "{ \"code\": 400, \"message\": \"해당 모임에 가입할 수 있는 레벨 조건이 아닙니다.\" }"),
+                    })
+            ),
+            @ApiResponse(
                     responseCode = "403",
                     description = "단체에 가입되지 않은 사용자",
                     content = @Content(examples = @ExampleObject(value = "{ \"code\": 403, \"message\": \"단체에 가입된 멤버가 아닙니다.\" }"))
