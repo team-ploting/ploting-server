@@ -26,6 +26,6 @@ public enum LevelType {
                 return levelType;
             }
         }
-        throw new PointException(PointErrorCode.INVALID_LEVEL);
+        throw new PointException(PointErrorCode.INVALID_LEVEL_TYPE);
     }
 }
