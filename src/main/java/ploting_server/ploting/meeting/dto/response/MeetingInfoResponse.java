@@ -60,6 +60,9 @@ public class MeetingInfoResponse {
     @Schema(description = "여성 멤버 수", example = "20")
     private final int femaleCount;
 
+    @Schema(description = "단체 Id", example = "1")
+    private final Long organizationId;
+
     @Schema(description = "단체 이름", example = "환경지킴이 단체")
     private final String organizationName;
 
