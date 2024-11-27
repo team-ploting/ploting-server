@@ -3,7 +3,7 @@ package ploting_server.ploting.post.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ploting_server.ploting.comment.dto.response.CommentInfoResponse;
+import ploting_server.ploting.comment.dto.response.CommentListResponse;
 import ploting_server.ploting.comment.repository.CommentLikeRepository;
 import ploting_server.ploting.core.code.error.MemberErrorCode;
 import ploting_server.ploting.core.code.error.PostErrorCode;
@@ -106,8 +106,9 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(PostErrorCode.NOT_FOUND_POST_ID));
 
-        List<CommentInfoResponse> commentInfoResponse = post.getComments().stream()
-                .map(comment -> CommentInfoResponse.builder()
+        List<CommentListResponse> commentListResponse = post.getComments().stream()
+                .map(comment -> CommentListResponse.builder()
+                        .id(comment.getId())
                         .authorNickname(comment.getMember().getNickname())
                         .authorLocation(comment.getMember().getLocation())
                         .authorLevel(comment.getMember().getLevel())
@@ -131,7 +132,7 @@ public class PostService {
                 .hasLiked(postLikeRepository.existsByMemberIdAndPostId(memberId, postId))
                 .myPost(post.getMember().getId().equals(memberId))
                 .createdAt(post.getCreatedAt())
-                .comments(commentInfoResponse)
+                .comments(commentListResponse)
                 .build();
     }
 
