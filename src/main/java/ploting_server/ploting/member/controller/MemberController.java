@@ -56,7 +56,6 @@ public class MemberController {
             summary = "내 정보 조회",
             description = "내 정보를 조회합니다."
     )
-    @SecurityRequirements(value = {})
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
