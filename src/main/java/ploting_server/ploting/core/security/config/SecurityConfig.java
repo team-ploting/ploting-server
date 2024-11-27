@@ -141,7 +141,7 @@ public class SecurityConfig {
                 antMatcher(GET, "/filters/main"),
 
                 // 회원
-                antMatcher(GET, "/members/{memberId}"),
+                antMatcher(GET, "/members/{memberId:\\d+}"),
                 antMatcher(GET, "/members/check-nickname"),
 
                 // 단체
