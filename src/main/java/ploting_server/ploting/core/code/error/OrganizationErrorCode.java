@@ -19,6 +19,9 @@ public enum OrganizationErrorCode implements BaseErrorCode {
     ALREADY_REGISTERED_MEMBER(400, "이미 해당 단체에 가입된 상태입니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_ORGANIZATION_LIKE(400, "좋아요를 누르지 않은 상태입니다.", HttpStatus.BAD_REQUEST),
     ALREADY_EXIST_ORGANIZATION_LIKE(400, "이미 좋아요를 누른 상태입니다.", HttpStatus.BAD_REQUEST),
+    AGE_NOT_ELIGIBLE(400, "해당 단체에 가입할 수 있는 나이 조건이 아닙니다.", HttpStatus.BAD_REQUEST),
+    LEVEL_NOT_ELIGIBLE(400, "해당 단체에 가입할 수 있는 레벨 조건이 아닙니다.", HttpStatus.BAD_REQUEST),
+    FULL_MEMBER_CAPACITY(400, "단체의 인원이 이미 꽉 찼습니다.", HttpStatus.BAD_REQUEST),
 
     // 403 FORBIDDEN
     NOT_ORGANIZATION_MEMBER(403, "단체에 가입된 멤버가 아닙니다.", HttpStatus.FORBIDDEN),

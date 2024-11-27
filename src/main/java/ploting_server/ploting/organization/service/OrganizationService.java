@@ -23,6 +23,8 @@ import ploting_server.ploting.organization.repository.OrganizationMemberReposito
 import ploting_server.ploting.organization.repository.OrganizationRepository;
 import ploting_server.ploting.point.entity.LevelType;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -182,6 +184,16 @@ public class OrganizationService {
         Organization organization = organizationRepository.findById(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
+        // 단체 가입 조건 확인
+        checkOrganizationJoinCondition(
+                member,
+                organization.getMinAge(),
+                organization.getMaxAge(),
+                organization.getMinLevel(),
+                organization.getMemberCount(),
+                organization.getMaxMember()
+        );
+
         // 이미 가입된 회원인지 확인
         boolean isMemberExists = organizationMemberRepository.existsByOrganizationIdAndMemberId(organizationId, memberId);
         if (isMemberExists) {
@@ -221,5 +233,21 @@ public class OrganizationService {
         organization.removeOrganizationMember(organizationMember);
 
         organizationMemberRepository.delete(organizationMember);
+    }
+
+    /**
+     * 단체 가입 조건을 충족하는지 확인합니다.
+     */
+    private void checkOrganizationJoinCondition(Member member, int minAge, int maxAge, int minLevel, int memberCount, int maxMember) {
+        int age = Period.between(member.getBirth(), LocalDate.now()).getYears();
+        if (age < minAge || age > maxAge) {
+            throw new OrganizationException(OrganizationErrorCode.AGE_NOT_ELIGIBLE);
+        }
+        if (member.getLevel() < minLevel) {
+            throw new OrganizationException(OrganizationErrorCode.LEVEL_NOT_ELIGIBLE);
+        }
+        if (memberCount >= maxMember) {
+            throw new OrganizationException(OrganizationErrorCode.FULL_MEMBER_CAPACITY);
+        }
     }
 }
