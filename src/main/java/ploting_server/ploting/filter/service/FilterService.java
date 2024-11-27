@@ -13,12 +13,16 @@ import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.organization.dto.response.OrganizationListResponse;
 import ploting_server.ploting.organization.repository.OrganizationLikeRepository;
 import ploting_server.ploting.post.dto.response.PostListResponse;
+import ploting_server.ploting.post.entity.Post;
 import ploting_server.ploting.post.repository.PostLikeRepository;
 import ploting_server.ploting.post.repository.PostRepository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 메인을 관리하는 서비스 클래스입니다.
@@ -38,7 +42,13 @@ public class FilterService {
      */
     @Transactional(readOnly = true)
     public List<FilteredResponse> getMainItems(String search) {
-        List<FilteredResponse> posts = postRepository.searchPosts(search).stream()
+        List<Post> searchPosts = postRepository.searchPosts(search);
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter meetFormatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
+
+        List<FilteredResponse> posts = searchPosts.stream()
                 .map(post -> FilteredResponse.builder()
                         .type(FilterType.POST)
                         .body(PostListResponse.builder()
@@ -48,7 +58,8 @@ public class FilterService {
                                 .authorNickName(post.getMember().getNickname())
                                 .likeCount(post.getLikeCount())
                                 .commentCount(post.getCommentCount())
-                                .createdAt(post.getCreatedAt())
+                                .createdDate(post.getCreatedAt().format(dateFormatter))
+                                .createdTime(post.getCreatedAt().format(timeFormatter))
                                 .build())
                         .build())
                 .toList();
@@ -60,8 +71,7 @@ public class FilterService {
                                 .id(meeting.getId())
                                 .activeStatus(meeting.isActiveStatus())
                                 .name(meeting.getName())
-                                .meetDate(meeting.getMeetDate().toLocalDate())
-                                .meetHour(meeting.getMeetDate().getHour())
+                                .meetDate(meeting.getMeetDate().format(meetFormatter))
                                 .location(meeting.getLocation())
                                 .minLevel(meeting.getMinLevel())
                                 .memberCount(meeting.getMemberCount())
@@ -84,7 +94,11 @@ public class FilterService {
                 return ((MeetingListResponse) item.getBody()).getCreatedAt();
             }
             if (item.getBody() instanceof PostListResponse) {
-                return ((PostListResponse) item.getBody()).getCreatedAt();
+                PostListResponse body = (PostListResponse) item.getBody();
+                return LocalDateTime.parse(
+                        body.getCreatedDate() + " " + body.getCreatedTime(),
+                        DateTimeFormatter.ofPattern("yy.MM.dd HH:mm")
+                );
             }
             throw new FilterException(FilterErrorCode.INVALID_FILTER_DATA_TYPE);
         }).reversed());
@@ -97,6 +111,10 @@ public class FilterService {
      */
     @Transactional(readOnly = true)
     public List<FilteredResponse> getLikedItems(Long memberId) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter meetFormatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
+
         List<FilteredResponse> organizations = organizationLikeRepository.findAllByMemberId(memberId).stream()
                 .map(organizationLike -> FilteredResponse.builder()
                         .type(FilterType.ORGANIZATION)
@@ -123,8 +141,7 @@ public class FilterService {
                         .body(MeetingListResponse.builder()
                                 .id(meetingLike.getMeeting().getId())
                                 .name(meetingLike.getMeeting().getName())
-                                .meetDate(meetingLike.getMeeting().getMeetDate().toLocalDate())
-                                .meetHour(meetingLike.getMeeting().getMeetDate().getHour())
+                                .meetDate(meetingLike.getMeeting().getMeetDate().format(meetFormatter))
                                 .location(meetingLike.getMeeting().getLocation())
                                 .minLevel(meetingLike.getMeeting().getMinLevel())
                                 .memberCount(meetingLike.getMeeting().getMemberCount())
@@ -148,8 +165,8 @@ public class FilterService {
                                 .authorNickName(postLike.getPost().getMember().getNickname())
                                 .likeCount(postLike.getPost().getLikeCount())
                                 .commentCount(postLike.getPost().getCommentCount())
-                                .createdAt(postLike.getPost().getCreatedAt())
-                                .build())
+                                .createdDate(postLike.getPost().getCreatedAt().format(dateFormatter))
+                                .createdTime(postLike.getPost().getCreatedAt().format(timeFormatter)).build())
                         .build())
                 .toList();
 
@@ -166,7 +183,11 @@ public class FilterService {
                 return ((MeetingListResponse) item.getBody()).getCreatedAt();
             }
             if (item.getBody() instanceof PostListResponse) {
-                return ((PostListResponse) item.getBody()).getCreatedAt();
+                PostListResponse body = (PostListResponse) item.getBody();
+                return LocalDateTime.parse(
+                        body.getCreatedDate() + " " + body.getCreatedTime(),
+                        DateTimeFormatter.ofPattern("yy.MM.dd HH:mm")
+                );
             }
             throw new FilterException(FilterErrorCode.INVALID_FILTER_DATA_TYPE);
         }).reversed());
