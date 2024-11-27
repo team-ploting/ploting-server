@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import ploting_server.ploting.comment.dto.response.CommentInfoResponse;
+import ploting_server.ploting.comment.dto.response.CommentListResponse;
 import ploting_server.ploting.point.entity.LevelType;
 
 import java.time.LocalDateTime;
@@ -52,5 +52,5 @@ public class PostInfoResponse {
     private final LocalDateTime createdAt;
 
     @Schema(description = "게시글의 댓글")
-    private final List<CommentInfoResponse> comments;
+    private final List<CommentListResponse> comments;
 }

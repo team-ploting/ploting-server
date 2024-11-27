@@ -12,7 +12,10 @@ import ploting_server.ploting.point.entity.LevelType;
 @Getter
 @Builder
 @RequiredArgsConstructor
-public class CommentInfoResponse {
+public class CommentListResponse {
+
+    @Schema(description = "댓글 ID", example = "1")
+    private final Long id;
 
     @Schema(description = "댓글 작성자 닉네임", example = "환경지킴이")
     private final String authorNickname;
