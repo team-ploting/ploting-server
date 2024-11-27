@@ -150,6 +150,7 @@ public class SecurityConfig {
 
                 // 모임
                 antMatcher(GET, "/meetings/{meetings}/members"),
+                antMatcher(GET, "/meetings/organization/{organizationId}"),
 
                 // 미션
                 antMatcher(GET, "/missions"),
