@@ -59,10 +59,30 @@ public class MeetingController {
             ),
     })
     @GetMapping("/self")
-    public ResponseEntity<BfResponse<List<MeetingListResponse>>> getAllMeetings(
+    public ResponseEntity<BfResponse<List<MeetingListResponse>>> getAllMyMeetings(
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        List<MeetingListResponse> allMeetings = meetingService.getMyMeetings(Long.parseLong(principalDetails.getUsername()));
+        List<MeetingListResponse> allMeetings = meetingService.getAllMyMeetings(Long.parseLong(principalDetails.getUsername()));
+        return ResponseEntity.ok(new BfResponse<>(allMeetings));
+    }
+
+    @Operation(
+            summary = "단체의 모임 목록 조회",
+            description = "단체의 모임 목록을 조회합니다."
+    )
+    @SecurityRequirements(value = {})
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "단체의 모임 목록 조회 성공",
+                    useReturnTypeSchema = true
+            ),
+    })
+    @GetMapping("/organization/{organizationId}")
+    public ResponseEntity<BfResponse<List<MeetingListResponse>>> getAllOrganizationMeetings(
+            @PathVariable Long organizationId
+    ) {
+        List<MeetingListResponse> allMeetings = meetingService.getAllOrganizationMeetings(organizationId);
         return ResponseEntity.ok(new BfResponse<>(allMeetings));
     }
 

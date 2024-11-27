@@ -69,8 +69,36 @@ public class MeetingService {
      * 나의 모임 목록을 조회합니다.
      */
     @Transactional(readOnly = true)
-    public List<MeetingListResponse> getMyMeetings(Long memberId) {
+    public List<MeetingListResponse> getAllMyMeetings(Long memberId) {
         List<Meeting> meetings = meetingRepository.findAllByMemberIdOrderByCreatedAtDesc(memberId);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
+
+        return meetings.stream()
+                .map(meeting -> MeetingListResponse.builder()
+                        .id(meeting.getId())
+                        .activeStatus(meeting.isActiveStatus())
+                        .name(meeting.getName())
+                        .meetDate(meeting.getMeetDate().format(formatter))
+                        .location(meeting.getLocation())
+                        .minLevel(meeting.getMinLevel())
+                        .memberCount(meeting.getMemberCount())
+                        .maxMember(meeting.getMaxMember())
+                        .minAge(meeting.getMinAge())
+                        .maxAge(meeting.getMaxAge())
+                        .maleCount(meeting.getMaleCount())
+                        .femaleCount(meeting.getFemaleCount())
+                        .createdAt(meeting.getCreatedAt())
+                        .build())
+                .toList();
+    }
+
+    /**
+     * 단체의 모임 목록을 조회합니다.
+     */
+    @Transactional(readOnly = true)
+    public List<MeetingListResponse> getAllOrganizationMeetings(Long organizationId) {
+        List<Meeting> meetings = meetingRepository.findAllByOrganizationIdOrderByCreatedAtDesc(organizationId);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
 
