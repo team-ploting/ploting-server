@@ -19,7 +19,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
     List<Meeting> findAllByOrganizationId(Long organizationId);
 
-    Meeting findFirstByActiveStatusTrueOrderByCreatedAtDesc();
+    Optional<Meeting> findFirstByOrganizationIdAndActiveStatusTrueOrderByCreatedAtDesc(Long organizationId);
 
     boolean existsByOrganizationIdAndActiveStatusIsTrue(Long organizationId);
 
