@@ -53,6 +53,26 @@ public class MemberController {
     }
 
     @Operation(
+            summary = "내 정보 조회",
+            description = "내 정보를 조회합니다."
+    )
+    @SecurityRequirements(value = {})
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "내 정보 조회 성공",
+                    useReturnTypeSchema = true
+            )
+    })
+    @GetMapping("/self")
+    public ResponseEntity<BfResponse<MemberInfoResponse>> getSelf(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        MemberInfoResponse memberInfoResponse = memberService.getMember(Long.parseLong(principalDetails.getUsername()));
+        return ResponseEntity.ok(new BfResponse<>(memberInfoResponse));
+    }
+
+    @Operation(
             summary = "회원 정보 조회",
             description = "회원의 정보를 조회합니다."
     )
