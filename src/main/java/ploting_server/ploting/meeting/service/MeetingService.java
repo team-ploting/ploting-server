@@ -163,6 +163,7 @@ public class MeetingService {
                 .top3Members(top3Members)
                 .maleCount(meeting.getMaleCount())
                 .femaleCount(meeting.getFemaleCount())
+                .organizationId(organization.getId())
                 .organizationName(organization.getName())
                 .organizationMemberCount(organization.getMemberCount())
                 .activeStatus(meeting.isActiveStatus())
