@@ -101,29 +101,26 @@ public class OrganizationService {
         OrganizationMember leader = organizationMemberRepository.findByOrganizationIdAndLeaderStatusTrue(organizationId)
                 .orElseThrow(() -> new OrganizationException(OrganizationErrorCode.NOT_FOUND_ORGANIZATION_ID));
 
-        // 단체의 모임 리스트 조회
-        List<Meeting> top3MeetingsByCreatedAt = meetingRepository.findTop3ByActiveStatusTrueOrderByCreatedAtDesc();
+        // 단체의 최신순 모임 1개 조회
+        Meeting firstMeeting = meetingRepository.findFirstByActiveStatusTrueOrderByCreatedAtDesc();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
 
-        // 모임 리스트를 MeetingListResponse 리스트로 변환
-        List<MeetingListResponse> top3Meetings = top3MeetingsByCreatedAt.stream()
-                .map(meeting -> MeetingListResponse.builder()
-                        .id(meeting.getId())
-                        .activeStatus(meeting.isActiveStatus())
-                        .name(meeting.getName())
-                        .meetDate(meeting.getMeetDate().format(formatter))
-                        .location(meeting.getLocation())
-                        .minLevel(meeting.getMinLevel())
-                        .memberCount(meeting.getMemberCount())
-                        .maxMember(meeting.getMaxMember())
-                        .minAge(meeting.getMinAge())
-                        .maxAge(meeting.getMaxAge())
-                        .maleCount(meeting.getMaleCount())
-                        .femaleCount(meeting.getFemaleCount())
-                        .createdAt(meeting.getCreatedAt())
-                        .build())
-                .toList();
+        MeetingListResponse recentMeeting = MeetingListResponse.builder()
+                .id(firstMeeting.getId())
+                .activeStatus(firstMeeting.isActiveStatus())
+                .name(firstMeeting.getName())
+                .meetDate(firstMeeting.getMeetDate().format(formatter))
+                .location(firstMeeting.getLocation())
+                .minLevel(firstMeeting.getMinLevel())
+                .memberCount(firstMeeting.getMemberCount())
+                .maxMember(firstMeeting.getMaxMember())
+                .minAge(firstMeeting.getMinAge())
+                .maxAge(firstMeeting.getMaxAge())
+                .maleCount(firstMeeting.getMaleCount())
+                .femaleCount(firstMeeting.getFemaleCount())
+                .createdAt(firstMeeting.getCreatedAt())
+                .build();
 
         return OrganizationInfoResponse.builder()
                 .name(organization.getName())
@@ -142,7 +139,7 @@ public class OrganizationService {
                 .myOrganization(leader.getMember().getId().equals(memberId))
                 .maleCount(organization.getMaleCount())
                 .femaleCount(organization.getFemaleCount())
-                .top3Meetings(top3Meetings)
+                .recentMeeting(recentMeeting)
                 .build();
     }
 
