@@ -20,6 +20,8 @@ import ploting_server.ploting.organization.repository.OrganizationLikeRepository
 import ploting_server.ploting.organization.repository.OrganizationMemberRepository;
 import ploting_server.ploting.organization.repository.OrganizationRepository;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 /**
@@ -43,6 +45,14 @@ public class OrganizationLeaderService {
     public void createOrganization(Long memberId, OrganizationCreateRequest organizationCreateRequest) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        // 단체 생성 조건 확인
+        checkOrganizationCreateCondition(
+                member,
+                organizationCreateRequest.getMinAge(),
+                organizationCreateRequest.getMaxAge(),
+                organizationCreateRequest.getMinLevel()
+        );
 
         // 단체 생성
         Organization organization = Organization.builder()
@@ -194,6 +204,19 @@ public class OrganizationLeaderService {
         // 단체의 단체장인지 확인
         if (!organizationMember.getMember().getId().equals(memberId)) {
             throw new OrganizationException(OrganizationErrorCode.NOT_ORGANIZATION_LEADER);
+        }
+    }
+
+    /**
+     * 단체 생성 조건을 충족하는지 확인합니다.
+     */
+    private void checkOrganizationCreateCondition(Member member, int minAge, int maxAge, int minLevel) {
+        int age = Period.between(member.getBirth(), LocalDate.now()).getYears();
+        if (age < minAge || age > maxAge) {
+            throw new OrganizationException(OrganizationErrorCode.AGE_NOT_ELIGIBLE);
+        }
+        if (member.getLevel() < minLevel) {
+            throw new OrganizationException(OrganizationErrorCode.LEVEL_NOT_ELIGIBLE);
         }
     }
 }
