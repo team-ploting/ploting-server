@@ -54,16 +54,17 @@ public class FilterController {
                                     "        \"authorNickName\": \"twocowsilver\",\n" +
                                     "        \"likeCount\": 0,\n" +
                                     "        \"commentCount\": 0,\n" +
-                                    "        \"createdAt\": \"2024-11-23T20:30:37.954789\"\n" +
+                                    "        \"createdDate\": \"24.11.26\",\n" +
+                                    "        \"createdTime\": \"17:49\"\n" +
                                     "      }\n" +
                                     "    },\n" +
                                     "    {\n" +
                                     "      \"type\": \"MEETING\",\n" +
                                     "      \"body\": {\n" +
                                     "        \"id\": 1,\n" +
+                                    "        \"activeStatus\": true,\n" +
                                     "        \"name\": \"환경지킴이 모임\",\n" +
-                                    "        \"meetDate\": \"2024-08-17\",\n" +
-                                    "        \"meetHour\": 11,\n" +
+                                    "        \"meetDate\": \"8월 17일 오전 11시\",\n" +
                                     "        \"location\": \"강서구\",\n" +
                                     "        \"minLevel\": 5,\n" +
                                     "        \"memberCount\": 1,\n" +
@@ -111,16 +112,17 @@ public class FilterController {
                                     "        \"authorNickName\": \"twocowsilver\",\n" +
                                     "        \"likeCount\": 1,\n" +
                                     "        \"commentCount\": 0,\n" +
-                                    "        \"createdAt\": \"2024-11-23T20:30:37.954789\"\n" +
+                                    "        \"createdDate\": \"24.11.26\",\n" +
+                                    "        \"createdTime\": \"17:49\"\n" +
                                     "      }\n" +
                                     "    },\n" +
                                     "    {\n" +
                                     "      \"type\": \"MEETING\",\n" +
                                     "      \"body\": {\n" +
                                     "        \"id\": 2,\n" +
+                                    "        \"activeStatus\": true,\n" +
                                     "        \"name\": \"환경지킴이 모임\",\n" +
-                                    "        \"meetDate\": \"2024-08-17\",\n" +
-                                    "        \"meetHour\": 11,\n" +
+                                    "        \"meetDate\": \"8월 17일 오전 11시\",\n" +
                                     "        \"location\": \"강서구\",\n" +
                                     "        \"minLevel\": 5,\n" +
                                     "        \"memberCount\": 1,\n" +
