@@ -18,6 +18,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class MemberInfoResponse {
 
+    @Schema(description = "회원의 Id", example = "1")
+    private final Long id;
+
     @Schema(description = "회원의 이름", example = "이소은")
     private final String name;
 

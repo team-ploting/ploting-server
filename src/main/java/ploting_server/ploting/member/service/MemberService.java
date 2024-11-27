@@ -73,6 +73,7 @@ public class MemberService {
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
         return MemberInfoResponse.builder()
+                .id(member.getId())
                 .name(member.getName())
                 .nickname(member.getNickname())
                 .location(member.getLocation())
