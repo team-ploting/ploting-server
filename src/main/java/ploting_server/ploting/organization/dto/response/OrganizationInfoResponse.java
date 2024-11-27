@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import ploting_server.ploting.meeting.dto.response.MeetingListResponse;
 import ploting_server.ploting.point.entity.LevelType;
 
-import java.util.List;
-
 /**
  * 단체 세부 정보를 담는 DTO 클래스입니다.
  */
@@ -65,6 +63,6 @@ public class OrganizationInfoResponse {
     @Schema(description = "여성 멤버 수", example = "20")
     private final int femaleCount;
 
-    @Schema(description = "최신순 활성화된 모임 3개")
-    private final List<MeetingListResponse> top3Meetings;
+    @Schema(description = "최신순 활성화된 모임 1개")
+    private final MeetingListResponse recentMeeting;
 }
