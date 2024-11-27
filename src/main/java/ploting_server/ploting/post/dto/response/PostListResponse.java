@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Builder
 @RequiredArgsConstructor
@@ -30,6 +28,9 @@ public class PostListResponse {
     @Schema(description = "댓글 수", example = "5")
     private final int commentCount;
 
-    @Schema(description = "게시글 생성 시간", example = "2024-09-21T12:30:00")
-    private final LocalDateTime createdAt;
+    @Schema(description = "게시글 생성 일자", example = "24.09.21")
+    private final String createdDate;
+
+    @Schema(description = "게시글 생성 시간", example = "12:30")
+    private final String createdTime;
 }
