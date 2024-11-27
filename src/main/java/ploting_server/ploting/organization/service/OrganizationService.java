@@ -12,6 +12,7 @@ import ploting_server.ploting.meeting.entity.Meeting;
 import ploting_server.ploting.meeting.repository.MeetingRepository;
 import ploting_server.ploting.member.entity.Member;
 import ploting_server.ploting.member.repository.MemberRepository;
+import ploting_server.ploting.organization.dto.request.OrganizationJoinRequest;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationListResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationMemberListResponse;
@@ -177,7 +178,7 @@ public class OrganizationService {
      * 단체를 가입합니다.
      */
     @Transactional
-    public void registerOrganization(Long memberId, Long organizationId, String introduction) {
+    public void registerOrganization(Long memberId, Long organizationId, OrganizationJoinRequest organizationJoinRequest) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
@@ -203,7 +204,7 @@ public class OrganizationService {
         OrganizationMember organizationMember = OrganizationMember.builder()
                 .organization(organization)
                 .member(member)
-                .introduction(introduction)
+                .introduction(organizationJoinRequest.getIntroduction())
                 .leaderStatus(false)
                 .build();
 

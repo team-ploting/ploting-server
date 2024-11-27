@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import ploting_server.ploting.core.code.success.GlobalSuccessCode;
 import ploting_server.ploting.core.response.BfResponse;
 import ploting_server.ploting.core.security.principal.PrincipalDetails;
+import ploting_server.ploting.organization.dto.request.OrganizationJoinRequest;
 import ploting_server.ploting.organization.dto.response.OrganizationInfoResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationListResponse;
 import ploting_server.ploting.organization.dto.response.OrganizationMemberResponse;
@@ -132,9 +133,9 @@ public class OrganizationController {
     public ResponseEntity<BfResponse<GlobalSuccessCode>> registerOrganization(
             @AuthenticationPrincipal PrincipalDetails principalDetails,
             @PathVariable Long organizationId,
-            @RequestParam String introduction
+            @RequestBody OrganizationJoinRequest organizationJoinRequest
     ) {
-        organizationService.registerOrganization(Long.parseLong(principalDetails.getUsername()), organizationId, introduction);
+        organizationService.registerOrganization(Long.parseLong(principalDetails.getUsername()), organizationId, organizationJoinRequest);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS));
     }
 
