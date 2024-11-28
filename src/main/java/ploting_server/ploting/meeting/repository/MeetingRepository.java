@@ -34,5 +34,5 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     @Query("select m from Meeting m join m.meetingMembers mm where mm.member.id = :memberId ORDER BY m.createdAt DESC")
     List<Meeting> findAllByMemberIdOrderByCreatedAtDesc(Long memberId);
 
-    List<Meeting> findAllByOrganizationIdOrderByCreatedAtDesc(Long organizationId);
+    List<Meeting> findAllByOrganizationIdOrderByMeetDateDesc(Long organizationId);
 }
