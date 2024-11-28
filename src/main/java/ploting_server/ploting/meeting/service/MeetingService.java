@@ -102,7 +102,7 @@ public class MeetingService {
      */
     @Transactional(readOnly = true)
     public List<MeetingListResponse> getAllOrganizationMeetings(Long organizationId) {
-        List<Meeting> meetings = meetingRepository.findAllByOrganizationIdOrderByCreatedAtDesc(organizationId);
+        List<Meeting> meetings = meetingRepository.findAllByOrganizationIdOrderByMeetDateDesc(organizationId);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일 a h시", Locale.KOREAN);
 
