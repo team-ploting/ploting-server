@@ -15,10 +15,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.CorsUtils;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ploting_server.ploting.core.security.filter.JwtFilter;
 import ploting_server.ploting.core.security.handler.CustomAccessDeniedHandler;
 import ploting_server.ploting.core.security.service.jwt.JwtService;
@@ -27,7 +23,6 @@ import ploting_server.ploting.core.security.service.oauth.CustomOAuth2SuccessHan
 import ploting_server.ploting.core.security.service.oauth.CustomOAuth2UserService;
 import ploting_server.ploting.member.entity.RoleType;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.*;
@@ -86,7 +81,6 @@ public class SecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(authenticatedRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(authenticatedRequestMatchers())
                         .hasAnyAuthority(RoleType.ROLE_USER.name(), RoleType.ROLE_ADMIN.name())
                         .anyRequest().authenticated())
@@ -109,7 +103,6 @@ public class SecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(adminRequestMatchers()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers(adminRequestMatchers())
                         .hasAuthority(RoleType.ROLE_ADMIN.name())
                         .anyRequest().authenticated())
@@ -254,9 +247,6 @@ public class SecurityConfig {
         http
                 // JWT, OAuth 기반
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 보호 비활성화
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll())
                 .formLogin(AbstractHttpConfigurer::disable) // Form 기반 로그인 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable) // HTTP Basic 인증 비활성화
                 .rememberMe(AbstractHttpConfigurer::disable) // 세션 기반의 인증 비활성화
@@ -273,59 +263,5 @@ public class SecurityConfig {
                         .userInfoEndpoint(userinfo -> userinfo
                                 .userService(customOAuth2UserService))
                 ); // OAuth2 로그인 설정
-    }
-
-    /**
-     * CORS 설정
-     */
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        // 허용할 Origin(출처)
-        configuration.setAllowedOrigins(
-                Arrays.asList(
-                        "http://localhost:8080",
-                        "http://127.0.0.1:8080",
-                        "http://localhost:5173",
-                        "http://127.0.0.1:5173",
-                        "https://ploting.kr",
-                        "https://api.ploting.kr"
-                )
-        );
-
-        // 허용할 HTTP 메서드
-        configuration.setAllowedMethods(
-                Arrays.asList(
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "PATCH",
-                        "DELETE",
-                        "OPTIONS"
-                )
-        );
-
-        // 허용할 헤더
-        configuration.setAllowedHeaders(
-                Arrays.asList(
-                        "Authorization",
-                        "Content-Type",
-                        "Cache-Control",
-                        "X-Requested-With",
-                        "Origin",
-                        "Accept"
-                )
-        );
-
-        configuration.setMaxAge(3600L);
-
-        // 인증 정보(쿠키, Authorization 헤더 등)를 포함한 요청 허용
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 CORS 설정 적용
-
-        return source;
     }
 }
